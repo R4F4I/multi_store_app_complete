@@ -2,8 +2,10 @@
 
 // ignore_for_file: avoid_print
 
+
 import 'dart:io';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:multi_store_app/widgets/auth_widgets.dart';
@@ -11,7 +13,7 @@ import 'package:multi_store_app/widgets/snackbar.dart';
 
 import 'package:image_picker/image_picker.dart';
 
-
+import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 
 class CustomerRegister extends StatefulWidget {
   const CustomerRegister({super.key});
@@ -28,6 +30,18 @@ dynamic _pickedImageError;
 
 
 final ImagePicker _picker = ImagePicker();
+
+  late String name;
+  late String email;
+  late String password;
+  late String profileImage;
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  final GlobalKey<ScaffoldMessengerState> _scaffoldKey = GlobalKey<ScaffoldMessengerState>();
+  bool passwordVisible = false;
+
+CollectionReference customers = FirebaseFirestore.instance.collection('customers');
+late String _uid;
+
 
 void _pickImageFromCamera ()async{
   try{
@@ -77,8 +91,31 @@ void signUp() async {
         //print(name);
         //print(email);
         //print(password);
+        
+
+        firebase_storage.Reference ref = firebase_storage
+        .FirebaseStorage
+        .instance.ref('cust-images/$email.jpg');
+        
+        await ref.putFile(File(
+          _imageFile!.path
+          ));
+        profileImage = await ref.getDownloadURL();
+        _uid=FirebaseAuth.instance.currentUser!.uid;
+        await customers.doc(_uid).set({
+          'name':name,
+          'email':email,
+          'profileimage':profileImage,
+          'phone':'',
+          'address':'',
+          'custid':_uid, // customer_i.d
+        });
+        
         _formKey.currentState!.reset();
-        setState(() {_imageFile=null;});
+        setState(() {
+          _imageFile=null;
+          });
+
         Navigator.pushReplacementNamed(context, '/customer_home');
 
         } on FirebaseAuthException 
@@ -99,12 +136,7 @@ void signUp() async {
   }
 
 
-  late String name;
-  late String email;
-  late String password;
-  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  final GlobalKey<ScaffoldMessengerState> _scaffoldKey = GlobalKey<ScaffoldMessengerState>();
-  bool passwordVisible = false;
+
   @override
   Widget build(BuildContext context) {
     return ScaffoldMessenger(
