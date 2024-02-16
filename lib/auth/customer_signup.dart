@@ -1,6 +1,6 @@
 //import 'dart:ffi';
 
-// ignore_for_file: avoid_print
+// ignore_for_file: avoid_print, use_build_context_synchronously
 
 
 import 'dart:io';
@@ -38,6 +38,7 @@ final ImagePicker _picker = ImagePicker();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final GlobalKey<ScaffoldMessengerState> _scaffoldKey = GlobalKey<ScaffoldMessengerState>();
   bool passwordVisible = false;
+  bool processing = false;
 
 CollectionReference customers = FirebaseFirestore.instance.collection('customers');
 late String _uid;
@@ -82,6 +83,9 @@ void _pickImageFromGallery ()async{
 }
 
 void signUp() async {
+  setState(() {
+    processing=true;
+  });
     if (_formKey.currentState!.validate()) {
       if (_imageFile != null) {
         try{
@@ -122,17 +126,23 @@ void signUp() async {
         catch(e){
 
           if (e.code=='weak-password'){
+            setState(() {processing=false;});
             MyMessageHandler.showSnackBar(_scaffoldKey,'the password provided is weak');
           } 
           else if (e.code=='email-already-in-use'){
+            setState(() {processing=false;});
             MyMessageHandler.showSnackBar(_scaffoldKey,'the account already exists for that email');
           }
         }
         
       } 
-      else {MyMessageHandler.showSnackBar(_scaffoldKey, 'Please pick an Image first ');}
+      else {
+        setState(() {processing=false;});
+        MyMessageHandler.showSnackBar(_scaffoldKey, 'Please pick an Image first ');}
     } 
-    else {MyMessageHandler.showSnackBar(_scaffoldKey, 'Please fill all fields ');}
+    else {
+      setState(() {processing=false;});
+      MyMessageHandler.showSnackBar(_scaffoldKey, 'Please fill all fields ');}
   }
 
 
@@ -295,9 +305,11 @@ void signUp() async {
                       onPressed: (){},
                     ),
                   
-                     AuthMainButton(
-                      mainButtonLabel: 'Sign Up',
-                      onPressed: (){signUp();},
+                     processing == true
+                     ? const CircularProgressIndicator()
+                     : AuthMainButton(
+                       mainButtonLabel: 'Sign Up',
+                        onPressed: (){signUp();},
                     ),
                   ]),
                 ),
