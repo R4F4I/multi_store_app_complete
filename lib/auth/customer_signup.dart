@@ -120,7 +120,7 @@ void signUp() async {
           _imageFile=null;
           });
 
-        Navigator.pushReplacementNamed(context, '/customer_home');
+        Navigator.pushReplacementNamed(context, '/customer_login');
 
         } on FirebaseAuthException 
         catch(e){
@@ -302,11 +302,13 @@ void signUp() async {
                      HaveAccount(
                       haveAccount: 'Already have Account?',
                       actionLabel: 'Log In',
-                      onPressed: (){},
+                      onPressed: (){
+                        Navigator.pushReplacementNamed(context, '/customer_login');
+                      },
                     ),
                   
                      processing == true
-                     ? const CircularProgressIndicator()
+                     ? const Center(child: CircularProgressIndicator())
                      : AuthMainButton(
                        mainButtonLabel: 'Sign Up',
                         onPressed: (){signUp();},
