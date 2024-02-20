@@ -1,5 +1,6 @@
 // ignore_for_file: use_build_context_synchronously
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 //import 'package:firebase_core/firebase_core.dart';
 //import 'package:flutter/cupertino.dart';
@@ -12,16 +13,38 @@ import 'package:multi_store_app/widgets/appbar_widgets.dart';
 
 
 class ProfileScreen extends StatefulWidget {
-  const ProfileScreen({super.key});
+  final String documentId;
+  const ProfileScreen({super.key, required this.documentId});
 
   @override
   State<ProfileScreen> createState() => _ProfileScreenState();
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
+  CollectionReference customers = FirebaseFirestore.instance.collection('customers');
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return 
+    
+    FutureBuilder<DocumentSnapshot>(
+      future: customers.doc(widget.documentId).get(),
+      builder:
+          (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
+
+        if (snapshot.hasError) {
+          return const Text("Something went wrong");
+        }
+
+        if (snapshot.hasData && !snapshot.data!.exists) {
+          return const Text("Document does not exist");
+        }
+
+        if (snapshot.connectionState == ConnectionState.done) {
+          Map<String, dynamic> data = snapshot.data!.data() as Map<String, dynamic>;
+          return
+            /*Text("Full Name: ${data['full_name']} ${data['last_name']}");*/
+             Scaffold(
       backgroundColor: Colors.grey.shade300,
       body: Stack(
         children: [
@@ -58,14 +81,18 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     child: Padding(
                       padding: const EdgeInsets.only(top:25 ,left: 30),
                       child: Row(children: [
-                        const CircleAvatar(
+                         CircleAvatar(
+                          radius: 50,
+                          backgroundImage: NetworkImage(data['profileimage']),
+                          ),
+                        /*const CircleAvatar(
                           radius: 50,
                           backgroundImage: AssetImage('images/inapp/guest.jpg'),
-                          ),
+                          ),*/
                         Padding(
                           padding: const EdgeInsets.only(left: 25),
                           child: Text(
-                            'guest'.toUpperCase() ,
+                            data['name'].toUpperCase() ,
                             style: const TextStyle(fontSize: 24, 
                                              fontWeight: FontWeight.w600),),
                         )
@@ -176,13 +203,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         decoration: BoxDecoration(
                           color: Colors.white,
                           borderRadius: BorderRadius.circular(16)),
-                          child: const Column(children: [
+                          child:  Column(children: [
                             
-                            RepeatedListTIle(title: 'Email Address ',subtitle: 'example@example.com',icon: Icons.email,),
-                            YellowDivider(),
-                            RepeatedListTIle(title: 'Phone No. ',subtitle: '+11111111111',icon: Icons.phone,),
-                            YellowDivider(),
-                            RepeatedListTIle(title: 'Location',subtitle: "140 st. New Jersey",icon: Icons.location_pin,),
+                            RepeatedListTIle(title: 'Email Address ',subtitle: data['email'],icon: Icons.email,),
+                            const YellowDivider(),
+                            RepeatedListTIle(title: 'Phone No. ',subtitle: data['phone'],icon: Icons.phone,),
+                            const YellowDivider(),
+                            RepeatedListTIle(title: 'Location',subtitle: data['address'],icon: Icons.location_pin,),
                           
                           ]
                           ),
@@ -217,25 +244,42 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                         Navigator.pushReplacementNamed(context, '/welcome_screen');
                                             },
 
-                                );
-                              
-                              
-                           } ,),
-                          
+                                ); 
+                              },
+                            ),
                           ]
                         ),
                       ),
                      ),        
-                  ],),
+                    ],
+                  ),
                 ),
               ],
-              ),
-            )
-          ],
-        ),],
-      ),
-      
-    );
+            ),
+          )
+        ],
+       ),
+      ],
+    ),
+  );
+}
+
+  return const Center(child: CircularProgressIndicator());
+    },
+  );
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+   
   }
 }
 
