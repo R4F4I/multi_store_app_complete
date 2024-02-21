@@ -235,9 +235,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                         await FirebaseAuth.instance.signOut();
                                         Navigator.pop(context);
                                         Navigator.pushReplacementNamed(context, '/welcome_screen');
-                                            },
-
-                                ); 
+                                            },); 
                               },
                             ),
                           ]

@@ -1,3 +1,6 @@
+// ignore_for_file: use_build_context_synchronously
+
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:multi_store_app/dashboard/edit_profile.dart';
 import 'package:multi_store_app/dashboard/manage_products.dart';
@@ -5,6 +8,7 @@ import 'package:multi_store_app/dashboard/my_store.dart';
 import 'package:multi_store_app/dashboard/supp_balance.dart';
 import 'package:multi_store_app/dashboard/supp_orders.dart';
 import 'package:multi_store_app/dashboard/supp_statistics.dart';
+import 'package:multi_store_app/widgets/alert_dialog.dart';
 import 'package:multi_store_app/widgets/appbar_widgets.dart';
 
 List<String> label = [
@@ -47,8 +51,20 @@ class DashboardScreen extends StatelessWidget {
           title: 'dashboard'),
           actions: [
             IconButton(
-              onPressed: (){
-                Navigator.pushReplacementNamed(context,'/welcome_screen' );
+              onPressed: () {
+                MyAlertDialog.showMyDialog(
+                  context: context,
+                  title: 'Logging Out',
+                  content: 'Are you sure you want to logout?',
+                  tapNo: () {
+                    Navigator.pop(context);
+                  },
+                  tapYes: () async {
+                    await FirebaseAuth.instance.signOut();
+                    Navigator.pop(context);
+                    Navigator.pushReplacementNamed(context, '/welcome_screen');
+                  },
+                );
               },
               icon: const Icon(
                 Icons.logout,

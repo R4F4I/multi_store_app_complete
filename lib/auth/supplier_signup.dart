@@ -15,14 +15,14 @@ import 'package:image_picker/image_picker.dart';
 
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 
-class CustomerRegister extends StatefulWidget {
-  const CustomerRegister({super.key});
+class SupplierRegister extends StatefulWidget {
+  const SupplierRegister({super.key});
 
   @override
-  State<CustomerRegister> createState() => _CustomerRegisterState();
+  State<SupplierRegister> createState() => _SupplierRegisterState();
 }
 
-class _CustomerRegisterState extends State<CustomerRegister> {
+class _SupplierRegisterState extends State<SupplierRegister> {
   
 // ignore: unused_field
 XFile? _imageFile;
@@ -31,16 +31,16 @@ dynamic _pickedImageError;
 
 final ImagePicker _picker = ImagePicker();
 
-  late String name;
+  late String storeName;
   late String email;
   late String password;
-  late String profileImage;
+  late String storeLogo;
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final GlobalKey<ScaffoldMessengerState> _scaffoldKey = GlobalKey<ScaffoldMessengerState>();
   bool passwordVisible = false;
   bool processing = false;
 
-CollectionReference customers = FirebaseFirestore.instance.collection('customers');
+CollectionReference suppliers = FirebaseFirestore.instance.collection('suppliers');
 late String _uid;
 
 
@@ -90,29 +90,26 @@ void signUp() async {
       if (_imageFile != null) {
         try{
           await FirebaseAuth.instance.createUserWithEmailAndPassword(email: email,password: password);
-        //print('image picked!');
-        //print("valid");
-        //print(name);
-        //print(email);
-        //print(password);
+
         
 
         firebase_storage.Reference ref = firebase_storage
         .FirebaseStorage
-        .instance.ref('cust-images/$email.jpg');
+        .instance.ref('supp-images/$email.jpg');
         
         await ref.putFile(File(
           _imageFile!.path
           ));
-        profileImage = await ref.getDownloadURL();
+        storeLogo = await ref.getDownloadURL();
         _uid=FirebaseAuth.instance.currentUser!.uid;
-        await customers.doc(_uid).set({
-          'name':name,
+        await suppliers.doc(_uid).set({
+          'storename':storeName,
           'email':email,
-          'profileimage':profileImage,
+          'storelogo':storeLogo,
           'phone':'',
-          'address':'',
-          'custid':_uid, // customer_i.d
+          //'address':'',
+          'suppid':_uid, // customer_i.d
+          'coverimage':'',
         });
         
         _formKey.currentState!.reset();
@@ -120,7 +117,7 @@ void signUp() async {
           _imageFile=null;
           });
 
-        Navigator.pushReplacementNamed(context, '/customer_login');
+        Navigator.pushReplacementNamed(context, '/supplier_login');
 
         } on FirebaseAuthException 
         catch(e){
@@ -225,7 +222,7 @@ void signUp() async {
                           return null;
                         },
                         onChanged: (value){
-                          name=value;
+                          storeName=value;
                         },
                        
       

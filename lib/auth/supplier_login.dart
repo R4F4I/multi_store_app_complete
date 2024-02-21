@@ -6,14 +6,14 @@ import 'package:multi_store_app/widgets/auth_widgets.dart';
 import 'package:multi_store_app/widgets/snackbar.dart';
 
 
-class CustomerLogin extends StatefulWidget {
-  const CustomerLogin({super.key});
+class SupplierLogin extends StatefulWidget {
+  const SupplierLogin({super.key});
 
   @override
-  State<CustomerLogin> createState() => _CustomerLoginState();
+  State<SupplierLogin> createState() => _SupplierLoginState();
 }
 
-class _CustomerLoginState extends State<CustomerLogin> {
+class _SupplierLoginState extends State<SupplierLogin> {
   
   late String email;
   late String password;
@@ -33,7 +33,7 @@ void logIn() async {
           await FirebaseAuth.instance.signInWithEmailAndPassword(email: email,password: password);
         _formKey.currentState!.reset();
         
-        Navigator.pushReplacementNamed(context, '/customer_home');
+        Navigator.pushReplacementNamed(context, '/supplier_home');
 
         } on FirebaseAuthException 
         catch(e){
