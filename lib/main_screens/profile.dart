@@ -32,13 +32,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
       builder:
           (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
 
-        if (snapshot.hasError) {
-          return const Text("Something went wrong");
-        }
-
-        if (snapshot.hasData && !snapshot.data!.exists) {
-          return const Text("Document does not exist");
-        }
+        if (snapshot.hasError) {return const Text("Something went wrong");}
+        if (snapshot.hasData && !snapshot.data!.exists) {return const Text("Document does not exist");}
 
         if (snapshot.connectionState == ConnectionState.done) {
           Map<String, dynamic> data = snapshot.data!.data() as Map<String, dynamic>;
@@ -140,9 +135,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       ),
                     
                       Container(
-        
                           color: Colors.yellow,
-        
                         child: TextButton(
                           onPressed: (){
                             Navigator.push(context, MaterialPageRoute(builder: (context) => const CustomerOrders()));
@@ -265,21 +258,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
 }
 
   return const Center(child: CircularProgressIndicator());
-    },
-  );
-
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-   
+      },
+    );
   }
 }
 
