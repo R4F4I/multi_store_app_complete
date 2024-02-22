@@ -108,7 +108,7 @@ void signUp() async {
           'storelogo':storeLogo,
           'phone':'',
           //'address':'',
-          'suppid':_uid, // customer_i.d
+          'suppid':_uid, // supplier_i.d
           'coverimage':'',
         });
         

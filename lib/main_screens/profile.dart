@@ -76,18 +76,23 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     child: Padding(
                       padding: const EdgeInsets.only(top:25 ,left: 30),
                       child: Row(children: [
-                         CircleAvatar(
+                        data['profileimage'] == ''
+                        ? const CircleAvatar(
+                          radius: 50,
+                          backgroundImage: AssetImage('images/inapp/guest.jpg'),
+                          )
+
+                        : CircleAvatar(
                           radius: 50,
                           backgroundImage: NetworkImage(data['profileimage']),
                           ),
-                        /*const CircleAvatar(
-                          radius: 50,
-                          backgroundImage: AssetImage('images/inapp/guest.jpg'),
-                          ),*/
+                       
                         Padding(
                           padding: const EdgeInsets.only(left: 25),
                           child: Text(
-                            data['name'].toUpperCase() ,
+                            data['name']==""
+                              ?'guest'.toUpperCase()
+                              :data['name'].toUpperCase(),
                             style: const TextStyle(fontSize: 24, 
                                              fontWeight: FontWeight.w600),),
                         )
@@ -198,11 +203,28 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           borderRadius: BorderRadius.circular(16)),
                           child:  Column(children: [
                             
-                            RepeatedListTIle(title: 'Email Address ',subtitle: data['email'],icon: Icons.email,),
+                            RepeatedListTIle(title: 'Email Address ',
+                              subtitle: data['email'] == ''
+                                ?'example@example.com' 
+                                :data['email'],
+
+                              icon: Icons.email,),
+
+                              
                             const YellowDivider(),
-                            RepeatedListTIle(title: 'Phone No. ',subtitle: data['phone'],icon: Icons.phone,),
+                            RepeatedListTIle(title: 'Phone No. ',
+                              subtitle: data['phone'] == ''
+                              ?'example:+111111'
+                              :data['phone'],
+                              
+                              icon: Icons.phone,),
+                            
                             const YellowDivider(),
-                            RepeatedListTIle(title: 'Location',subtitle: data['address'],icon: Icons.location_pin,),
+                            RepeatedListTIle(title: 'Location',
+                              subtitle: data['address'] == ''
+                              ?'New Jersey - USA'
+                              :data['address'],
+                              icon: Icons.location_pin,),
                           
                           ]
                           ),

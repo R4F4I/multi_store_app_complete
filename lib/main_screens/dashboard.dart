@@ -93,13 +93,13 @@ class DashboardScreen extends StatelessWidget {
                 children: [
                 Icon(
                     iconLabel[index],
-                    size: 90,
+                    size: 85,
                     color: Colors.yellowAccent,
                     ),
                 Text(
                     label[index].toUpperCase(),
                     style:const TextStyle(
-                      fontSize: 24,
+                      fontSize: 20,
                       color: Colors.yellowAccent,
                       fontWeight: FontWeight.w600,
                       letterSpacing: 2,
