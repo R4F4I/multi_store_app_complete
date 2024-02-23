@@ -300,7 +300,7 @@ void signUp() async {
                       haveAccount: 'Already have Account?',
                       actionLabel: 'Log In',
                       onPressed: (){
-                        Navigator.pushReplacementNamed(context, '/customer_login');
+                        Navigator.pushReplacementNamed(context, '/supplier_login');
                       },
                     ),
                   
