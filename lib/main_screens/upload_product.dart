@@ -12,18 +12,26 @@ class _UploadProductScreenState extends State<UploadProductScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body:Column(
-        children: [
-          Row(
+      body:SafeArea(
+        child: SingleChildScrollView(
+          child: Column(
             children: [
-              Container(
-                color: Colors.blueGrey.shade100,
-                height: MediaQuery.of(context).size.width*0.5,
-                width: MediaQuery.of(context).size.width*0.5,
-                child: const Center(child: Text('you haven\'t picked \n \n any images yet!'),),
-                )
-                ],)
-      ],)
+              Row(
+                children: [
+                  Container(
+                    color: Colors.blueGrey.shade100,
+                    height: MediaQuery.of(context).size.width*0.5,
+                    width: MediaQuery.of(context).size.width*0.5,
+                    child: const Center(child: Text('you haven\'t picked \n \n any images yet!'),
+                    ),
+                    )
+                    ],),
+                    const SizedBox(
+                      height: 30,
+                      child: Divider(color: Colors.yellow,thickness: 1.5,))
+          ],),
+        ),
+      )
     );
   }
 }
