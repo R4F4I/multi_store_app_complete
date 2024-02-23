@@ -1,18 +1,29 @@
 import 'package:flutter/material.dart';
 
 
-class UploadProduct extends StatefulWidget {
-  const UploadProduct({super.key});
+class UploadProductScreen extends StatefulWidget {
+  const UploadProductScreen({super.key});
 
   @override
-  State<UploadProduct> createState() => _UploadProductState();
+  State<UploadProductScreen> createState() => _UploadProductScreenState();
 }
 
-class _UploadProductState extends State<UploadProduct> {
+class _UploadProductScreenState extends State<UploadProductScreen> {
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: Colors.blue,
+    return Scaffold(
+      body:Column(
+        children: [
+          Row(
+            children: [
+              Container(
+                color: Colors.blueGrey.shade100,
+                height: MediaQuery.of(context).size.width*0.5,
+                width: MediaQuery.of(context).size.width*0.5,
+                child: const Center(child: Text('you haven\'t picked \n \n any images yet!'),),
+                )
+                ],)
+      ],)
     );
   }
 }

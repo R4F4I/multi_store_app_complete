@@ -23,7 +23,7 @@ class _SupplierHomeScreenState extends State<SupplierHomeScreen> {
     CategoryScreen(),
     StoresScreen(),
     DashboardScreen(),
-    UploadProduct(),
+    UploadProductScreen(),
 
   ];
   /*in the widget '_tabs' all values are stored in indexed form hence
