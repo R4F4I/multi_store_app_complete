@@ -14,6 +14,8 @@ class _UploadProductScreenState extends State<UploadProductScreen> {
     return Scaffold(
       body:SafeArea(
         child: SingleChildScrollView(
+          reverse: true,
+          keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -45,6 +47,7 @@ class _UploadProductScreenState extends State<UploadProductScreen> {
                         child: SizedBox(
                           width: MediaQuery.of(context).size.width*0.4,
                           child: TextFormField(
+                            keyboardType: const TextInputType.numberWithOptions(decimal: true),
                             decoration: textFormDecoration.copyWith(
                               labelText: 'price',
                               hintText: 'enter price of product',
