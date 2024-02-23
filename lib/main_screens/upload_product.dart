@@ -97,7 +97,27 @@ class _UploadProductScreenState extends State<UploadProductScreen> {
                       ),
                   ],),
         ),
-      )
+      ),
+      floatingActionButton: Row(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+        Padding(
+          padding: const EdgeInsets.only(right: 10.0),
+          child: 
+          FloatingActionButton(
+            //shape: const CircleBorder(),
+            onPressed: (){},
+            backgroundColor: Colors.yellow,
+            child: const Icon(Icons.photo_library,
+              color: Colors.black,) ,),
+        ),
+          FloatingActionButton(
+            //shape: const CircleBorder(),
+            onPressed: (){},
+            backgroundColor: Colors.yellow,
+            child: const Icon(Icons.upload,
+              color: Colors.black,) ,),
+      ]),
     );
   }
 }
@@ -107,14 +127,14 @@ class _UploadProductScreenState extends State<UploadProductScreen> {
 
 
 var textFormDecoration =  InputDecoration(
-                              labelText: 'price',
-                              hintText: 'price of a unit item',
-                              labelStyle: const TextStyle(color: Colors.purple),
-                              border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
-                              enabledBorder: OutlineInputBorder(
-                                borderSide: const BorderSide(color: Colors.yellow, width: 1),
-                                borderRadius: BorderRadius.circular(10)),
-                              focusedBorder: OutlineInputBorder(
-                                borderSide: const BorderSide(color: Colors.blueAccent, width: 2),
-                                borderRadius: BorderRadius.circular(10)),
-                              );
+    labelText: 'price',
+    hintText: 'price of a unit item',
+    labelStyle: const TextStyle(color: Colors.purple),
+    border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+    enabledBorder: OutlineInputBorder(
+      borderSide: const BorderSide(color: Colors.yellow, width: 1),
+      borderRadius: BorderRadius.circular(10)),
+    focusedBorder: OutlineInputBorder(
+      borderSide: const BorderSide(color: Colors.blueAccent, width: 2),
+      borderRadius: BorderRadius.circular(10)),
+    );
