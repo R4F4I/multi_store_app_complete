@@ -47,7 +47,7 @@ class _UploadProductScreenState extends State<UploadProductScreen> {
                           child: TextFormField(
                             decoration: textFormDecoration.copyWith(
                               labelText: 'price',
-                              hintText: 'price of a unit item',
+                              hintText: 'enter price of product',
                             )
                           ),
                         ),
@@ -55,11 +55,11 @@ class _UploadProductScreenState extends State<UploadProductScreen> {
                       Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: SizedBox(
-                          width: MediaQuery.of(context).size.width*0.4,
+                          width: MediaQuery.of(context).size.width*0.45,
                           child: TextFormField(
                             decoration: textFormDecoration.copyWith(
-                              labelText: 'price',
-                              hintText: 'price of a unit item',
+                              labelText: 'Quantity',
+                              hintText: 'Enter Quantity',
                             )
                           ),
                         ),
@@ -67,11 +67,13 @@ class _UploadProductScreenState extends State<UploadProductScreen> {
                       Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: SizedBox(
-                          width: MediaQuery.of(context).size.width*0.4,
+                          width: MediaQuery.of(context).size.width,
                           child: TextFormField(
+                            maxLength: 100,
+                            maxLines: 3,
                             decoration: textFormDecoration.copyWith(
-                              labelText: 'price',
-                              hintText: 'price of a unit item',
+                              labelText: 'product Name',
+                              hintText: 'Enter product Name',
                             )
                           ),
                         ),
@@ -79,11 +81,13 @@ class _UploadProductScreenState extends State<UploadProductScreen> {
                       Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: SizedBox(
-                          width: MediaQuery.of(context).size.width*0.4,
+                          width: MediaQuery.of(context).size.width,
                           child: TextFormField(
+                            maxLength: 800,
+                            maxLines: 5,
                             decoration: textFormDecoration.copyWith(
-                              labelText: 'price',
-                              hintText: 'price of a unit item',
+                              labelText: 'product Description',
+                              hintText: 'provide product Description',
                             )
                           ),
                         ),
@@ -102,6 +106,7 @@ class _UploadProductScreenState extends State<UploadProductScreen> {
 var textFormDecoration =  InputDecoration(
                               labelText: 'price',
                               hintText: 'price of a unit item',
+                              labelStyle: const TextStyle(color: Colors.purple),
                               border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
                               enabledBorder: OutlineInputBorder(
                                 borderSide: const BorderSide(color: Colors.yellow, width: 1),
