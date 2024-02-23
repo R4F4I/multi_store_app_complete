@@ -45,7 +45,61 @@ class _UploadProductScreenState extends State<UploadProductScreen> {
                         child: SizedBox(
                           width: MediaQuery.of(context).size.width*0.4,
                           child: TextFormField(
-                            decoration: InputDecoration(
+                            decoration: textFormDecoration.copyWith(
+                              labelText: 'price',
+                              hintText: 'price of a unit item',
+                            )
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: SizedBox(
+                          width: MediaQuery.of(context).size.width*0.4,
+                          child: TextFormField(
+                            decoration: textFormDecoration.copyWith(
+                              labelText: 'price',
+                              hintText: 'price of a unit item',
+                            )
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: SizedBox(
+                          width: MediaQuery.of(context).size.width*0.4,
+                          child: TextFormField(
+                            decoration: textFormDecoration.copyWith(
+                              labelText: 'price',
+                              hintText: 'price of a unit item',
+                            )
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: SizedBox(
+                          width: MediaQuery.of(context).size.width*0.4,
+                          child: TextFormField(
+                            decoration: textFormDecoration.copyWith(
+                              labelText: 'price',
+                              hintText: 'price of a unit item',
+                            )
+                          ),
+                        ),
+                      ),
+                  ],),
+        ),
+      )
+    );
+  }
+}
+
+
+
+
+
+var textFormDecoration =  InputDecoration(
                               labelText: 'price',
                               hintText: 'price of a unit item',
                               border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
@@ -55,12 +109,4 @@ class _UploadProductScreenState extends State<UploadProductScreen> {
                               focusedBorder: OutlineInputBorder(
                                 borderSide: const BorderSide(color: Colors.blueAccent, width: 2),
                                 borderRadius: BorderRadius.circular(10)),
-                              ),),
-                        ),
-                      )
-          ],),
-        ),
-      )
-    );
-  }
-}
+                              );
