@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print
+
 import 'package:flutter/material.dart';
 import 'package:multi_store_app/widgets/snackbar.dart';
 
@@ -58,6 +60,9 @@ class _UploadProductScreenState extends State<UploadProductScreen> {
                                   if (value!.isEmpty){
                                     return 'please enter price';
                                   }
+                                  else if (value.isValidPrice() == false){
+                                    return 'invalid Price';
+                                  }
                                   return null;
                                 },
                                 keyboardType: const TextInputType.numberWithOptions(decimal: true),
@@ -76,6 +81,9 @@ class _UploadProductScreenState extends State<UploadProductScreen> {
                                  validator: (value){
                                   if (value!.isEmpty){
                                     return 'please enter Quantity';
+                                  }
+                                  else if (value.isValidQuantity() == false){
+                                    return 'invalid quantity';
                                   }
                                   return null;
                                 },
@@ -178,3 +186,42 @@ var textFormDecoration =  InputDecoration(
       borderSide: const BorderSide(color: Colors.blueAccent, width: 2),
       borderRadius: BorderRadius.circular(10)),
     );
+
+extension QuantityValidator on String{
+  bool isValidQuantity(){
+    return RegExp(r'^[1-9][0-9]*$').hasMatch(this);
+  }
+}
+/* 
+above regex: 
+> only allows integers, 
+e.g: 12: 'yes', 12.3: 'no',
+
+> single digit int must not be 0,
+e.g: 12: 'yes', 012 : 'no',
+
+> 2nd & digits beyond that, are optional
+e.g: 1,12,123,1234, ... 
+ */
+
+
+extension PriceValidator on String{
+  bool isValidPrice(){
+    return RegExp(r'^(((([1-9][0-9]*)[\.]*)||([0][\.]*))([0-9]{1,2}))$').hasMatch(this);
+  }
+}
+
+/* 
+above regex :
+> qualities of prev. +
+
+> allows decimals(optional) only upto 2 decmial place, 
+e.g: 12.3: 'yes',12.34: 'yes', 12.345: 'no',
+
+> or can start with 0 only once before decimal,
+e.g: 0.9: 'yes', 01.9: 'no',
+
+> after decimal num is neccessary,
+e.g: 1.0: 'yes',1.: 'no',
+
+ */
