@@ -14,6 +14,21 @@ class UploadProductScreen extends StatefulWidget {
 class _UploadProductScreenState extends State<UploadProductScreen> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final GlobalKey<ScaffoldMessengerState> _scaffoldKey = GlobalKey<ScaffoldMessengerState>();
+
+  late double price;
+  late int quantity;
+  late String proName;
+  late String proDesc;
+
+  void uploadProduct() {
+    _formKey.currentState!.save(); // since "onChanged" automatically saves while "onSaved" does not, we have to manually save
+    print('valid');
+    print(price);
+    print(quantity);
+    print(proName);
+    print(proDesc);
+  }
+
   @override
   Widget build(BuildContext context) {
     return ScaffoldMessenger(
@@ -65,6 +80,9 @@ class _UploadProductScreenState extends State<UploadProductScreen> {
                                   }
                                   return null;
                                 },
+                                onSaved: (value){  //onChanged not used as it has no 'null check': (value in (value!) has nullCheck '!' ) 
+                                  price = double.parse(value!); // value is 'string', price is 'double', (conversion)
+                                },
                                 keyboardType: const TextInputType.numberWithOptions(decimal: true),
                                 decoration: textFormDecoration.copyWith(
                                   labelText: 'price',
@@ -87,6 +105,9 @@ class _UploadProductScreenState extends State<UploadProductScreen> {
                                   }
                                   return null;
                                 },
+                                onSaved: (value){
+                                  quantity = int.parse(value!); // value is 'string', quantity is 'int', (conversion)
+                                },
                                 decoration: textFormDecoration.copyWith(
                                   labelText: 'Quantity',
                                   hintText: 'Enter Quantity',
@@ -104,6 +125,9 @@ class _UploadProductScreenState extends State<UploadProductScreen> {
                                     return 'please enter product Name';
                                   }
                                   return null;
+                                },
+                                onSaved: (value){
+                                  proName = value!; // no conversion needed,
                                 },
                                 maxLength: 100,
                                 maxLines: 3,
@@ -124,6 +148,9 @@ class _UploadProductScreenState extends State<UploadProductScreen> {
                                     return 'please enter product Description';
                                   }
                                   return null;
+                                },
+                                onSaved: (value){
+                                  proDesc = value!; // no conversion needed,
                                 },
                                 maxLength: 800,
                                 maxLines: 5,
@@ -155,7 +182,7 @@ class _UploadProductScreenState extends State<UploadProductScreen> {
               //shape: const CircleBorder(),
               onPressed: (){
                 if(_formKey.currentState!.validate()){
-                  print('valid');
+                 uploadProduct();
                 }
                 else {
                   MyMessageHandler.showSnackBar(_scaffoldKey,'Please fill all fields');
