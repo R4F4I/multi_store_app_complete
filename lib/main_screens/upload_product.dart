@@ -1,6 +1,9 @@
 // ignore_for_file: avoid_print
 
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:multi_store_app/widgets/snackbar.dart';
 
 
@@ -20,13 +23,68 @@ class _UploadProductScreenState extends State<UploadProductScreen> {
   late String proName;
   late String proDesc;
 
+// picks mulitple Images,
+//imagesFIleList is a list of type XFile
+// the function '_pickProductImages()'  uses 'pickMultiImage()' to select multiple images
+// then places them inside 'pickedImages' (which places them insde the created imagesFileList)
+  final ImagePicker _picker = ImagePicker();
+  List<XFile>? imagesFileList = [];
+  dynamic _pickedImageError;
+
+  void _pickProductImages() async {
+    try {
+      final pickedImages = await _picker.pickMultiImage(
+          maxHeight: 300, maxWidth: 300, imageQuality: 95);
+      setState(() {
+        imagesFileList = pickedImages; // incase, add: 'pickedImages!'
+      });
+    } catch (e) {
+      setState(() {
+        _pickedImageError = e;
+      });
+      print(_pickedImageError);
+    }
+  }
+
+// shows multiple images present inside imagesFileList
+  Widget previewImages() {
+    if (imagesFileList!.isNotEmpty) {
+      return ListView.builder(
+          itemCount: imagesFileList!.length,
+          itemBuilder: (context, index) {
+            return Image.file(File(imagesFileList![index].path));
+          });
+    } 
+    else { // when the delete icon is pressed, it does not show the initial empty text, hence we add this
+      return const Center(
+        child: Text(
+          'you haven\'t picked \n \n any images yet!',
+          style: TextStyle(fontSize: 16),
+          textAlign: TextAlign.center,
+        ),
+      );
+    }
+  }
   void uploadProduct() {
-    _formKey.currentState!.save(); // since "onChanged" automatically saves while "onSaved" does not, we have to manually save
-    print('valid');
-    print(price);
-    print(quantity);
-    print(proName);
-    print(proDesc);
+    if (_formKey.currentState!.validate()) {
+      _formKey.currentState!.save(); // since "onChanged" automatically saves while "onSaved" does not, we have to manually save
+      if(imagesFileList!.isNotEmpty){
+        print('images picked!'); // image validation   
+        print('valid');
+        print(price);
+        print(quantity);
+        print(proName);
+        print(proDesc);
+        // after successful attempt, clear all fields
+        imagesFileList=[];
+        _formKey.currentState!.reset();
+
+      } else{
+        MyMessageHandler.showSnackBar(_scaffoldKey, 'Please pick an image');
+      }
+    } else {
+      MyMessageHandler.showSnackBar(_scaffoldKey, 'Please fill all fields');
+    }
   }
 
   @override
@@ -45,20 +103,33 @@ class _UploadProductScreenState extends State<UploadProductScreen> {
                 children: [
                   Row(
                     children: [
-                      Container(
+                      Stack(
+                        children: [
+                          Container(
                         color: Colors.blueGrey.shade100,
                         height: MediaQuery.of(context).size.width*0.5,
                         width: MediaQuery.of(context).size.width*0.5,
-                        child: const Center(
-                          child: 
-                            Text('you haven\'t picked \n \n any images yet!',
+                        child:imagesFileList != null
+                          ?previewImages()
+                          :const Center(
+                          child: Text('you haven\'t picked \n \n any images yet!',
                             style: TextStyle(fontSize: 16),
                             textAlign: TextAlign.center,
               
                         
                         ),
                         ),
-                        )
+                        ),
+                        // this icons wil empty the images from the imagesFileList
+                          IconButton(
+                              onPressed: () {
+                                setState(() {
+                                  imagesFileList = [];
+                                });
+                              },
+                              icon: const Icon(Icons.delete_forever)),
+                        ],
+                      )
                         ],),
                         const Padding(
                           padding: EdgeInsets.all(8.0),
@@ -108,6 +179,7 @@ class _UploadProductScreenState extends State<UploadProductScreen> {
                                 onSaved: (value){
                                   quantity = int.parse(value!); // value is 'string', quantity is 'int', (conversion)
                                 },
+                                keyboardType: const TextInputType.numberWithOptions(),
                                 decoration: textFormDecoration.copyWith(
                                   labelText: 'Quantity',
                                   hintText: 'Enter Quantity',
@@ -173,7 +245,9 @@ class _UploadProductScreenState extends State<UploadProductScreen> {
             child: 
             FloatingActionButton(
               //shape: const CircleBorder(),
-              onPressed: (){},
+              onPressed: (){
+                _pickProductImages();
+              },
               backgroundColor: Colors.yellow,
               child: const Icon(Icons.photo_library,
                 color: Colors.black,) ,),
@@ -181,12 +255,7 @@ class _UploadProductScreenState extends State<UploadProductScreen> {
             FloatingActionButton(
               //shape: const CircleBorder(),
               onPressed: (){
-                if(_formKey.currentState!.validate()){
-                 uploadProduct();
-                }
-                else {
-                  MyMessageHandler.showSnackBar(_scaffoldKey,'Please fill all fields');
-                }
+                uploadProduct();
               },
               backgroundColor: Colors.yellow,
               child: const Icon(Icons.upload,
