@@ -55,7 +55,8 @@ class _UploadProductScreenState extends State<UploadProductScreen> {
             return Image.file(File(imagesFileList![index].path));
           });
     } 
-    else { // when the delete icon is pressed, it does not show the initial empty text, hence we add this
+    else { 
+      // when the delete icon is pressed, it does not show the initial empty text, hence we add this
       return const Center(
         child: Text(
           'you haven\'t picked \n \n any images yet!',
@@ -103,9 +104,7 @@ class _UploadProductScreenState extends State<UploadProductScreen> {
                 children: [
                   Row(
                     children: [
-                      Stack(
-                        children: [
-                          Container(
+                      Container(
                         color: Colors.blueGrey.shade100,
                         height: MediaQuery.of(context).size.width*0.5,
                         width: MediaQuery.of(context).size.width*0.5,
@@ -115,21 +114,9 @@ class _UploadProductScreenState extends State<UploadProductScreen> {
                           child: Text('you haven\'t picked \n \n any images yet!',
                             style: TextStyle(fontSize: 16),
                             textAlign: TextAlign.center,
-              
-                        
                         ),
                         ),
                         ),
-                        // this icons wil empty the images from the imagesFileList
-                          IconButton(
-                              onPressed: () {
-                                setState(() {
-                                  imagesFileList = [];
-                                });
-                              },
-                              icon: const Icon(Icons.delete_forever)),
-                        ],
-                      )
                         ],),
                         const Padding(
                           padding: EdgeInsets.all(8.0),
@@ -245,13 +232,25 @@ class _UploadProductScreenState extends State<UploadProductScreen> {
             child: 
             FloatingActionButton(
               //shape: const CircleBorder(),
-              onPressed: (){
+              onPressed: imagesFileList!.isEmpty 
+              ?(){ 
                 _pickProductImages();
+                } 
+              :(){
+                setState(() {
+                  imagesFileList=[];
+                });
               },
               backgroundColor: Colors.yellow,
-              child: const Icon(Icons.photo_library,
-                color: Colors.black,) ,),
-          ),
+              child: imagesFileList!.isEmpty 
+
+              ?const Icon(Icons.photo_library,
+                color: Colors.black,)
+              
+              :const Icon(Icons.delete_forever, //to allow user to remove & pick images with the same button
+                color: Colors.black,),
+                ),
+              ),
             FloatingActionButton(
               //shape: const CircleBorder(),
               onPressed: (){
