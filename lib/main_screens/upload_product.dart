@@ -1,4 +1,4 @@
-// ignore_for_file: avoid_print
+// ignore_for_file: avoid_print, sort_child_properties_last
 
 import 'dart:io';
 
@@ -6,6 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:multi_store_app/widgets/snackbar.dart';
 
+List <String> mainCategList = ['men','women','shoes','bags'];
+List <String> subCategList = ['shirt','jacket','vest','coat'];
 
 class UploadProductScreen extends StatefulWidget {
   const UploadProductScreen({super.key});
@@ -22,6 +24,8 @@ class _UploadProductScreenState extends State<UploadProductScreen> {
   late int quantity;
   late String proName;
   late String proDesc;
+  String mainCategdropDownVal='men';
+  String subCategdropDownVal='shirt';
 
 // picks mulitple Images,
 //imagesFIleList is a list of type XFile
@@ -114,9 +118,41 @@ class _UploadProductScreenState extends State<UploadProductScreen> {
                           child: Text('you haven\'t picked \n \n any images yet!',
                             style: TextStyle(fontSize: 16),
                             textAlign: TextAlign.center,
-                        ),
-                        ),
-                        ),
+                              ),
+                            ),
+                          ),
+                        Column(children: [
+                          const Text('select main category'),
+                          // DropDownButton is one widget that contains several widgets, hence list
+                          // these widget here, are the DropDownButtonMenuItem which contains: a 'child' & 'value' 
+                          // clicking on a 'child' of DropDownButtonMenuItem uses the 'value'
+                          DropdownButton(
+                            value:mainCategdropDownVal, //! value here MUST exist in [DropdownMenuItem(value: )] /// aka: "DropdownButton(value) == DropdownMenuItem(value)"" /// the values within "DropdownMenuItem" MUST also be unique 
+                            items: mainCategList
+                            .map<DropdownMenuItem<String>>((value){
+                              return DropdownMenuItem(child: Text(value),value: value,);
+                            }).toList(),
+                            onChanged: (String? value){
+                            print(value);
+                            setState(() {
+                              mainCategdropDownVal=value!;
+                            });
+                          }),
+                          const Text('select sub category'),
+                          
+                          DropdownButton(
+                            value:subCategdropDownVal, 
+                            items: subCategList
+                            .map<DropdownMenuItem<String>>((value){
+                              return DropdownMenuItem(child: Text(value),value: value,);
+                            }).toList(),
+                            onChanged: (String? value){
+                            print(value);
+                            setState(() {
+                              subCategdropDownVal=value!;
+                            });
+                          })
+                        ],)
                         ],),
                         const Padding(
                           padding: EdgeInsets.all(8.0),
