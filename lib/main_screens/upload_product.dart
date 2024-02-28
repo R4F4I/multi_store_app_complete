@@ -6,8 +6,13 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:multi_store_app/widgets/snackbar.dart';
 
-List <String> mainCategList = ['men','women','shoes','bags'];
-List <String> subCategList = ['shirt','jacket','vest','coat'];
+List <String> mainCategList = ['select category','men','women','shoes','bags'];
+List <String>   menSubCateg = ['subcategory'    ,   'shirt',   'jacket',   'vest',   'coat'];
+List <String> womenSubCateg = ['subcategory'    , 'w shirt', 'w jacket', 'w vest', 'w coat'];
+List <String> shoesSubCateg = ['subcategory'    ,'sh shirt','sh jacket','sh vest','sh coat'];
+List <String>  bagsSubCateg = ['subcategory'    ,' b shirt', 'b jacket', 'b vest', 'b coat'];
+
+
 
 class UploadProductScreen extends StatefulWidget {
   const UploadProductScreen({super.key});
@@ -24,8 +29,9 @@ class _UploadProductScreenState extends State<UploadProductScreen> {
   late int quantity;
   late String proName;
   late String proDesc;
-  String mainCategdropDownVal='men';
-  String subCategdropDownVal='shirt';
+  String mainCategdropDownVal='select category';
+  String subCategdropDownVal='subcategory';
+  List<String> subCategList=[];
 
 // picks mulitple Images,
 //imagesFIleList is a list of type XFile
@@ -136,7 +142,20 @@ class _UploadProductScreenState extends State<UploadProductScreen> {
                             print(value);
                             setState(() {
                               mainCategdropDownVal=value!;
+                              subCategdropDownVal='subcategory';
                             });
+                            if(value == 'men'){
+                              subCategList=menSubCateg;
+                            }
+                            else if(value == 'women'){
+                              subCategList=womenSubCateg;
+                            }
+                            else if(value == 'shoes'){
+                              subCategList=shoesSubCateg;
+                            }
+                            else if(value == 'bags'){
+                              subCategList=bagsSubCateg;
+                            }
                           }),
                           const Text('select sub category'),
                           
