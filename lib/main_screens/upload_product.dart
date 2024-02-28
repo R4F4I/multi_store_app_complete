@@ -4,13 +4,9 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:multi_store_app/utilities/categ_list.dart';
 import 'package:multi_store_app/widgets/snackbar.dart';
 
-List <String> mainCategList = ['select category','men','women','shoes','bags'];
-List <String>   menSubCateg = ['subcategory'    ,   'shirt',   'jacket',   'vest',   'coat'];
-List <String> womenSubCateg = ['subcategory'    , 'w shirt', 'w jacket', 'w vest', 'w coat'];
-List <String> shoesSubCateg = ['subcategory'    ,'sh shirt','sh jacket','sh vest','sh coat'];
-List <String>  bagsSubCateg = ['subcategory'    ,' b shirt', 'b jacket', 'b vest', 'b coat'];
 
 
 
@@ -76,6 +72,19 @@ class _UploadProductScreenState extends State<UploadProductScreen> {
       );
     }
   }
+
+  void selectedMainCateg(String ? value){
+    if(value=='subcategory'){subCategList=[];}
+    else if(value == 'men'){subCategList = men;}
+    else if(value == 'women'){subCategList = women;}
+    else if(value == 'electronics'){subCategList = electronics;}
+    else if(value == 'accessories'){subCategList = accessories;}
+    else if(value == 'shoes'){subCategList = shoes;}
+    else if(value == 'home & garden'){subCategList = homeandgarden;}
+    else if(value == 'beauty'){subCategList = beauty;}
+    else if(value == 'kids'){subCategList = kids;}
+    else if(value == 'bags'){subCategList = bags;}
+  }
   void uploadProduct() {
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save(); // since "onChanged" automatically saves while "onSaved" does not, we have to manually save
@@ -134,7 +143,7 @@ class _UploadProductScreenState extends State<UploadProductScreen> {
                           // clicking on a 'child' of DropDownButtonMenuItem uses the 'value'
                           DropdownButton(
                             value:mainCategdropDownVal, //! value here MUST exist in [DropdownMenuItem(value: )] /// aka: "DropdownButton(value) == DropdownMenuItem(value)"" /// the values within "DropdownMenuItem" MUST also be unique 
-                            items: mainCategList
+                            items: maincateg
                             .map<DropdownMenuItem<String>>((value){
                               return DropdownMenuItem(child: Text(value),value: value,);
                             }).toList(),
@@ -144,22 +153,12 @@ class _UploadProductScreenState extends State<UploadProductScreen> {
                               mainCategdropDownVal=value!;
                               subCategdropDownVal='subcategory';
                             });
-                            if(value == 'men'){
-                              subCategList=menSubCateg;
-                            }
-                            else if(value == 'women'){
-                              subCategList=womenSubCateg;
-                            }
-                            else if(value == 'shoes'){
-                              subCategList=shoesSubCateg;
-                            }
-                            else if(value == 'bags'){
-                              subCategList=bagsSubCateg;
-                            }
+                            selectedMainCateg(value);
                           }),
                           const Text('select sub category'),
                           
                           DropdownButton(
+                            disabledHint: const Text('select category'),
                             value:subCategdropDownVal, 
                             items: subCategList
                             .map<DropdownMenuItem<String>>((value){
