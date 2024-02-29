@@ -32,9 +32,9 @@ class HomeGardenCategory extends StatelessWidget {
                       children: List.generate(homeandgarden.length -1, (index) {
                         return SubCategoryModel(
                           mainCategName: 'homeandgarden',
-                          subCategName:accessories[index +1] ,
+                          subCategName:homeandgarden[index +1] ,
                           assetName:'images/homegarden/home$index.jpg' ,
-                          subCategLabel:accessories[index +1] ,
+                          subCategLabel:homeandgarden[index +1] ,
                         );
                       }),
                     ),

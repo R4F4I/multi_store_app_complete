@@ -86,7 +86,8 @@ class _UploadProductScreenState extends State<UploadProductScreen> {
     else if(value == 'bags'){subCategList = bags;}
   }
   void uploadProduct() {
-    if (_formKey.currentState!.validate()) {
+    if (mainCategdropDownVal!='select category'&& subCategdropDownVal!='subcategory'){ // '&&' since both of them should be selected
+      if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save(); // since "onChanged" automatically saves while "onSaved" does not, we have to manually save
       if(imagesFileList!.isNotEmpty){
         print('images picked!'); // image validation   
@@ -96,7 +97,11 @@ class _UploadProductScreenState extends State<UploadProductScreen> {
         print(proName);
         print(proDesc);
         // after successful attempt, clear all fields
-        imagesFileList=[];
+        setState(() {
+          imagesFileList=[];
+          mainCategdropDownVal='select category';
+          subCategdropDownVal='subcategory';
+        });
         _formKey.currentState!.reset();
 
       } else{
@@ -105,10 +110,14 @@ class _UploadProductScreenState extends State<UploadProductScreen> {
     } else {
       MyMessageHandler.showSnackBar(_scaffoldKey, 'Please fill all fields');
     }
+  } else { 
+    MyMessageHandler.showSnackBar(_scaffoldKey, 'Please select categories for product');
+  }    
   }
 
   @override
   Widget build(BuildContext context) {
+    var size = MediaQuery.of(context).size;
     return ScaffoldMessenger(
       key: _scaffoldKey,
       child: Scaffold(
@@ -125,8 +134,8 @@ class _UploadProductScreenState extends State<UploadProductScreen> {
                     children: [
                       Container(
                         color: Colors.blueGrey.shade100,
-                        height: MediaQuery.of(context).size.width*0.5,
-                        width: MediaQuery.of(context).size.width*0.5,
+                        height: size.width*0.5,
+                        width: size.width*0.5,
                         child:imagesFileList != null
                           ?previewImages()
                           :const Center(
@@ -136,41 +145,64 @@ class _UploadProductScreenState extends State<UploadProductScreen> {
                               ),
                             ),
                           ),
-                        Column(children: [
-                          const Text('select main category'),
-                          // DropDownButton is one widget that contains several widgets, hence list
-                          // these widget here, are the DropDownButtonMenuItem which contains: a 'child' & 'value' 
-                          // clicking on a 'child' of DropDownButtonMenuItem uses the 'value'
-                          DropdownButton(
-                            value:mainCategdropDownVal, //! value here MUST exist in [DropdownMenuItem(value: )] /// aka: "DropdownButton(value) == DropdownMenuItem(value)"" /// the values within "DropdownMenuItem" MUST also be unique 
-                            items: maincateg
-                            .map<DropdownMenuItem<String>>((value){
-                              return DropdownMenuItem(child: Text(value),value: value,);
-                            }).toList(),
-                            onChanged: (String? value){
-                            print(value);
-                            setState(() {
-                              mainCategdropDownVal=value!;
-                              subCategdropDownVal='subcategory';
-                            });
-                            selectedMainCateg(value);
-                          }),
-                          const Text('select sub category'),
-                          
-                          DropdownButton(
-                            disabledHint: const Text('select category'),
-                            value:subCategdropDownVal, 
-                            items: subCategList
-                            .map<DropdownMenuItem<String>>((value){
-                              return DropdownMenuItem(child: Text(value),value: value,);
-                            }).toList(),
-                            onChanged: (String? value){
-                            print(value);
-                            setState(() {
-                              subCategdropDownVal=value!;
-                            });
-                          })
-                        ],)
+                      SizedBox(
+                        height: size.width*0.5,
+                        width: size.width*0.5,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                            Column( //both wrapped in column to keep them together,
+                              children: [
+                                const Text('*select main category',style: TextStyle(color: Colors.red),),
+                                // DropDownButton is one widget that contains several widgets, hence list
+                                // these widget here, are the DropDownButtonMenuItem which contains: a 'child' & 'value' 
+                                // clicking on a 'child' of DropDownButtonMenuItem uses the 'value'
+                                DropdownButton(
+                                  iconSize: 40,
+                                  iconEnabledColor: Colors.red,
+                                  dropdownColor: Colors.yellow.shade400,
+                                  value:mainCategdropDownVal, //! value here MUST exist in [DropdownMenuItem(value: )] /// aka: "DropdownButton(value) == DropdownMenuItem(value)"" /// the values within "DropdownMenuItem" MUST also be unique 
+                                  items: maincateg
+                                  .map<DropdownMenuItem<String>>((value){
+                                    return DropdownMenuItem(child: Text(value),value: value,);
+                                  }).toList(),
+                                  onChanged: (String? value){
+                                  print(value);
+                                  setState(() {
+                                    mainCategdropDownVal=value!;
+                                    subCategdropDownVal='subcategory';
+                                  });
+                                  selectedMainCateg(value);
+                                }),
+                              ],
+                            ),
+                            Column( //both wrapped in column to keep them together,
+                              children: [
+                                const Text('*select sub category',style: TextStyle(color: Colors.red),),
+                                
+                                DropdownButton(
+                                  iconSize: 40,
+                                  iconEnabledColor: Colors.red,
+                                  iconDisabledColor: Colors.black,
+                                  dropdownColor: Colors.yellow.shade400,
+                                  menuMaxHeight: 500,
+                                  disabledHint: const Text('select category'),
+                                  value:subCategdropDownVal, 
+                                  items: subCategList
+                                  .map<DropdownMenuItem<String>>((value){
+                                    return DropdownMenuItem(child: Text(value),value: value,);
+                                  }).toList(),
+                                  onChanged: (String? value){
+                                  print(value);
+                                  setState(() {
+                                    subCategdropDownVal=value!;
+                                  });
+                                }),
+                              ],
+                            )
+                          ],),
+                        )
                         ],),
                         const Padding(
                           padding: EdgeInsets.all(8.0),
