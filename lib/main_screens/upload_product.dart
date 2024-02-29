@@ -1,4 +1,4 @@
-// ignore_for_file: avoid_print, sort_child_properties_last
+// ignore_for_file: avoid_print, sort_child_properties_last, depend_on_referenced_packages
 
 import 'dart:io';
 
@@ -7,6 +7,8 @@ import 'package:image_picker/image_picker.dart';
 import 'package:multi_store_app/utilities/categ_list.dart';
 import 'package:multi_store_app/widgets/snackbar.dart';
 
+import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
+import 'package:path/path.dart' as path;
 
 
 
@@ -35,6 +37,7 @@ class _UploadProductScreenState extends State<UploadProductScreen> {
 // then places them inside 'pickedImages' (which places them insde the created imagesFileList)
   final ImagePicker _picker = ImagePicker();
   List<XFile>? imagesFileList = [];
+  List<String> imagesUrlList = [];
   dynamic _pickedImageError;
 
   void _pickProductImages() async {
@@ -85,11 +88,28 @@ class _UploadProductScreenState extends State<UploadProductScreen> {
     else if(value == 'kids'){subCategList = kids;}
     else if(value == 'bags'){subCategList = bags;}
   }
-  void uploadProduct() {
+  void uploadProduct() async{
     if (mainCategdropDownVal!='select category'&& subCategdropDownVal!='subcategory'){ // '&&' since both of them should be selected
       if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save(); // since "onChanged" automatically saves while "onSaved" does not, we have to manually save
       if(imagesFileList!.isNotEmpty){
+        // this for loop will upload each image inside the imagesFIleList to firebase,
+        // it references each image's name by placing it in products folder 
+        try {
+          for (var image in imagesFileList!){
+          firebase_storage.Reference ref = firebase_storage.FirebaseStorage.instance.ref(
+            'products/${path.basename(image.path)}' // here each image is place in products folder, it name stays the same , basename place actual name inside path, hence input: 'path/in/my/local/space/image.png' output:'products/image.png'
+          );
+          await ref.putFile(File(image.path)).whenComplete(() async{
+            await ref.getDownloadURL().then((value) {
+              imagesUrlList.add(value); // when the image files are successfully uploaded to firebase, fetch their URLs and place them inside 'imagesUrlList' 
+            });
+          });
+        }
+       } catch(e){
+        print(e);
+      }
+        
         print('images picked!'); // image validation   
         print('valid');
         print(price);
