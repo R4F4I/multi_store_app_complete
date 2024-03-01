@@ -2,6 +2,8 @@
 
 import 'dart:io';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:multi_store_app/utilities/categ_list.dart';
@@ -103,6 +105,19 @@ class _UploadProductScreenState extends State<UploadProductScreen> {
           await ref.putFile(File(image.path)).whenComplete(() async{
             await ref.getDownloadURL().then((value) {
               imagesUrlList.add(value); // when the image files are successfully uploaded to firebase, fetch their URLs and place them inside 'imagesUrlList' 
+            }).whenComplete(() async{
+              CollectionReference productRef = FirebaseFirestore.instance.collection('products');
+              await productRef.doc().set({
+                'maincateg': mainCategdropDownVal,
+                'subcateg': subCategdropDownVal,
+                'price': price,
+                'instock': quantity,
+                'proname': proName,
+                'prodesc': proDesc,
+                'sid': FirebaseAuth.instance.currentUser!.uid,
+                'proimages': imagesUrlList,
+                'discount': 0,
+              });
             });
           });
         }
@@ -120,7 +135,7 @@ class _UploadProductScreenState extends State<UploadProductScreen> {
         setState(() {
           imagesFileList=[];
           mainCategdropDownVal='select category';
-          subCategdropDownVal='subcategory';
+          //subCategdropDownVal='subcategory'; // this we can now simply just disable the button
         });
         _formKey.currentState!.reset();
 
