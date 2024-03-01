@@ -90,7 +90,7 @@ class _UploadProductScreenState extends State<UploadProductScreen> {
     else if(value == 'kids'){subCategList = kids;}
     else if(value == 'bags'){subCategList = bags;}
   }
-  void uploadProduct() async{
+  Future<void> uploadImages() async{
     if (mainCategdropDownVal!='select category'&& subCategdropDownVal!='subcategory'){ // '&&' since both of them should be selected
       if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save(); // since "onChanged" automatically saves while "onSaved" does not, we have to manually save
@@ -105,8 +105,25 @@ class _UploadProductScreenState extends State<UploadProductScreen> {
           await ref.putFile(File(image.path)).whenComplete(() async{
             await ref.getDownloadURL().then((value) {
               imagesUrlList.add(value); // when the image files are successfully uploaded to firebase, fetch their URLs and place them inside 'imagesUrlList' 
-            }).whenComplete(() async{
-              CollectionReference productRef = FirebaseFirestore.instance.collection('products');
+            });
+          });
+        }
+       } catch(e){
+        print(e);
+       }
+      } else{
+        MyMessageHandler.showSnackBar(_scaffoldKey, 'Please pick an image');}
+    } else {
+      MyMessageHandler.showSnackBar(_scaffoldKey, 'Please fill all fields');
+    }
+  } else { 
+    MyMessageHandler.showSnackBar(_scaffoldKey, 'Please select categories for product');
+  }    
+  }
+
+  void uploadData() async{
+    if(imagesUrlList.isNotEmpty){
+      CollectionReference productRef = FirebaseFirestore.instance.collection('products');
               await productRef.doc().set({
                 'maincateg': mainCategdropDownVal,
                 'subcateg': subCategdropDownVal,
@@ -117,37 +134,22 @@ class _UploadProductScreenState extends State<UploadProductScreen> {
                 'sid': FirebaseAuth.instance.currentUser!.uid,
                 'proimages': imagesUrlList,
                 'discount': 0,
+                  }).whenComplete(() {
+                setState(() {
+                  imagesFileList=[];
+                  imagesUrlList=[];
+                  mainCategdropDownVal='select category';
+                  subCategList=[];
+                  });
+                _formKey.currentState!.reset();
               });
-            });
-          });
-        }
-       } catch(e){
-        print(e);
-      }
-        
-        print('images picked!'); // image validation   
-        print('valid');
-        print(price);
-        print(quantity);
-        print(proName);
-        print(proDesc);
-        // after successful attempt, clear all fields
-        setState(() {
-          imagesFileList=[];
-          mainCategdropDownVal='select category';
-          //subCategdropDownVal='subcategory'; // this we can now simply just disable the button
-        });
-        _formKey.currentState!.reset();
 
-      } else{
-        MyMessageHandler.showSnackBar(_scaffoldKey, 'Please pick an image');
-      }
     } else {
-      MyMessageHandler.showSnackBar(_scaffoldKey, 'Please fill all fields');
+      print('no images');
     }
-  } else { 
-    MyMessageHandler.showSnackBar(_scaffoldKey, 'Please select categories for product');
-  }    
+  }
+  void uploadProduct() async{
+    await uploadImages().whenComplete(() => uploadData()); // to avoid the 'incrementing' & the 'imagesUrlList not emptying' error, we split the two processes into two different functions
   }
 
   @override
