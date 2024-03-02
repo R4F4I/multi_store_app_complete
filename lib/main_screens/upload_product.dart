@@ -34,6 +34,7 @@ class _UploadProductScreenState extends State<UploadProductScreen> {
   String mainCategdropDownVal='select category';
   String subCategdropDownVal='subcategory';
   List<String> subCategList=[];
+  bool processing = false;
 
 // picks mulitple Images,
 //imagesFIleList is a list of type XFile
@@ -100,6 +101,9 @@ class _UploadProductScreenState extends State<UploadProductScreen> {
         // this for loop will upload each image inside the imagesFIleList to firebase,
         // it references each image's name by placing it in products folder 
         try {
+          setState(() {
+            processing=true; 
+          });
           for (var image in imagesFileList!){
           firebase_storage.Reference ref = firebase_storage.FirebaseStorage.instance.ref(
             'products/${path.basename(image.path)}' // here each image is place in products folder, it name stays the same , basename place actual name inside path, hence input: 'path/in/my/local/space/image.png' output:'products/image.png'
@@ -140,6 +144,7 @@ class _UploadProductScreenState extends State<UploadProductScreen> {
                 'discount': 0,
                   }).whenComplete(() {
                 setState(() {
+                  processing=false; // when all is complete, processing is not happening
                   imagesFileList=[];
                   imagesUrlList=[];
                   mainCategdropDownVal='select category';
@@ -381,10 +386,14 @@ class _UploadProductScreenState extends State<UploadProductScreen> {
             FloatingActionButton(
               //shape: const CircleBorder(),
               onPressed: (){
-                uploadProduct();
+                processing==true
+                ?null // disable button during processing to prevent duplicates from accidental clicking
+                :uploadProduct();
               },
               backgroundColor: Colors.yellow,
-              child: const Icon(Icons.upload,
+              child: processing == true
+              ? const CircularProgressIndicator(color: Colors.black,) // display to user that the data is processing
+              : const Icon(Icons.upload,
                 color: Colors.black,) ,),
         ]),
       ),
