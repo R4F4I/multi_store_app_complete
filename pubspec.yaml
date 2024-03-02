@@ -41,6 +41,7 @@ dependencies:
   cloud_firestore: ^4.15.4
   firebase_storage: ^11.6.5
   firebase_core: ^2.25.4
+  uuid: ^4.3.3
   
 
 

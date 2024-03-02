@@ -11,6 +11,7 @@ import 'package:multi_store_app/widgets/snackbar.dart';
 
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:path/path.dart' as path;
+import 'package:uuid/uuid.dart';
 
 
 
@@ -29,6 +30,7 @@ class _UploadProductScreenState extends State<UploadProductScreen> {
   late int quantity;
   late String proName;
   late String proDesc;
+  late String proId;
   String mainCategdropDownVal='select category';
   String subCategdropDownVal='subcategory';
   List<String> subCategList=[];
@@ -124,7 +126,9 @@ class _UploadProductScreenState extends State<UploadProductScreen> {
   void uploadData() async{
     if(imagesUrlList.isNotEmpty){
       CollectionReference productRef = FirebaseFirestore.instance.collection('products');
-              await productRef.doc().set({
+      proId = const Uuid().v4(); // used uuid to be able to refer to a prod id to edit in future, as the ones made by firebase cant be referenced
+              await productRef.doc(proId).set({
+                'proid':proId,
                 'maincateg': mainCategdropDownVal,
                 'subcateg': subCategdropDownVal,
                 'price': price,
