@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:multi_store_app/galleries/men_gallery.dart';
 import 'package:multi_store_app/widgets/fake_search.dart';
 
 
@@ -42,7 +43,7 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
 
         body: const TabBarView(children: [
-          Center(child: Text('mens tab item')),
+          MenGalleryScreen(),
           Center(child: Text('womens tab item')),
           Center(child: Text('shoes tab item')),
           Center(child: Text('Bags tab item')),
