@@ -16,11 +16,11 @@ class _HomeScreenState extends State<HomeScreen> {
     return DefaultTabController(
       length: 9,
       child: Scaffold(
-    
+        backgroundColor: Colors.blueGrey.shade100.withOpacity(0.5),
         appBar:  AppBar(
     
           elevation: 0,
-          backgroundColor: const Color.fromARGB(255, 255, 255, 255),
+          backgroundColor: Colors.white,
           title: const FakeSearch(),
 
           bottom: const TabBar(
