@@ -4,15 +4,15 @@ import 'package:multi_store_app/models/product_model.dart';
 import 'package:staggered_grid_view_flutter/widgets/staggered_grid_view.dart';
 import 'package:staggered_grid_view_flutter/widgets/staggered_tile.dart';
 
-class MenGalleryScreen extends StatefulWidget {
-  const MenGalleryScreen({super.key});
+class HomeAndGardenGalleryScreen extends StatefulWidget {
+  const HomeAndGardenGalleryScreen({super.key});
 
   @override
-  State<MenGalleryScreen> createState() => _MenGalleryScreenState();
+  State<HomeAndGardenGalleryScreen> createState() => _HomeAndGardenGalleryScreenState();
 }
 
-class _MenGalleryScreenState extends State<MenGalleryScreen> {
-  final Stream<QuerySnapshot> _productsStream = FirebaseFirestore.instance.collection('products').where('maincateg',isEqualTo: 'men').snapshots(); // filter which fields to show up in which area using this
+class _HomeAndGardenGalleryScreenState extends State<HomeAndGardenGalleryScreen> {
+  final Stream<QuerySnapshot> _productsStream = FirebaseFirestore.instance.collection('products').where('maincateg',isEqualTo: 'home & garden').snapshots(); // filter which fields to show up in which area using this
 
   @override
   Widget build(BuildContext context) {
