@@ -30,6 +30,42 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
               fontSize: 16,
               fontWeight: FontWeight.w600),
           ),
+          Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,  
+          children: [
+            const Row(
+              children: [
+                Text('USD',style: TextStyle(
+                  color: Colors.red,
+                  fontSize: 16,
+                  fontWeight: FontWeight.w600,
+                  ),
+                ),
+                Text(' 99.99',style: TextStyle(
+                  color: Colors.red,
+                  fontSize: 16,
+                  fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ],
+            ),
+            IconButton(
+              onPressed: (){}, 
+              icon: const Icon(
+                Icons.favorite_border_outlined,
+                color: Colors.red,
+                size: 30,
+                ),
+              ),
+            
+          ],),
+          const Text(' 99 pieces left in stock',
+              style: TextStyle(
+                  color: Colors.blueGrey,
+                  fontSize: 16,
+                  fontWeight: FontWeight.w600,
+                  ),
+                ),
       ],)
     );
   }
