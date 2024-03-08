@@ -66,7 +66,35 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                   fontWeight: FontWeight.w600,
                   ),
                 ),
+          const ProductDetailsHeaderLabel(label: '  Item Description  ',),
+          Text('Pro Desc.',
+            style: TextStyle(
+              color: Colors.blueGrey.shade800,
+              fontSize: 16,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+          const ProductDetailsHeaderLabel(label: '  Recommended Items  ',),
       ],)
     );
+  }
+}
+
+class ProductDetailsHeaderLabel extends StatelessWidget {
+  final String label;
+  const ProductDetailsHeaderLabel({
+    super.key, required this.label
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(height: 60,child: Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        SizedBox(height: 40,width: 50,child: Divider(color: Colors.yellow.shade900,thickness: 1,)),
+        Text(label, style: TextStyle(color: Colors.yellow.shade900,fontSize: 24,fontWeight: FontWeight.bold),),
+        SizedBox(height: 40,width: 50,child: Divider(color: Colors.yellow.shade900,thickness: 1,)),
+    ]),
+            );
   }
 }
