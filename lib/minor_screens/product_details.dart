@@ -8,16 +8,23 @@ import 'package:staggered_grid_view_flutter/widgets/staggered_tile.dart';
 
 
 class ProductDetailsScreen extends StatefulWidget {
-  const ProductDetailsScreen({super.key});
+  final dynamic proList;
+  const ProductDetailsScreen({super.key, required this.proList});
 
   @override
   State<ProductDetailsScreen> createState() => _ProductDetailsScreenState();
 }
 
 class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
-  final Stream<QuerySnapshot> _productsStream = FirebaseFirestore.instance.collection('products').snapshots();
+  late List<dynamic> imagesList = widget.proList['proimages'];
   @override
   Widget build(BuildContext context) {
+    final Stream<QuerySnapshot> productsStream = 
+      FirebaseFirestore.instance
+        .collection('products')
+        .where('maincateg',isEqualTo: widget.proList['maincateg'])
+        .where('subcateg',isEqualTo: widget.proList['subcateg'])
+        .snapshots();
     return Material(
       child: SafeArea(
         child: Scaffold(
@@ -28,12 +35,12 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                 child: Swiper(
                   pagination: const SwiperPagination(builder: SwiperPagination.fraction),
                   itemBuilder: (context,index){
-                  return const Image(image: NetworkImage('https://fakestoreapi.com/img/81fPKd-2AYL._AC_SL1500_.jpg',),);
+                  return Image(image: NetworkImage(imagesList[index]),);
                 }, 
-                  itemCount: 1,
+                  itemCount: imagesList.length,
                   ),
                 ),
-                Text('pro name',
+                Text(widget.proList['proname'],
                  style: TextStyle(
                     color: Colors.grey.shade600,
                     fontSize: 16,
@@ -42,15 +49,15 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                 Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,  
                 children: [
-                  const Row(
+                   Row(
                     children: [
-                      Text('USD',style: TextStyle(
+                      const Text('USD  ',style: TextStyle(
                         color: Colors.red,
                         fontSize: 16,
                         fontWeight: FontWeight.w600,
                         ),
                       ),
-                      Text(' 99.99',style: TextStyle(
+                      Text(widget.proList['price'].toStringAsFixed(2),style: const TextStyle(
                         color: Colors.red,
                         fontSize: 16,
                         fontWeight: FontWeight.w600,
@@ -68,15 +75,15 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                     ),
                   
                 ],),
-                const Text(' 99 pieces left in stock',
-                    style: TextStyle(
+                Text((widget.proList['instock'].toString())+(' pieces left in stock'),
+                    style:  const TextStyle(
                         color: Colors.blueGrey,
                         fontSize: 16,
                         fontWeight: FontWeight.w600,
                         ),
                       ),
                 const ProductDetailsHeaderLabel(label: '  Item Description  ',),
-                Text('Pro Desc.',
+                Text(widget.proList['prodesc'],
                   style: TextStyle(
                     color: Colors.blueGrey.shade800,
                     fontSize: 16,
@@ -85,7 +92,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                 ),
                 const ProductDetailsHeaderLabel(label: '  Recommended Items  ',),
                   SizedBox(child: StreamBuilder<QuerySnapshot>(
-              stream: _productsStream,
+              stream: productsStream,
               builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
                 if (snapshot.hasError) {
                   return const Text('Something went wrong');
@@ -123,18 +130,21 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
             )
               ],),
           ),
-          bottomSheet: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-            Row(
+          bottomSheet: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 15),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                IconButton(onPressed: (){}, icon: const Icon(Icons.store)),
-                const SizedBox(width: 20,),
-                IconButton(onPressed: (){}, icon: const Icon(Icons.shopping_cart_sharp)),
-              ],
-            ),
-            YellowButton(label: 'Add to Cart'.toUpperCase(), onPressed: (){}, width: 0.5),
-          ],),
+              Row(
+                children: [
+                  IconButton(onPressed: (){}, icon: const Icon(Icons.store)),
+                  const SizedBox(width: 20,),
+                  IconButton(onPressed: (){}, icon: const Icon(Icons.shopping_cart_sharp)),
+                ],
+              ),
+              YellowButton(label: 'Add to Cart'.toUpperCase(), onPressed: (){}, width: 0.5),
+            ],),
+          ),
           ),
       ),
     );
