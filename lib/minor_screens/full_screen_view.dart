@@ -22,34 +22,37 @@ class _FullScreenViewState extends State<FullScreenView> {
         backgroundColor: Colors.white,
         leading: const AppBarBackButton(),
       ),
-      body: Column(
-        children:[
-           Center(
-              child: Text(
-                ('${index+1}')+('/')+(widget.imagesList.length.toString()),
-                style: const TextStyle(
-                    fontSize: 24,
-                    letterSpacing: 8
+      body: SafeArea(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children:[
+             Center(
+                child: Text(
+                  ('${index+1}')+('/')+(widget.imagesList.length.toString()),
+                  style: const TextStyle(
+                      fontSize: 24,
+                      letterSpacing: 8
+                  ),
                 ),
-              ),
-          ),
-          SizedBox(
-            height: size.height*0.5,
-            child: PageView(
-              onPageChanged: (value){
-                setState(() {
-                  index=value;
-                });
-              },
-              controller: _controller,
-              children: images(),
             ),
-          ),
-          SizedBox(
-            height: size.height*0.2,
-            child: imageView(),
-          ),
-        ]
+            SizedBox(
+              height: size.height*0.5,
+              child: PageView(
+                onPageChanged: (value){
+                  setState(() {
+                    index=value;
+                  });
+                },
+                controller: _controller,
+                children: images(),
+              ),
+            ),
+            SizedBox(
+              height: size.height*0.2,
+              child: imageView(),
+            ),
+          ]
+        ),
       ),
     );
   }
