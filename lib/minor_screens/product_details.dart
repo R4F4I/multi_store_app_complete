@@ -33,7 +33,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
             child: Column(children: [
               InkWell(
                 onTap: (){
-                  Navigator.push(context, MaterialPageRoute(builder: (context)=> const FullScreenView()));
+                  Navigator.push(context, MaterialPageRoute(builder: (context)=> FullScreenView(imagesList: imagesList,)));
                 },
                 child: Stack(
                   children: [SizedBox(
