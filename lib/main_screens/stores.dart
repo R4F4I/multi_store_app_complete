@@ -29,7 +29,14 @@ class StoresScreen extends StatelessWidget {
                   itemBuilder: (context,index){
                         return GestureDetector(
                           onTap: (){
-                            Navigator.push(context, MaterialPageRoute(builder: (context)=>const VisitStore()));
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context)=> VisitStore(
+                                        suppID: snapshot.data!.docs[index]['suppid']
+                                    )
+                                )
+                            );
                           },
                           child: Column(
                             children: [

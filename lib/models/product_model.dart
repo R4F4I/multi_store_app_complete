@@ -37,7 +37,7 @@ class ProductModel extends StatelessWidget {
                     Text(
                     products['proname'],
                     maxLines: 2,
-                    overflow: TextOverflow.fade,
+                    overflow: TextOverflow.clip,
                     style: TextStyle(
                       color: Colors.grey.shade600,
                       fontSize: 16,
