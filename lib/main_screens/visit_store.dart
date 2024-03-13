@@ -43,6 +43,9 @@ class _VisitStoreState extends State<VisitStore> {
           return Scaffold(
             backgroundColor: Colors.blueGrey.shade100,
             appBar: AppBar(
+              iconTheme: const IconThemeData(
+                color: Colors.white,
+                ),      
               toolbarHeight: 100,
               flexibleSpace: Image.asset(
                 'images/inapp/coverimage.jpg',
@@ -95,7 +98,9 @@ class _VisitStoreState extends State<VisitStore> {
                           ),
                           child: MaterialButton(
                             onPressed: (){
-                              following = !following;
+                              setState(() {
+                                following = !following;
+                              });                              
                             },
                             child: Center(
                               child: following == true
