@@ -33,7 +33,7 @@ class StoresScreen extends StatelessWidget {
                                 context,
                                 MaterialPageRoute(
                                     builder: (context)=> VisitStore(
-                                        suppID: snapshot.data!.docs[index]['suppid']
+                                        suppID: snapshot.data!.docs[index]['sid']
                                     )
                                 )
                             );

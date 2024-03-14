@@ -4,7 +4,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:multi_store_app/dashboard/edit_profile.dart';
 import 'package:multi_store_app/dashboard/manage_products.dart';
-import 'package:multi_store_app/dashboard/my_store.dart';
 import 'package:multi_store_app/dashboard/supp_balance.dart';
 import 'package:multi_store_app/dashboard/supp_orders.dart';
 import 'package:multi_store_app/dashboard/supp_statistics.dart';

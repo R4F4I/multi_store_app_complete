@@ -112,7 +112,7 @@ void signUp() async {
           'profileimage':profileImage,
           'phone':'',
           'address':'',
-          'custid':_uid, // customer_i.d
+          'cid':_uid, // customer_i.d
         });
         
         _formKey.currentState!.reset();
