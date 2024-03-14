@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:staggered_grid_view_flutter/widgets/staggered_grid_view.dart';
 import 'package:staggered_grid_view_flutter/widgets/staggered_tile.dart';
@@ -86,39 +87,64 @@ class _VisitStoreState extends State<VisitStore> {
                             ),
                           ],
                         ),
-                        Container(
-                          height: 35,
-                          width: MediaQuery.of(context).size.width*0.3,
-                          decoration: BoxDecoration(
-                            color: Colors.yellow,
-                            border: Border.all(
-                                width: 3,
-                                color: Colors.black),
-                            borderRadius: BorderRadius.circular(25),
-                          ),
-                          child: MaterialButton(
-                            onPressed: (){
-                              setState(() {
-                                following = !following;
-                              });                              
-                            },
-                            child: Center(
-                              child: following == true
-                                  ? const Text('UNFOLLOW',
-                                    style: TextStyle(
-                                      color: Colors.black,
-                                      fontSize: 16,
+                        data['sid']==FirebaseAuth.instance.currentUser!.uid
+                            ? Container(
+                                height: 35,
+                                width: MediaQuery.of(context).size.width*0.3,
+                                decoration: BoxDecoration(
+                                  color: Colors.yellow,
+                                  border: Border.all(
+                                      width: 3,
+                                      color: Colors.black),
+                                  borderRadius: BorderRadius.circular(25),
+                                ),
+                                child: MaterialButton(
+                                  onPressed: (){},
+                                  child: const Center(
+                                    child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                      children: [
+                                        Text('Edit'),
+                                        Icon(
+                                          Icons.edit,
+                                          color: Colors.black,)],
+                                    )
+                                  ),
                                 ),
                               )
-                                  : const Text('FOLLOW',
-                                    style: TextStyle(
-                                      color: Colors.black,
-                                      fontSize: 16,
+                            : Container(
+                                height: 35,
+                                width: MediaQuery.of(context).size.width*0.3,
+                                decoration: BoxDecoration(
+                                  color: Colors.yellow,
+                                  border: Border.all(
+                                      width: 3,
+                                      color: Colors.black),
+                                  borderRadius: BorderRadius.circular(25),
                                 ),
-                              ),
-                            ),
-                          ),
-                        )
+                                child: MaterialButton(
+                                  onPressed: (){
+                                    setState(() {
+                                      following = !following;
+                                    });
+                                  },
+                                  child: Center(
+                                    child: following == true
+                                        ? const Text('UNFOLLOW',
+                                      style: TextStyle(
+                                        color: Colors.black,
+                                        fontSize: 16,
+                                      ),
+                                    )
+                                        : const Text('FOLLOW',
+                                      style: TextStyle(
+                                        color: Colors.black,
+                                        fontSize: 16,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              )
                       ],),
                   )
                 ],),
