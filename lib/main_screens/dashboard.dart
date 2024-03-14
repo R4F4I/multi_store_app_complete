@@ -8,6 +8,7 @@ import 'package:multi_store_app/dashboard/my_store.dart';
 import 'package:multi_store_app/dashboard/supp_balance.dart';
 import 'package:multi_store_app/dashboard/supp_orders.dart';
 import 'package:multi_store_app/dashboard/supp_statistics.dart';
+import 'package:multi_store_app/main_screens/visit_store.dart';
 import 'package:multi_store_app/widgets/alert_dialog.dart';
 import 'package:multi_store_app/widgets/appbar_widgets.dart';
 
@@ -29,13 +30,13 @@ List<IconData> iconLabel = [
 
 ];
 
-List<Widget> pages= const [
-  MyStore(),
-  SupplierOrders(),
-  EditProfile(),
-  ManageProducts(),
-  BalanceScreen(),
-  StatisticsScreen(),
+List<Widget> pages= [
+  VisitStore(suppID: FirebaseAuth.instance.currentUser!.uid),
+  const SupplierOrders(),
+  const EditProfile(),
+  const ManageProducts(),
+  const BalanceScreen(),
+  const StatisticsScreen(),
 ];
 
 class DashboardScreen extends StatelessWidget {
