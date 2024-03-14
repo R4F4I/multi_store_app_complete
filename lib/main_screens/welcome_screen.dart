@@ -36,7 +36,7 @@ class _WelcomeScreenState extends State<WelcomeScreen>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   bool processing=false;
-  CollectionReference customers = FirebaseFirestore.instance.collection('customers');
+  CollectionReference anonymous = FirebaseFirestore.instance.collection('anonymous');
   late String _uid;
 
 
@@ -212,16 +212,15 @@ class _WelcomeScreenState extends State<WelcomeScreen>
                       });
                       await FirebaseAuth.instance.signInAnonymously().whenComplete(() async {
                         _uid=FirebaseAuth.instance.currentUser!.uid;
-                        await customers.doc(_uid).set({
+                        await anonymous.doc(_uid).set({
                                     'name': '',
                                     'email': '',
                                     'profileimage': '',
                                     'phone': '',
                                     'address': '',
-                                    'custid': _uid, // customer_i.d
+                                    'cid': _uid, // customer_i.d
                                   });
                       });
-                                
                       Navigator.pushReplacementNamed(context, '/customer_home');
                     },
                     child: const Icon(Icons.person,size: 55,color: Colors.lightBlueAccent,),
