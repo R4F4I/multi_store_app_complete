@@ -1,9 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:multi_store_app/widgets/appbar_widgets.dart';
 import 'package:staggered_grid_view_flutter/widgets/staggered_grid_view.dart';
 import 'package:staggered_grid_view_flutter/widgets/staggered_tile.dart';
-
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import '../models/product_model.dart';
 
 class VisitStore extends StatefulWidget {
@@ -44,9 +45,7 @@ class _VisitStoreState extends State<VisitStore> {
           return Scaffold(
             backgroundColor: Colors.blueGrey.shade100,
             appBar: AppBar(
-              iconTheme: const IconThemeData(
-                color: Colors.white,
-                ),      
+              leading: const YellowBackButton(),
               toolbarHeight: 100,
               flexibleSpace: Image.asset(
                 'images/inapp/coverimage.jpg',
@@ -187,6 +186,16 @@ class _VisitStoreState extends State<VisitStore> {
                   );
                 },
               ),
+            ),
+            floatingActionButton: FloatingActionButton(
+              shape: const CircleBorder(),
+              backgroundColor: Colors.green,
+              child: const Icon(
+                FontAwesomeIcons.whatsapp,
+                color: Colors.white,
+                size: 40,
+              ),
+              onPressed: (){},
             ),
           );
         }
