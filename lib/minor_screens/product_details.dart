@@ -1,9 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_swiper_null_safety/flutter_swiper_null_safety.dart';
+import 'package:multi_store_app/main_screens/cart.dart';
 import 'package:multi_store_app/main_screens/visit_store.dart';
 import 'package:multi_store_app/minor_screens/full_screen_view.dart';
 import 'package:multi_store_app/models/product_model.dart';
+import 'package:multi_store_app/widgets/appbar_widgets.dart';
 import 'package:multi_store_app/widgets/yellow_button.dart';
 import 'package:staggered_grid_view_flutter/widgets/staggered_grid_view.dart';
 import 'package:staggered_grid_view_flutter/widgets/staggered_tile.dart';
@@ -195,7 +197,9 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                       icon: const Icon(Icons.store)
                   ),
                   const SizedBox(width: 20,),
-                  IconButton(onPressed: (){}, icon: const Icon(Icons.shopping_cart_sharp)),
+                  IconButton(onPressed: (){
+                    Navigator.push(context, MaterialPageRoute(builder: (context)=> const CartScreen(back: AppBarBackButton(),)));
+                  }, icon: const Icon(Icons.shopping_cart_sharp)),
                 ],
               ),
               YellowButton(label: 'Add to Cart'.toUpperCase(), onPressed: (){}, width: 0.5),
