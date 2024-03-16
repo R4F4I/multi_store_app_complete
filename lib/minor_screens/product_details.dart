@@ -137,37 +137,37 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                         SizedBox(child: StreamBuilder<QuerySnapshot>(
                                     stream: productsStream,
                                     builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
-                      if (snapshot.hasError) {
-                        return const Text('Something went wrong');
-                      }
-                                  
-                      if (snapshot.connectionState == ConnectionState.waiting) {
-                        return const Center(child: CircularProgressIndicator());
-                      }
-                      if (snapshot.data!.docs.isEmpty){ //when a section, filtered with '.where(,isEqualTo: )' returns an empty output
-                        return const Center(child: Text(
-                          'This category has \n \n no items yet!',
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            fontSize: 26,
-                            fontWeight: FontWeight.bold,
-                            fontFamily: 'Acme',
-                            letterSpacing: 1.5,
-                            color: Colors.blueGrey,
-                          ),
-                          ));
-                      }
-                      return SingleChildScrollView(
-                        child: StaggeredGridView.countBuilder(
-                          physics: const NeverScrollableScrollPhysics(),
-                          shrinkWrap: true,
-                          itemCount: snapshot.data!.docs.length,
-                          crossAxisCount: 2, 
-                          itemBuilder: (context,index){
-                            return ProductModel(products: snapshot.data!.docs[index]);
-                          }, 
-                          staggeredTileBuilder: (context)=>const StaggeredTile.fit(1)),
-                        );
+                          if (snapshot.hasError) {
+                            return const Text('Something went wrong');
+                          }
+
+                          if (snapshot.connectionState == ConnectionState.waiting) {
+                            return const Center(child: CircularProgressIndicator());
+                          }
+                          if (snapshot.data!.docs.isEmpty){ //when a section, filtered with '.where(,isEqualTo: )' returns an empty output
+                            return const Center(child: Text(
+                              'This category has \n \n no items yet!',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                fontSize: 26,
+                                fontWeight: FontWeight.bold,
+                                fontFamily: 'Acme',
+                                letterSpacing: 1.5,
+                                color: Colors.blueGrey,
+                              ),
+                              ));
+                          }
+                              return SingleChildScrollView(
+                                child: StaggeredGridView.countBuilder(
+                                  physics: const NeverScrollableScrollPhysics(),
+                                  shrinkWrap: true,
+                                  itemCount: snapshot.data!.docs.length,
+                                  crossAxisCount: 2,
+                                  itemBuilder: (context,index){
+                                    return ProductModel(products: snapshot.data!.docs[index]);
+                                  },
+                                  staggeredTileBuilder: (context)=>const StaggeredTile.fit(1)),
+                            );
                        },  
                       ),
                     ),],
