@@ -1,6 +1,9 @@
 import "package:flutter/material.dart";
 import "package:multi_store_app/widgets/appbar_widgets.dart";
 import "package:multi_store_app/widgets/yellow_button.dart";
+import "package:provider/provider.dart";
+
+import "../providers/cart_provider.dart";
 
 class CartScreen extends StatefulWidget {
   final Widget? back;
@@ -32,7 +35,15 @@ class _CartScreenState extends State<CartScreen> {
           ),
         
           
-          body: Center(
+          body: Consumer<Cart>(builder: (context,cart,child){
+            return ListView.builder(
+                itemCount: cart.count,
+                itemBuilder: (context,index){
+              return Text(cart.getItems[index].price.toString());
+            });
+          },),
+
+          /*Center(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -62,7 +73,7 @@ class _CartScreenState extends State<CartScreen> {
               ),
             )
           ],)
-          ),
+          ),*/
           bottomSheet: Padding(
             padding: const EdgeInsets.all(8.0),
             child: Row(

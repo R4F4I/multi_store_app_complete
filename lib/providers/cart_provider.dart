@@ -35,8 +35,7 @@ class Cart extends ChangeNotifier{ // Cart inherits ChangeNotifier
   }
 
   int? get count{ // returns length of _list aka amt of products selected by user
-    _list.length;
-    return null;
+    return _list.length;
   }
   void addItem( // method to create a Product Object
   String name,

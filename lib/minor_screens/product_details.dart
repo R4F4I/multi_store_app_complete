@@ -5,8 +5,10 @@ import 'package:multi_store_app/main_screens/cart.dart';
 import 'package:multi_store_app/main_screens/visit_store.dart';
 import 'package:multi_store_app/minor_screens/full_screen_view.dart';
 import 'package:multi_store_app/models/product_model.dart';
+import 'package:multi_store_app/providers/cart_provider.dart';
 import 'package:multi_store_app/widgets/appbar_widgets.dart';
 import 'package:multi_store_app/widgets/yellow_button.dart';
+import 'package:provider/provider.dart';
 import 'package:staggered_grid_view_flutter/widgets/staggered_grid_view.dart';
 import 'package:staggered_grid_view_flutter/widgets/staggered_tile.dart';
 
@@ -202,7 +204,20 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                   }, icon: const Icon(Icons.shopping_cart_sharp)),
                 ],
               ),
-              YellowButton(label: 'Add to Cart'.toUpperCase(), onPressed: (){}, width: 0.5),
+              YellowButton(
+                  label: 'Add to Cart'.toUpperCase(),
+                  onPressed: (){
+                    context.read<Cart>().addItem(
+                        widget.proList['proname'],
+                        widget.proList['price'],
+                        1,
+                        widget.proList['instock'],
+                        widget.proList['proimages'],
+                        widget.proList['proid'],
+                      widget.proList['sid'],
+                    );
+                  },
+                  width: 0.5),
             ],),
           ),
           ),
