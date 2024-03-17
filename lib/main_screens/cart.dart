@@ -89,7 +89,14 @@ class _CartScreenState extends State<CartScreen> {
                                         ),
                                         child: Row(
                                           children: [
-                                            IconButton(
+                                            product.qty==1
+                                            ? IconButton(
+                                                onPressed: (){},
+                                                icon: const Icon(
+                                                    Icons.delete_forever,
+                                                )
+                                            )
+                                            : IconButton(
                                                 onPressed: (){
                                                   cart.decrement(product);
                                                 },
@@ -100,13 +107,21 @@ class _CartScreenState extends State<CartScreen> {
                                             ),
                                             Text(
                                               product.qty.toString(),
-                                              style: const TextStyle(
+                                              style: product.qty == product.qntty
+                                                ? const TextStyle(
+                                                  fontSize: 20,
+                                                  fontFamily: 'Acme',
+                                                  color: Colors.red
+                                              )
+                                                :const TextStyle(
                                                   fontSize: 20,
                                                   fontFamily: 'Acme',
                                               ),
                                             ),
                                             IconButton(
-                                                onPressed: (){
+                                                onPressed: product.qty == product.qntty
+                                                ? null
+                                                : (){
                                                   cart.increment(product);
                                                 },
                                                 icon: const Icon(
