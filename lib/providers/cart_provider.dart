@@ -20,6 +20,12 @@ class Product{
     required this.documentId,
     required this.suppId,
   });
+  void increase(){
+    qty++;
+  }
+  void decrease(){
+    qty--;
+  }
 }
 
 /* - class that takes multiple Product objects and appends them to _list
@@ -56,6 +62,14 @@ class Cart extends ChangeNotifier{ // Cart inherits ChangeNotifier
       suppId: suppId,
     );
     _list.add(product); // append the Product Object to _list
+    notifyListeners();
+  }
+  void increment(Product product){
+    product.increase();
+    notifyListeners();
+  }
+  void decrement(Product product){
+    product.decrease();
     notifyListeners();
   }
 }

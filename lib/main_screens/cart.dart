@@ -41,6 +41,7 @@ class _CartScreenState extends State<CartScreen> {
             return ListView.builder(
                 itemCount: cart.count,
                 itemBuilder: (context,index){
+                  final product = cart.getItems[index];
               return Padding(
                 padding: const EdgeInsets.all(5.0),
                 child: Card(
@@ -51,7 +52,7 @@ class _CartScreenState extends State<CartScreen> {
                           SizedBox(
                             height: 100,
                             width: 120,
-                            child: Image.network(cart.getItems[index].imagesUrl.first),
+                            child: Image.network(product.imagesUrl.first),
                           ),
                           Flexible(
                             child: Padding(
@@ -60,7 +61,7 @@ class _CartScreenState extends State<CartScreen> {
                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: [
                                   Text(
-                                      cart.getItems[index].name,
+                                      product.name,
                                     maxLines: 2,
                                     overflow: TextOverflow.ellipsis,
                                     style: TextStyle(
@@ -73,7 +74,7 @@ class _CartScreenState extends State<CartScreen> {
                                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                     children: [
                                       Text(
-                                          cart.getItems[index].price.toStringAsFixed(2),
+                                          product.price.toStringAsFixed(2),
                                         style: const TextStyle(
                                           fontSize: 16,
                                           fontWeight: FontWeight.bold,
@@ -89,21 +90,25 @@ class _CartScreenState extends State<CartScreen> {
                                         child: Row(
                                           children: [
                                             IconButton(
-                                                onPressed: (){},
+                                                onPressed: (){
+                                                  cart.decrement(product);
+                                                },
                                                 icon: const Icon(
                                                     FontAwesomeIcons.minus,
                                                   size: 18,
                                                 )
                                             ),
-                                            const Text(
-                                              '1233',
-                                              style: TextStyle(
+                                            Text(
+                                              product.qty.toString(),
+                                              style: const TextStyle(
                                                   fontSize: 20,
                                                   fontFamily: 'Acme',
                                               ),
                                             ),
                                             IconButton(
-                                                onPressed: (){},
+                                                onPressed: (){
+                                                  cart.increment(product);
+                                                },
                                                 icon: const Icon(
                                                   FontAwesomeIcons.plus,
                                                   size: 18,
