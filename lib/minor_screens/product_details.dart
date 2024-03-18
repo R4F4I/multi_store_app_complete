@@ -6,6 +6,7 @@ import 'package:multi_store_app/main_screens/visit_store.dart';
 import 'package:multi_store_app/minor_screens/full_screen_view.dart';
 import 'package:multi_store_app/models/product_model.dart';
 import 'package:multi_store_app/providers/cart_provider.dart';
+import 'package:multi_store_app/providers/wish_provider.dart';
 import 'package:multi_store_app/widgets/appbar_widgets.dart';
 import 'package:multi_store_app/widgets/snackbar.dart';
 import 'package:multi_store_app/widgets/yellow_button.dart';
@@ -118,7 +119,19 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                             ],
                           ),
                           IconButton(
-                            onPressed: (){}, 
+                            onPressed: (){
+                              context.read<Wish>().getWishItems.firstWhereOrNull((product) => product.documentId==widget.proList['proid']) !=null                               
+                              ? MyMessageHandler.showSnackBar(_scaffoldKey,'this item is already in your Wishlist')
+                              : context.read<Wish>().addWishItem(          
+                                  widget.proList['proname'],
+                                  widget.proList['price'],
+                                  1,
+                                  widget.proList['instock'],
+                                  widget.proList['proimages'],
+                                  widget.proList['proid'],
+                                widget.proList['sid'],
+                              );
+                            },
                             icon: const Icon(
                               Icons.favorite_border_outlined,
                               color: Colors.red,
@@ -211,7 +224,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                 ),
                 YellowButton(
                     label: 'Add to Cart'.toUpperCase(),
-                    onPressed: (){          
+                    onPressed: (){
                       context.read<Cart>().getItems.firstWhereOrNull((product) => product.documentId==widget.proList['proid']) !=null 
                       // above line checks documentId of each prod. obj. in cart list, and 
                       // compares it with documentId of the current Item pressed on, 

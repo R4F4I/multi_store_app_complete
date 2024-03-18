@@ -10,6 +10,7 @@ import 'package:multi_store_app/main_screens/welcome_screen.dart';              
 
 import 'package:firebase_core/firebase_core.dart';
 import 'package:multi_store_app/providers/cart_provider.dart';
+import 'package:multi_store_app/providers/wish_provider.dart';
 import 'package:provider/provider.dart';
 import 'firebase_options.dart';
 
@@ -22,7 +23,8 @@ Future<void> main()async{
     );
   runApp(MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (_)=>Cart())
+        ChangeNotifierProvider(create: (_)=>Cart()),
+        ChangeNotifierProvider(create: (_)=>Wish())
       ],
       child: const MyApp()));
 }
