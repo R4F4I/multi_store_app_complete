@@ -1,5 +1,6 @@
 import "package:flutter/material.dart";
 import "package:font_awesome_flutter/font_awesome_flutter.dart";
+import "package:multi_store_app/widgets/alert_dialog.dart";
 import "package:multi_store_app/widgets/appbar_widgets.dart";
 import "package:multi_store_app/widgets/yellow_button.dart";
 import "package:provider/provider.dart";
@@ -27,13 +28,26 @@ class _CartScreenState extends State<CartScreen> {
             leading: widget.back,
             title: const AppBarTitle(title: 'Cart',),
             actions: [
-              IconButton(onPressed: (){
-                context.read<Cart>().clearCart();
-              }, icon: 
-              const Icon(
-                Icons.delete_forever,
-                color: Colors.black,)
-                )
+              // only show the delete button when Cart is not empty
+              context.watch<Cart>().getItems.isEmpty
+              ? const SizedBox()
+              : IconButton(onPressed: (){
+                  MyAlertDialog.showMyDialog(
+                          context: context,
+                          title: 'Clear Cart',
+                          content: 'Are you sure you want to clear your cart?',
+                          tapNo: () {
+                            Navigator.pop(context);
+                          },
+                          tapYes: () {
+                            context.read<Cart>().clearCart();
+                            Navigator.pop(context);
+                          });
+                }, icon: 
+                const Icon(
+                  Icons.delete_forever,
+                  color: Colors.black,)
+                  )
             ],
         
           ),
