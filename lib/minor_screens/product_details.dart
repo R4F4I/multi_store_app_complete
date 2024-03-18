@@ -120,8 +120,8 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                           ),
                           IconButton(
                             onPressed: (){
-                              context.read<Wish>().getWishItems.firstWhereOrNull((product) => product.documentId==widget.proList['proid']) !=null                               
-                              ? MyMessageHandler.showSnackBar(_scaffoldKey,'this item is already in your Wishlist')
+                              context.read<Wish>().getWishItems.firstWhereOrNull((product) => product.documentId==widget.proList['proid']) !=null
+                              ? context.read<Wish>().removeThis(widget.proList['proid']) //now reclicking the heart icon removes the product from wishlist
                               : context.read<Wish>().addWishItem(          
                                   widget.proList['proname'],
                                   widget.proList['price'],
@@ -132,11 +132,17 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                                 widget.proList['sid'],
                               );
                             },
-                            icon: const Icon(
+                            icon: context.watch<Wish>().getWishItems.firstWhereOrNull((product) => product.documentId==widget.proList['proid']) !=null
+                              ? const Icon(
+                              Icons.favorite,
+                              color: Colors.red,
+                              size: 30,
+                              )
+                              : const Icon(
                               Icons.favorite_border_outlined,
                               color: Colors.red,
                               size: 30,
-                              ),
+                              )
                             ),
                           
                         ],),
