@@ -64,6 +64,14 @@ class Cart extends ChangeNotifier{ // Cart inherits ChangeNotifier
     _list.add(product); // append the Product Object to _list
     notifyListeners();
   }
+  void removeItem(Product product){
+    _list.remove(product);
+    notifyListeners();
+  }
+  void clearCart(){
+    _list.clear();
+    notifyListeners();
+  }
   void increment(Product product){
     product.increase();
     notifyListeners();

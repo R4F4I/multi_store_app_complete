@@ -27,7 +27,9 @@ class _CartScreenState extends State<CartScreen> {
             leading: widget.back,
             title: const AppBarTitle(title: 'Cart',),
             actions: [
-              IconButton(onPressed: (){}, icon: 
+              IconButton(onPressed: (){
+                context.read<Cart>().clearCart();
+              }, icon: 
               const Icon(
                 Icons.delete_forever,
                 color: Colors.black,)
@@ -91,7 +93,9 @@ class _CartScreenState extends State<CartScreen> {
                                           children: [
                                             product.qty==1
                                             ? IconButton(
-                                                onPressed: (){},
+                                                onPressed: (){
+                                                  cart.removeItem(product);
+                                                },
                                                 icon: const Icon(
                                                     Icons.delete_forever,
                                                 )
