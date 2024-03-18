@@ -40,6 +40,15 @@ class Cart extends ChangeNotifier{ // Cart inherits ChangeNotifier
     return _list;
   }
 
+  double get totalPrice{
+    var total =0.0;
+
+    for (var item in _list ){
+       total += item.price * item.qty;
+    }
+    return total;
+  }
+
   int? get count{ // returns length of _list aka amt of products selected by user
     return _list.length;
   }
