@@ -9,25 +9,17 @@ import 'package:multi_store_app/providers/product_class.dart';
    - initialises with empty _list
  */
 
-class Cart extends ChangeNotifier{ // Cart inherits ChangeNotifier
+class Wish extends ChangeNotifier{ // Wish inherits ChangeNotifier
   final  List<Product> _list = [];
-  List<Product> get getItems{ //getter to get _list
+  List<Product> get getWishItems{ //getter to get _list
     return _list;
   }
 
-  double get totalPrice{
-    var total =0.0;
-
-    for (var item in _list ){
-       total += item.price * item.qty;
-    }
-    return total;
-  }
 
   int? get count{ // returns length of _list aka amt of products selected by user
     return _list.length;
   }
-  void addItem( // method to create a Product Object
+  void addWishItem( // method to create a Product Object
   String name,
   double price,
   int qty,
@@ -52,16 +44,8 @@ class Cart extends ChangeNotifier{ // Cart inherits ChangeNotifier
     _list.remove(product);
     notifyListeners();
   }
-  void clearCart(){
+  void clearWishlist(){
     _list.clear();
-    notifyListeners();
-  }
-  void increment(Product product){
-    product.increase();
-    notifyListeners();
-  }
-  void decrement(Product product){
-    product.decrease();
     notifyListeners();
   }
 }
