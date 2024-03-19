@@ -1,5 +1,3 @@
-// ignore_for_file: use_build_context_synchronously
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:multi_store_app/dashboard/edit_profile.dart';
@@ -61,6 +59,7 @@ class DashboardScreen extends StatelessWidget {
                   },
                   tapYes: () async {
                     await FirebaseAuth.instance.signOut();
+                    if (!context.mounted) return;
                     Navigator.pop(context);
                     Navigator.pushReplacementNamed(context, '/welcome_screen');
                   },

@@ -1,9 +1,5 @@
-// ignore_for_file: use_build_context_synchronously
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-//import 'package:firebase_core/firebase_core.dart';
-//import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:multi_store_app/customer_screens/customer_orders.dart';
 import 'package:multi_store_app/customer_screens/wishlist.dart';
@@ -258,6 +254,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 tapNo: () {Navigator.pop(context);},
                                 tapYes: () async {
                                         await FirebaseAuth.instance.signOut();
+                                        if (!context.mounted) return;
                                         Navigator.pop(context);
                                         Navigator.pushReplacementNamed(context, '/welcome_screen');
                                             },); 

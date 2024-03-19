@@ -1,10 +1,7 @@
-// ignore: file_names
 import 'package:flutter/material.dart';
 import 'package:multi_store_app/main_screens/dashboard.dart';
-//import 'package:multi_store_app/main_screens/cart.dart';
 import 'package:multi_store_app/main_screens/home.dart';
 import 'package:multi_store_app/main_screens/category.dart';
-//import 'package:multi_store_app/main_screens/profile.dart';
 import 'package:multi_store_app/main_screens/stores.dart';
 import 'package:multi_store_app/main_screens/upload_product.dart';
 

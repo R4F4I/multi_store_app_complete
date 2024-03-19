@@ -1,5 +1,3 @@
-// ignore_for_file: use_build_context_synchronously
-
 import 'dart:math';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -221,6 +219,7 @@ class _WelcomeScreenState extends State<WelcomeScreen>
                                     'cid': _uid, // customer_i.d
                                   });
                       });
+                      if (!context.mounted) return;
                       Navigator.pushReplacementNamed(context, '/customer_home');
                     },
                     child: const Icon(Icons.person,size: 55,color: Colors.lightBlueAccent,),
