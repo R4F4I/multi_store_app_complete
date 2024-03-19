@@ -2,6 +2,7 @@ import "package:collection/collection.dart";
 import "package:flutter/material.dart";
 import "package:multi_store_app/providers/cart_provider.dart";
 import "package:multi_store_app/providers/wish_provider.dart";
+import "package:multi_store_app/widgets/alert_dialog.dart";
 import "package:multi_store_app/widgets/appbar_widgets.dart";
 import "package:provider/provider.dart";
 
@@ -25,9 +26,9 @@ class _WishlistScreenState extends State<WishlistScreen> {
             backgroundColor:Colors.white,
             leading: const AppBarBackButton(),
             title: const AppBarTitle(title: 'Wishlist',),
-            /*actions: [
-              // only show the delete button when Cart is not empty
-              context.watch<Cart>().getItems.isEmpty
+            actions: [
+              // only show the delete button when wishlist is not empty
+              context.watch<Wish>().getWishItems.isEmpty
               ? const SizedBox()
               : IconButton(onPressed: (){
                   MyAlertDialog.showMyDialog(
@@ -38,7 +39,7 @@ class _WishlistScreenState extends State<WishlistScreen> {
                             Navigator.pop(context);
                           },
                           tapYes: () {
-                            context.read<Cart>().clearCart();
+                            context.read<Wish>().clearWishlist();
                             Navigator.pop(context);
                           });
                 }, icon: 
@@ -46,7 +47,7 @@ class _WishlistScreenState extends State<WishlistScreen> {
                   Icons.delete_forever,
                   color: Colors.black,)
                   )
-            ],*/
+            ],
         
           ),
         
@@ -73,7 +74,10 @@ class EmptyWishlist extends StatelessWidget {
           children: [
           Text(
               "Your Wishlist is Empty !",
-                style: TextStyle(fontSize: 30),
+                style: TextStyle(
+                  fontSize: 30,
+                  color: Colors.grey
+                  ),
                 ),
       ],)
     );
