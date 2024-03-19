@@ -1,3 +1,4 @@
+import "package:flutter/cupertino.dart";
 import "package:flutter/material.dart";
 import "package:font_awesome_flutter/font_awesome_flutter.dart";
 import "package:multi_store_app/widgets/alert_dialog.dart";
@@ -43,10 +44,8 @@ class _CartScreenState extends State<CartScreen> {
                             context.read<Cart>().clearCart();
                             Navigator.pop(context);
                           });
-                }, icon: 
-                const Icon(
-                  Icons.delete_forever,
-                  color: Colors.black,)
+                }, 
+                icon: const Icon(Icons.delete_forever,color: Colors.black,)
                   )
             ],
         
@@ -191,11 +190,43 @@ class CartItems extends StatelessWidget {
                                         product.qty==1
                                         ? IconButton(
                                             onPressed: (){
-                                              cart.removeItem(product);
+                                            showCupertinoModalPopup<void>(
+                                                context: context,
+                                                builder: (BuildContext context) => CupertinoActionSheet(
+                                                  title: const Text('Remove Item?'),
+                                                  message: const Text('Are you sure you want to remove this item forn your cart?'),
+                                                  actions: <CupertinoActionSheetAction>[
+                                                    CupertinoActionSheetAction(
+                                                      //https://api.flutter.dev/flutter/cupertino/CupertinoActionSheet-class.html                                                      
+                                                      isDefaultAction: true,
+                                                      onPressed: () {
+                                                        Navigator.pop(context);
+                                                      },
+                                                      child: const Text('Move to Wishlist'),
+                                                    ),
+                                                    CupertinoActionSheetAction(
+                                                      onPressed: () {
+                                                        Navigator.pop(context);
+                                                      },
+                                                      child: const Text('Delete Item'),
+                                                    ),
+                                                  ],
+                                                  cancelButton: TextButton(
+                                                    onPressed: (){
+                                                      Navigator.pop(context);
+                                                      }, 
+                                                    child: const Text(
+                                                      'cancel',
+                                                      style: TextStyle(
+                                                        fontSize: 20,
+                                                        color: Colors.red
+                                                      )
+                                                    )
+                                                  )
+                                                ),
+                                              );
                                             },
-                                            icon: const Icon(
-                                                Icons.delete_forever,
-                                            )
+                                            icon: const Icon(Icons.delete_forever,)
                                         )
                                         : IconButton(
                                             onPressed: (){
