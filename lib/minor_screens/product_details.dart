@@ -25,16 +25,17 @@ class ProductDetailsScreen extends StatefulWidget {
 }
 
 class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
+  late var existingItemWishlist = context.read<Wish>().getWishItems.firstWhereOrNull((product) => product.documentId==widget.proList['proid']);
+  late var existingItemCart = context.read<Cart>().getItems.firstWhereOrNull((product) => product.documentId==widget.proList['proid']);
+  late final Stream<QuerySnapshot> productsStream = FirebaseFirestore.instance
+      .collection('products')
+      .where('maincateg',isEqualTo: widget.proList['maincateg'])
+      .where('subcateg',isEqualTo: widget.proList['subcateg'])
+      .snapshots();
   final GlobalKey<ScaffoldMessengerState> _scaffoldKey = GlobalKey<ScaffoldMessengerState>();
   late List<dynamic> imagesList = widget.proList['proimages'];
   @override
-  Widget build(BuildContext context) {
-    final Stream<QuerySnapshot> productsStream = 
-      FirebaseFirestore.instance
-        .collection('products')
-        .where('maincateg',isEqualTo: widget.proList['maincateg'])
-        .where('subcateg',isEqualTo: widget.proList['subcateg'])
-        .snapshots();
+  Widget build(BuildContext context) {    
     return Material(
       child: SafeArea(
         child: ScaffoldMessenger(
@@ -120,7 +121,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                           ),
                           IconButton(
                             onPressed: (){
-                              context.read<Wish>().getWishItems.firstWhereOrNull((product) => product.documentId==widget.proList['proid']) !=null
+                              existingItemWishlist !=null
                               ? context.read<Wish>().removeThis(widget.proList['proid']) //now reclicking the heart icon removes the product from wishlist
                               : context.read<Wish>().addWishItem(          
                                   widget.proList['proname'],
@@ -231,7 +232,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                 YellowButton(
                     label: 'Add to Cart'.toUpperCase(),
                     onPressed: (){
-                      context.read<Cart>().getItems.firstWhereOrNull((product) => product.documentId==widget.proList['proid']) !=null 
+                      existingItemCart !=null 
                       // above line checks documentId of each prod. obj. in cart list, and 
                       // compares it with documentId of the current Item pressed on, 
                       //if they are same, the snackbar pops, else addItem

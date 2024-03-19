@@ -16,6 +16,7 @@ class ProductModel extends StatefulWidget {
 }
 
 class _ProductModelState extends State<ProductModel> {
+  late var existingItemWishlist = context.read<Wish>().getWishItems.firstWhereOrNull((product) => product.documentId==widget.products['proid']);
   @override
   Widget build(BuildContext context) {
     return InkWell(
@@ -70,7 +71,7 @@ class _ProductModelState extends State<ProductModel> {
                                 icon: const Icon(Icons.edit,color: Colors.black,))
                               : IconButton(
                                 onPressed: (){
-                                  context.read<Wish>().getWishItems.firstWhereOrNull((product) => product.documentId==widget.products['proid']) !=null
+                                  existingItemWishlist !=null
                                   ? context.read<Wish>().removeThis(widget.products['proid']) //now reclicking the heart icon removes the product from wishlist
                                   : context.read<Wish>().addWishItem(          
                                       widget.products['proname'],
