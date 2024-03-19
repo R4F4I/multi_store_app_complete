@@ -1,4 +1,6 @@
+import "package:collection/collection.dart";
 import "package:flutter/material.dart";
+import "package:multi_store_app/providers/cart_provider.dart";
 import "package:multi_store_app/providers/wish_provider.dart";
 import "package:multi_store_app/widgets/appbar_widgets.dart";
 import "package:provider/provider.dart";
@@ -136,8 +138,20 @@ class WishItems extends StatelessWidget {
                                     }, 
                                     icon: const Icon(Icons.delete_forever)),
                                   const SizedBox(width: 10,),
-                                  IconButton(
-                                    onPressed: (){}, 
+                                  context.watch<Cart>().getItems.firstWhereOrNull((element) => element.documentId==product.documentId) !=null 
+                                      ? const SizedBox()
+                                      :IconButton(
+                                        onPressed: (){
+                                        context.read<Cart>().addItem(
+                                            product.name,
+                                            product.price,
+                                            1,
+                                            product.qntty,
+                                            product.imagesUrl,
+                                            product.documentId,
+                                            product.suppId,
+                                        );
+                                      }, 
                                     icon: const Icon(Icons.add_shopping_cart))
                                 ],)
                                 ],
