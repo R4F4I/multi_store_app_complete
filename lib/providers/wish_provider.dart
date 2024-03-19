@@ -19,7 +19,7 @@ class Wish extends ChangeNotifier{ // Wish inherits ChangeNotifier
   int? get count{ // returns length of _list aka amt of products selected by user
     return _list.length;
   }
-  void addWishItem( // method to create a Product Object
+  Future<void> addWishItem( // method to create a Product Object
   String name,
   double price,
   int qty,
@@ -27,7 +27,7 @@ class Wish extends ChangeNotifier{ // Wish inherits ChangeNotifier
   List imagesUrl,
   String documentId,
   String suppId,
-  ){
+  )async{
     final product = Product(
       name: name,
       price: price, 

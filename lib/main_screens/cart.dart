@@ -1,6 +1,8 @@
+import "package:collection/collection.dart";
 import "package:flutter/cupertino.dart";
 import "package:flutter/material.dart";
 import "package:font_awesome_flutter/font_awesome_flutter.dart";
+import "package:multi_store_app/providers/wish_provider.dart";
 import "package:multi_store_app/widgets/alert_dialog.dart";
 import "package:multi_store_app/widgets/appbar_widgets.dart";
 import "package:multi_store_app/widgets/yellow_button.dart";
@@ -199,13 +201,27 @@ class CartItems extends StatelessWidget {
                                                     CupertinoActionSheetAction(
                                                       //https://api.flutter.dev/flutter/cupertino/CupertinoActionSheet-class.html                                                      
                                                       isDefaultAction: true,
-                                                      onPressed: () {
-                                                        Navigator.pop(context);
-                                                      },
+                                                       onPressed: () async{
+                                                          context.read<Wish>().getWishItems.firstWhereOrNull((element) => element.documentId==product.documentId) !=null
+                                                          ? context.read<Cart>().removeItem(product) // if already in wishlist, just remove from cart
+                                                          : await context.read<Wish>().addWishItem(
+                                                              product.name,
+                                                              product.price,
+                                                              1,
+                                                              product.qntty,
+                                                              product.imagesUrl,
+                                                              product.documentId,
+                                                              product.suppId,
+                                                          );
+                                                          if (!context.mounted) return; // USE THIS IN ASYNC BUILDCONTEXT https://dart.dev/tools/linter-rules/use_build_context_synchronously
+                                                          context.read<Cart>().removeItem(product); // after moving to wishlist we want to remove the product from cart regardless
+                                                          Navigator.pop(context);
+                                                        },
                                                       child: const Text('Move to Wishlist'),
                                                     ),
                                                     CupertinoActionSheetAction(
                                                       onPressed: () {
+                                                        context.read<Cart>().removeItem(product);
                                                         Navigator.pop(context);
                                                       },
                                                       child: const Text('Delete Item'),
