@@ -14,6 +14,7 @@ import 'package:provider/provider.dart';
 import 'package:staggered_grid_view_flutter/widgets/staggered_grid_view.dart';
 import 'package:staggered_grid_view_flutter/widgets/staggered_tile.dart';
 import 'package:collection/collection.dart';
+import 'package:badges/badges.dart' as badges;
 
 
 class ProductDetailsScreen extends StatefulWidget {
@@ -25,8 +26,6 @@ class ProductDetailsScreen extends StatefulWidget {
 }
 
 class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
-  late var existingItemWishlist = context.read<Wish>().getWishItems.firstWhereOrNull((product) => product.documentId==widget.proList['proid']);
-  late var existingItemCart = context.read<Cart>().getItems.firstWhereOrNull((product) => product.documentId==widget.proList['proid']);
   late final Stream<QuerySnapshot> productsStream = FirebaseFirestore.instance
       .collection('products')
       .where('maincateg',isEqualTo: widget.proList['maincateg'])
@@ -35,7 +34,8 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
   final GlobalKey<ScaffoldMessengerState> _scaffoldKey = GlobalKey<ScaffoldMessengerState>();
   late List<dynamic> imagesList = widget.proList['proimages'];
   @override
-  Widget build(BuildContext context) {    
+  Widget build(BuildContext context) {
+    var existingItemCart = context.read<Cart>().getItems.firstWhereOrNull((product) => product.documentId==widget.proList['proid']);
     return Material(
       child: SafeArea(
         child: ScaffoldMessenger(
@@ -121,6 +121,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                           ),
                           IconButton(
                             onPressed: (){
+                              var existingItemWishlist = context.read<Wish>().getWishItems.firstWhereOrNull((product) => product.documentId==widget.proList['proid']);
                               existingItemWishlist !=null
                               ? context.read<Wish>().removeThis(widget.proList['proid']) //now reclicking the heart icon removes the product from wishlist
                               : context.read<Wish>().addWishItem(          
@@ -226,12 +227,20 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                     const SizedBox(width: 20,),
                     IconButton(onPressed: (){
                       Navigator.push(context, MaterialPageRoute(builder: (context)=> const CartScreen(back: AppBarBackButton(),)));
-                    }, icon: const Icon(Icons.shopping_cart_sharp)),
+                    }, icon: badges.Badge(
+                      showBadge: context.read<Cart>().getItems.isEmpty
+                        ? false
+                        : true,
+                      badgeStyle: const badges.BadgeStyle(
+                        badgeColor: Colors.yellow ,
+                      ),
+                      badgeContent: Text(context.watch<Cart>().getItems.length.toString()),
+                      child: const Icon(Icons.shopping_cart_sharp))),
                   ],
                 ),
                 YellowButton(
-                    label: 'Add to Cart'.toUpperCase(),
-                    onPressed: (){
+                    label: existingItemCart!=null ?'Added to Cart'.toUpperCase():'Add to Cart'.toUpperCase(),
+                    onPressed: (){                      
                       existingItemCart !=null 
                       // above line checks documentId of each prod. obj. in cart list, and 
                       // compares it with documentId of the current Item pressed on, 
