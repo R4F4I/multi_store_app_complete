@@ -239,11 +239,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           borderRadius: BorderRadius.circular(16)),
                           child:  Column(children: [
                           
-                           RepeatedListTIle(title: 'Edit Profile',icon: Icons.edit,onPressed:() {} ,),
-                           const YellowDivider(),
-                           RepeatedListTIle(title: 'Change Password',icon: Icons.lock,onPressed:() {} ,),
-                           const YellowDivider(),
-                           RepeatedListTIle(title: 'Log Out',icon: Icons.logout,
+                            RepeatedListTIle(title: 'Edit Profile',icon: Icons.edit,onPressed:() {} ,),
+                            const YellowDivider(),
+                            RepeatedListTIle(title: 'Change Password',icon: Icons.lock,onPressed:() {} ,),
+                            const YellowDivider(),
+                            RepeatedListTIle(title: 'Log Out',icon: Icons.logout,
                             
                             onPressed:() async{
 
