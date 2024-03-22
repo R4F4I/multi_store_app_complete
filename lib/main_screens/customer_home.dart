@@ -1,4 +1,3 @@
-// ignore_for_file: file_names
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -7,6 +6,9 @@ import 'package:multi_store_app/main_screens/home.dart';
 import 'package:multi_store_app/main_screens/category.dart';
 import 'package:multi_store_app/main_screens/profile.dart';
 import 'package:multi_store_app/main_screens/stores.dart';
+import 'package:multi_store_app/providers/cart_provider.dart';
+import 'package:provider/provider.dart';
+import 'package:badges/badges.dart' as badges;
 
 class CustomerHomeScreen extends StatefulWidget {
   const CustomerHomeScreen({super.key});
@@ -44,13 +46,21 @@ class _CustomerHomeScreenState extends State<CustomerHomeScreen> {
         selectedItemColor: const Color.fromARGB(255, 7, 7, 7),
         /*unselectedItemColor: Colors.black,*/
         currentIndex: _selectedIndex,
-        items: const [
+        items: [
 
-        BottomNavigationBarItem(icon:Icon(Icons.home),label: 'Home',),
-        BottomNavigationBarItem(icon:Icon(Icons.search),label: 'Categores',),
-        BottomNavigationBarItem(icon:Icon(Icons.shop),label: 'Stores',),
-        BottomNavigationBarItem(icon:Icon(Icons.shopping_cart),label: 'Cart',),
-        BottomNavigationBarItem(icon:Icon(Icons.person),label: 'Profile',),
+        const BottomNavigationBarItem(icon:Icon(Icons.home),label: 'Home',),
+        const BottomNavigationBarItem(icon:Icon(Icons.search),label: 'Categores',),
+        const BottomNavigationBarItem(icon:Icon(Icons.shop),label: 'Stores',),
+        BottomNavigationBarItem(
+          icon: badges.Badge(
+                showBadge: context.read<Cart>().getItems.isEmpty ? false : true,
+                badgeStyle: const badges.BadgeStyle(
+                  badgeColor: Colors.yellow,
+                ),
+                badgeContent:Text(context.watch<Cart>().getItems.length.toString()),
+                child: const Icon(Icons.shopping_cart_sharp)),
+          label: 'Cart',),
+        const BottomNavigationBarItem(icon:Icon(Icons.person),label: 'Profile',),
       ],
       onTap:(index){   /*by selecting an item the value is passed to index by the onTap function */
         setState(() {
