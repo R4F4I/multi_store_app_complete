@@ -208,12 +208,17 @@ class _PaymentScreenState extends State<PaymentScreen> {
                                                 'paymentstatus':'cash on delivery',
                                                 'orderreview':false,
 
+                                              }).whenComplete(() async{
+                                                await FirebaseFirestore.instance.runTransaction((transaction) async{
+                                                  DocumentReference documentReference = FirebaseFirestore.instance.collection('products').doc(item.documentId);
+                                                  DocumentSnapshot snapshot2 = await transaction.get(documentReference);
+                                                  transaction.update(documentReference, {'instock':snapshot2['instock'] - item.qty});
+                                                });
                                               });
-                                              // TODO: update the relevant instock values on the supplier side
-
                                             }
                                             if (!context.mounted) return;
-                                            Navigator.pop(context);
+                                            context.read<Cart>().clearCart;
+                                            Navigator.popUntil(context,ModalRoute.withName('/customer_home'));
                                           }, 
                                           width: 0.9,),
                                       )
