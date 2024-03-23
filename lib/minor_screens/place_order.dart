@@ -1,6 +1,7 @@
 import "package:cloud_firestore/cloud_firestore.dart";
 import "package:firebase_auth/firebase_auth.dart";
 import "package:flutter/material.dart";
+import "package:multi_store_app/minor_screens/payment_screen.dart";
 import "package:multi_store_app/providers/cart_provider.dart";
 import "package:multi_store_app/widgets/appbar_widgets.dart";
 import "package:multi_store_app/widgets/yellow_button.dart";
@@ -152,9 +153,11 @@ class _PlaceOrderScreenState extends State<PlaceOrderScreen> {
                       child: Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: YellowButton(
-                          label: 'Confirm',
+                          label: 'Confirm ${context.watch<Cart>().totalPrice.toStringAsFixed(2)} USD',
                           width: 1,
-                          onPressed: (){},
+                          onPressed: (){
+                            Navigator.push(context, MaterialPageRoute(builder: (context) => const PaymentScreen()),);
+                          },
                         ),
                       ),
                     ),
