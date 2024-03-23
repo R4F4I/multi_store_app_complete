@@ -28,6 +28,10 @@ class _PlaceOrderScreenState extends State<PlaceOrderScreen> {
         if (snapshot.hasError) {return const Text("Something went wrong");}
         if (snapshot.hasData && !snapshot.data!.exists) {return const Text("Document does not exist");}
 
+        if (snapshot.connectionState ==ConnectionState.waiting){
+          return const Material(child: Center(child: CircularProgressIndicator(),),);
+        }
+
         if (snapshot.connectionState == ConnectionState.done) {
           Map<String, dynamic> data = snapshot.data!.data() as Map<String, dynamic>;
           return 
@@ -100,6 +104,37 @@ class _PlaceOrderScreenState extends State<PlaceOrderScreen> {
                                               child: Image.network(order.imagesUrl.first),
                                               ),
                                             ),
+                                            Flexible(
+                                              child: Column(
+                                                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                                crossAxisAlignment: CrossAxisAlignment.start,
+                                                children: [
+                                                  Text(
+                                                    order.name, 
+                                                    maxLines: 2,
+                                                    overflow: TextOverflow.ellipsis,
+                                                    style: TextStyle(fontSize: 16,fontWeight: FontWeight.w600,color: Colors.grey.shade600),
+                                                    ),
+                                                  Row(
+                                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                    children: [
+                                                      Text(
+                                                        order.price.toStringAsFixed(2), 
+                                                        maxLines: 2,
+                                                        overflow: TextOverflow.ellipsis,
+                                                        style: TextStyle(fontSize: 16,fontWeight: FontWeight.w600,color: Colors.grey.shade600),
+                                                        ),
+                                                      Text(
+                                                        ' x ${order.qty.toString()}', 
+                                                        maxLines: 2,
+                                                        overflow: TextOverflow.ellipsis,
+                                                        style: TextStyle(fontSize: 16,fontWeight: FontWeight.w600,color: Colors.grey.shade600),
+                                                        ),
+                                                    ],
+                                                  ),
+                                                ],
+                                              )
+                                            )
                                         ]),
                                       ),
                                     );
