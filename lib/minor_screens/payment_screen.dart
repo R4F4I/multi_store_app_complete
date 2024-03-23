@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print
+
 import "package:cloud_firestore/cloud_firestore.dart";
 import "package:firebase_auth/firebase_auth.dart";
 import "package:flutter/material.dart";
@@ -156,7 +158,33 @@ class _PaymentScreenState extends State<PaymentScreen> {
                         child: YellowButton(
                           label: 'Confirm ${totalPaid.toStringAsFixed(2)} USD',
                           width: 1,
-                          onPressed: (){print(selectedValue);},
+                          onPressed: (){
+                            if (selectedValue==1){
+                              showModalBottomSheet(
+                                context: context, 
+                                builder: (context)=>SizedBox(
+                                  height: MediaQuery.of(context).size.height*0.3,
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(bottom: 100),
+                                    child: Column(
+                                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                      children: [
+                                      Text(
+                                        'Pay At Home \$ ${totalPaid.toStringAsFixed(2)} ?',
+                                        style: const TextStyle(fontSize: 24) ,
+                                      ),
+                                      Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: YellowButton(label: 'Confirm Payment?', onPressed: (){}, width: 0.9,),
+                                      )
+                                    ]),
+                                  ),
+                                  )
+                                );
+                            }
+                            else if (selectedValue==2){print('visa');}
+                            else if (selectedValue==3){print('paypal');}
+                          },
                         ),
                       ),
                     ),
