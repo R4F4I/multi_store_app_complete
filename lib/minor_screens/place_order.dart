@@ -74,6 +74,24 @@ class _PlaceOrderScreenState extends State<PlaceOrderScreen> {
                                 color: Colors.white,
                                 borderRadius: BorderRadius.circular(15)
                               ),
+                                child: Consumer<Cart>(
+                                  builder: (context,cart,child){
+                                  return ListView.builder(
+                                    itemCount: cart.count,
+                                    itemBuilder: (context,index){
+                                      final order = cart.getItems[index];
+                                    return Padding(
+                                      padding: const EdgeInsets.all(6.0),
+                                      child: Container(
+                                        height: 100,
+                                        decoration: BoxDecoration(
+                                          border: Border.all(width: 0.3),
+                                          borderRadius: BorderRadius.circular(15),
+                                        ),
+                                      ),
+                                    );
+                                  });
+                                }),
                             ),
                           ),
                       ],),
