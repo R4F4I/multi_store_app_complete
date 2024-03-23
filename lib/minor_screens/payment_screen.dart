@@ -18,6 +18,8 @@ class _PaymentScreenState extends State<PaymentScreen> {
 
   @override
   Widget build(BuildContext context) {
+    double totalPrice = context.watch<Cart>().totalPrice;
+    double totalPaid  = context.watch<Cart>().totalPrice + 10.0;
     return 
     
     FutureBuilder<DocumentSnapshot>(
@@ -27,6 +29,10 @@ class _PaymentScreenState extends State<PaymentScreen> {
 
         if (snapshot.hasError) {return const Text("Something went wrong");}
         if (snapshot.hasData && !snapshot.data!.exists) {return const Text("Document does not exist");}
+
+        if (snapshot.connectionState ==ConnectionState.waiting){
+          return const Material(child: Center(child: CircularProgressIndicator(),),);
+        }
 
         if (snapshot.connectionState == ConnectionState.done) {
           return 
@@ -53,6 +59,33 @@ class _PaymentScreenState extends State<PaymentScreen> {
                               color: Colors.white,
                               borderRadius: BorderRadius.circular(15)
                             ),
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(vertical: 4,horizontal: 16),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                children: [
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    children: [                                    
+                                      const Text('Total ',style: TextStyle(fontSize: 20),),
+                                      Text('${totalPaid.toStringAsFixed(2)} USD',style: const TextStyle(fontSize: 20),),
+                                  ],),
+                                  const Divider(color: Colors.grey,thickness: 2,),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    children: [                                    
+                                      const Text('Total Price ',style: TextStyle(fontSize: 16,color: Colors.grey),),
+                                      Text('${totalPrice.toStringAsFixed(2)} USD',style: const TextStyle(fontSize: 16,color: Colors.grey),),
+                                  ],),
+                                  const Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    children: [                                    
+                                      Text('Shipping Cost ',style: TextStyle(fontSize: 16,color: Colors.grey),),
+                                      Text('10.00 USD',style: TextStyle(fontSize: 16,color: Colors.grey),),
+                                  ],),
+                                ]),
+                            ),
                           ),
                           const SizedBox(height: 20,),
                           Expanded(
@@ -70,7 +103,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
                       child: Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: YellowButton(
-                          label: 'Confirm ${context.watch<Cart>().totalPrice.toStringAsFixed(2)} USD',
+                          label: 'Confirm ${totalPaid.toStringAsFixed(2)} USD',
                           width: 1,
                           onPressed: (){},
                         ),
