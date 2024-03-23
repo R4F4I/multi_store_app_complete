@@ -1,6 +1,7 @@
 import "package:cloud_firestore/cloud_firestore.dart";
 import "package:firebase_auth/firebase_auth.dart";
 import "package:flutter/material.dart";
+import "package:font_awesome_flutter/font_awesome_flutter.dart";
 import "package:multi_store_app/providers/cart_provider.dart";
 import "package:multi_store_app/widgets/appbar_widgets.dart";
 import "package:multi_store_app/widgets/yellow_button.dart";
@@ -15,6 +16,7 @@ class PaymentScreen extends StatefulWidget {
 
 class _PaymentScreenState extends State<PaymentScreen> {
   CollectionReference customers = FirebaseFirestore.instance.collection('customers');
+  int selectedValue = 1;
 
   @override
   Widget build(BuildContext context) {
@@ -94,6 +96,55 @@ class _PaymentScreenState extends State<PaymentScreen> {
                                 color: Colors.white,
                                 borderRadius: BorderRadius.circular(15)
                               ),
+                              child: Column(children: [
+                                RadioListTile(
+                                  value: 1, 
+                                  groupValue: selectedValue,
+                                  onChanged: (int ?value){
+                                    setState(() {
+                                      selectedValue = value!;
+                                    });
+                                  },
+                                  title: const Text('Cash On Delivery'),
+                                  subtitle: const Text('Pay via Cash'),
+                                ),
+                                RadioListTile(
+                                  value: 2, 
+                                  groupValue: selectedValue,
+                                  onChanged: (int ?value){
+                                    setState(() {
+                                      selectedValue = value!;
+                                    });
+                                  },
+                                  title: const Text('Pay via Visa / MasterCard'),
+                                  subtitle: const Row(
+                                    children: [
+                                      Icon(Icons.payment,color: Colors.blue,size: 30,),
+                                      Padding(
+                                        padding: EdgeInsets.symmetric(horizontal: 15),
+                                        child: Icon(FontAwesomeIcons.ccMastercard,color: Colors.blue,),
+                                      ),
+                                      Icon(FontAwesomeIcons.ccVisa,color: Colors.blue,)
+                                      ],)
+                                ),
+                                RadioListTile(
+                                  value: 3, 
+                                  groupValue: selectedValue,
+                                  onChanged: (int ?value){
+                                    setState(() {
+                                      selectedValue = value!;
+                                    });
+                                  },
+                                  title: const Text('Pay via PayPal'),
+                                  subtitle: const Row(
+                                    children: [
+                                      Icon(FontAwesomeIcons.paypal,color: Colors.blue,),
+                                      SizedBox(width: 15,),
+                                      Icon(FontAwesomeIcons.ccPaypal,color: Colors.blue,),
+                                    ],
+                                  ),
+                                ),
+                              ]),
                             ),
                           ),
                       ],),
@@ -105,7 +156,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
                         child: YellowButton(
                           label: 'Confirm ${totalPaid.toStringAsFixed(2)} USD',
                           width: 1,
-                          onPressed: (){},
+                          onPressed: (){print(selectedValue);},
                         ),
                       ),
                     ),
