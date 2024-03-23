@@ -1,8 +1,10 @@
 import "package:cloud_firestore/cloud_firestore.dart";
 import "package:firebase_auth/firebase_auth.dart";
 import "package:flutter/material.dart";
+import "package:multi_store_app/providers/cart_provider.dart";
 import "package:multi_store_app/widgets/appbar_widgets.dart";
 import "package:multi_store_app/widgets/yellow_button.dart";
+import "package:provider/provider.dart";
 
 class PlaceOrderScreen extends StatefulWidget {
   const PlaceOrderScreen({super.key});
@@ -48,10 +50,22 @@ class _PlaceOrderScreenState extends State<PlaceOrderScreen> {
                         children: [
                           Container(
                             height: 90,
+                            width: double.infinity,
                             decoration: BoxDecoration(
                               color: Colors.white,
                               borderRadius: BorderRadius.circular(15)
                             ),
+                              child: Padding(
+                                padding: const EdgeInsets.symmetric(vertical: 4,horizontal: 16),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                  children: [
+                                    Text("Name: ${data['name']}"),
+                                    Text("Phone: ${data['phone']}"),
+                                    Text("Address: ${data['address']}"),
+                                ],),
+                            )
                           ),
                           const SizedBox(height: 20,),
                           Expanded(
