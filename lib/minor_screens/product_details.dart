@@ -148,7 +148,15 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                             ),
                           
                         ],),
-                        Text((widget.proList['instock'].toString())+(' pieces left in stock'),
+                        widget.proList['instock']==0
+                        ? const Text((' This Item is out of stock'),
+                            style:  TextStyle(
+                                color: Colors.blueGrey,
+                                fontSize: 16,
+                                fontWeight: FontWeight.w600,
+                                ),
+                              )
+                        : Text((widget.proList['instock'].toString())+(' pieces left in stock'),
                             style:  const TextStyle(
                                 color: Colors.blueGrey,
                                 fontSize: 16,
@@ -240,13 +248,14 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                 ),
                 YellowButton(
                     label: existingItemCart!=null ?'Added to Cart'.toUpperCase():'Add to Cart'.toUpperCase(),
-                    onPressed: (){                      
-                      existingItemCart !=null 
+                    onPressed: (){
+                      if (widget.proList['instock']==0){MyMessageHandler.showSnackBar(_scaffoldKey,'this item is out of stock');}
+                      else if (existingItemCart !=null){MyMessageHandler.showSnackBar(_scaffoldKey,'this item is already in your cart');}
                       // above line checks documentId of each prod. obj. in cart list, and 
                       // compares it with documentId of the current Item pressed on, 
                       //if they are same, the snackbar pops, else addItem
-                      ? MyMessageHandler.showSnackBar(_scaffoldKey,'this item is already in your cart')
-                      : context.read<Cart>().addItem(          
+                      else {
+                        context.read<Cart>().addItem(          
                           widget.proList['proname'],
                           widget.proList['price'],
                           1,
@@ -255,6 +264,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                           widget.proList['proid'],
                         widget.proList['sid'],
                       );
+                      }
                     },
                     width: 0.5),
               ],),
