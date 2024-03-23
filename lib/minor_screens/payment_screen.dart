@@ -8,6 +8,7 @@ import "package:multi_store_app/providers/cart_provider.dart";
 import "package:multi_store_app/widgets/appbar_widgets.dart";
 import "package:multi_store_app/widgets/yellow_button.dart";
 import "package:provider/provider.dart";
+import "package:uuid/uuid.dart";
 
 class PaymentScreen extends StatefulWidget {
   const PaymentScreen({super.key});
@@ -19,6 +20,7 @@ class PaymentScreen extends StatefulWidget {
 class _PaymentScreenState extends State<PaymentScreen> {
   CollectionReference customers = FirebaseFirestore.instance.collection('customers');
   int selectedValue = 1;
+  late String orderId;
 
   @override
   Widget build(BuildContext context) {
@@ -39,6 +41,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
         }
 
         if (snapshot.connectionState == ConnectionState.done) {
+          Map<String, dynamic> data = snapshot.data!.data() as Map<String, dynamic>;
           return 
             Material(
               color: Colors.grey.shade200,
@@ -175,7 +178,44 @@ class _PaymentScreenState extends State<PaymentScreen> {
                                       ),
                                       Padding(
                                         padding: const EdgeInsets.all(8.0),
-                                        child: YellowButton(label: 'Confirm Payment?', onPressed: (){}, width: 0.9,),
+                                        child: YellowButton(
+                                          label: 'Confirm Payment?', 
+                                          onPressed: () async{
+                                            // ignore: use_build_context_synchronously
+                                            for (var item in context.read<Cart>().getItems){
+                                              CollectionReference orderRef = FirebaseFirestore.instance.collection('orders');
+                                              orderId = const Uuid().v4();
+                                              await orderRef.doc(orderId).set({
+
+                                                'cid': data['cid'],
+                                                'custname': data['name'],
+                                                'email': data['email'],
+                                                'address': data['address'],
+                                                'phone': data['phone'],
+                                                'profileimage': data['profileimage'],
+
+                                                'sid': item.suppId,
+
+                                                'proid': item.documentId,
+                                                'orderid': orderId,
+                                                'orderiamge': item.imagesUrl.first,
+                                                'orderqty':item.qty,
+                                                'orderprice': item.qty*item.price,
+
+                                                'deliverystatus': 'preparing',
+                                                'deliverydate':'',
+                                                'orderdate':DateTime.now(),
+                                                'paymentstatus':'cash on delivery',
+                                                'orderreview':false,
+
+                                              });
+                                              // TODO: update the relevant instock values on the supplier side
+
+                                            }
+                                            if (!context.mounted) return;
+                                            Navigator.pop(context);
+                                          }, 
+                                          width: 0.9,),
                                       )
                                     ]),
                                   ),
