@@ -88,6 +88,19 @@ class _PlaceOrderScreenState extends State<PlaceOrderScreen> {
                                           border: Border.all(width: 0.3),
                                           borderRadius: BorderRadius.circular(15),
                                         ),
+                                        child: Row(children: [
+                                          ClipRRect(
+                                            borderRadius: const BorderRadius.only(
+                                              topLeft: Radius.circular(15),
+                                              bottomLeft: Radius.circular(15),
+                                            ),
+                                            child: SizedBox(
+                                              height: 100,
+                                              width: 100,
+                                              child: Image.network(order.imagesUrl.first),
+                                              ),
+                                            ),
+                                        ]),
                                       ),
                                     );
                                   });
