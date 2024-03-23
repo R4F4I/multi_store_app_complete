@@ -113,24 +113,27 @@ class _PlaceOrderScreenState extends State<PlaceOrderScreen> {
                                                     order.name, 
                                                     maxLines: 2,
                                                     overflow: TextOverflow.ellipsis,
-                                                    style: TextStyle(fontSize: 16,fontWeight: FontWeight.w600,color: Colors.grey.shade600),
+                                                    style: TextStyle(fontSize: 18,fontWeight: FontWeight.w600,color: Colors.grey.shade600),
                                                     ),
-                                                  Row(
-                                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                                    children: [
-                                                      Text(
-                                                        order.price.toStringAsFixed(2), 
-                                                        maxLines: 2,
-                                                        overflow: TextOverflow.ellipsis,
-                                                        style: TextStyle(fontSize: 16,fontWeight: FontWeight.w600,color: Colors.grey.shade600),
-                                                        ),
-                                                      Text(
-                                                        ' x ${order.qty.toString()}', 
-                                                        maxLines: 2,
-                                                        overflow: TextOverflow.ellipsis,
-                                                        style: TextStyle(fontSize: 16,fontWeight: FontWeight.w600,color: Colors.grey.shade600),
-                                                        ),
-                                                    ],
+                                                  Padding(
+                                                    padding: const EdgeInsets.symmetric(vertical: 4,horizontal: 16),
+                                                    child: Row(
+                                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                      children: [
+                                                        Text(
+                                                          order.price.toStringAsFixed(2), 
+                                                          maxLines: 2,
+                                                          overflow: TextOverflow.ellipsis,
+                                                          style: TextStyle(fontSize: 16,fontWeight: FontWeight.w600,color: Colors.grey.shade600),
+                                                          ),
+                                                        Text(
+                                                          ' x ${order.qty.toString()}', 
+                                                          maxLines: 2,
+                                                          overflow: TextOverflow.ellipsis,
+                                                          style: TextStyle(fontSize: 16,fontWeight: FontWeight.w600,color: Colors.grey.shade600),
+                                                          ),
+                                                      ],
+                                                    ),
                                                   ),
                                                 ],
                                               )
