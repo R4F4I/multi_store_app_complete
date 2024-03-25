@@ -43,11 +43,69 @@ class CustomerOrders extends StatelessWidget {
           return ListView.builder(
             itemCount: snapshot.data!.docs.length,
             itemBuilder: (context,index){
-              return Text(snapshot.data!.docs[index]['ordername']);
-
-          });
-        } 
-      ),
+              var order = snapshot.data!.docs[index];
+              return Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Container(
+                  decoration: BoxDecoration(
+                          border: Border.all(color: Colors.yellow),
+                          borderRadius: BorderRadius.circular(15)
+                        ),
+                  child: ExpansionTile(
+                          title: Container(
+                            constraints: const BoxConstraints(maxHeight: 80),
+                            width: double.infinity,
+                            child: Row(
+                              children: [
+                            Padding(
+                                padding: const EdgeInsets.only(right: 15),
+                                child: Container(
+                                  constraints:
+                                      const BoxConstraints(maxHeight: 80, maxWidth: 80),
+                                  child: Image.network(order['orderimage']),
+                                ),
+                            ),
+                            Flexible(
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                  Text(
+                                    order['ordername'],
+                                    overflow: TextOverflow.ellipsis,
+                                    maxLines: 2,
+                                    style: TextStyle(
+                                          fontSize: 13,
+                                          fontWeight: FontWeight.w600,
+                                          color: Colors.grey.shade600
+                                          ),
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Row(
+                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        children: [
+                                        Text(('\$ ')+(order['orderprice'].toStringAsFixed(2))),
+                                        Text((' x ')+(order['orderqty'].toString()))
+                                      ],
+                                      ),
+                                    )
+                                  ],
+                                )
+                            )
+                          ],
+                        ),
+                      ),
+                      subtitle: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                        const Text('See more...'),
+                        Text(order['deliverystatus'])
+                      ],),
+                    ),
+                ),
+              );
+            });
+          }),
     );
   }
 }
