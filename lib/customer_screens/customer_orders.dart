@@ -101,10 +101,62 @@ class CustomerOrders extends StatelessWidget {
                         const Text('See more...'),
                         Text(order['deliverystatus'])
                       ],),
+                      children: [
+                        Container(
+                          //height: 200,
+                          width: double.infinity,
+                          decoration: BoxDecoration(
+                            color: order['deliverystatus'] == 'delivered'
+                              ? Colors.blue.withOpacity(0.2)
+                              : Colors.yellow.withOpacity(0.2),
+                            borderRadius: BorderRadius.circular(15),
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(('Name: ')+(order['custname']), style: const TextStyle(fontSize: 15),),
+                                Text(('Phone No.: ')+(order['phone']), style: const TextStyle(fontSize: 15),),
+                                Text(('Email Address: ')+(order['email']), style: const TextStyle(fontSize: 15),),
+                                Text(('Address: ')+(order['address']), style: const TextStyle(fontSize: 15),),
+
+                                Row(
+                                  children: [
+                                    const Text( 'Payment Status: ',style: TextStyle(fontSize: 15)),
+                                    Text(order['paymentstatus'], style: const TextStyle(fontSize: 15,color: Colors.purple))
+                                  ]
+                                ),
+                                Row(
+                                  children: [
+                                    const Text('Delivery Status: ', style: TextStyle(fontSize: 15),),
+                                    Text(order['deliverystatus'], style: const TextStyle(fontSize: 15,color: Colors.green),),
+                                  ],
+                                ),
+                                
+                                order['deliverystatus'] == 'shipping'
+                                  ? Text(('Estimated Delivery Date: ')+(order['deliverydate']), style: const TextStyle(fontSize: 15),) 
+                                  : const Text(''),
+                                
+                                order['deliverystatus'] == 'delivered' && order['orderreview'] == false
+                                  ? TextButton(onPressed: (){}, child: const Text('Write Review'))
+                                  : const Text(''),
+
+                                order['deliverystatus'] == 'delivered' && order['orderreview'] == true
+                                  ? const Row(children: [
+                                      Icon(Icons.check, color: Colors.blue),
+                                      Text('Review added',style: TextStyle(color: Colors.blue,fontStyle: FontStyle.italic),)                                   
+                                    ],)
+
+                                  : const Text('')
+                                  ],
+                                ),
+                              ))
+                        ],
+                      ),
                     ),
-                ),
-              );
-            });
+                  );
+                });
           }),
     );
   }
