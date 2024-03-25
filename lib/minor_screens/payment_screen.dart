@@ -207,6 +207,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
                                                 'orderiamge': item.imagesUrl.first,
                                                 'orderqty':item.qty,
                                                 'orderprice': item.qty*item.price,
+                                                'ordername':item.name,
 
                                                 'deliverystatus': 'preparing',
                                                 'deliverydate':'',
