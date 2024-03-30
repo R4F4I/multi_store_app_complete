@@ -1,4 +1,5 @@
 # multi_store_app
+
  flutter app project w/ udemy
 
 ## Section Summaries
@@ -13,7 +14,6 @@
 |--|--|--|
 </details>
 
-
 ### 03 - Firebase Authentication [ Level 1 ]
 
 <details>
@@ -24,7 +24,6 @@
 
 #### $\Rightarrow$ it will consist of a sign Up page
 
-
 | ![image](https://github.com/R4F4I/multi_store_app/assets/94185789/0b86f8c6-d5f5-4ac4-8459-8fc18882359d) | ![image](https://github.com/R4F4I/multi_store_app/assets/94185789/052acdde-4fc4-4c54-a7dd-6be2dc8b8742) | ![image](https://github.com/R4F4I/multi_store_app/assets/94185789/33517eb6-606f-4bfb-a3a1-6fa106dbe82b) | ![image](https://github.com/R4F4I/multi_store_app/assets/94185789/1b718d17-b5fc-4778-a1e1-fe33dcf18bf9) | ![image](https://github.com/R4F4I/multi_store_app/assets/94185789/82609749-8292-4424-9b44-ac14529c988d) |
 |--|--|--|--|--|
 
@@ -32,8 +31,8 @@
 - it will also have the functionality to hide a password
 - it will return any errors using the bottom yellow popup bar
 
-
 #### It will also support a firebase connection
+
 | ![image](https://github.com/R4F4I/multi_store_app/assets/94185789/a0aeaa6d-258f-438b-af32-60f8e788d7f3)|![image](https://github.com/R4F4I/multi_store_app/assets/94185789/1114360e-d3f1-4fb6-90e3-6b9d98c56b97)| ![image](https://github.com/R4F4I/multi_store_app/assets/94185789/9ca9d788-ad40-4da0-b5dd-bfa18057bf47)|
 |--|--|--|
 
@@ -41,7 +40,6 @@
 - firebase will:
   - authenticate customers, &
   - store their data in a database, including their images
- 
 
 #### $\Rightarrow$ we will also hold the ability to login into an existing account and switch b/w the login & signup pages
 
@@ -58,18 +56,13 @@
 | ![image](https://github.com/R4F4I/multi_store_app/assets/94185789/27c2d0c2-3108-4797-acec-53c25db7dc88)|![image](https://github.com/R4F4I/multi_store_app/assets/94185789/f903ceef-404f-43c8-ae21-f0a413e5ff93)|![image](https://github.com/R4F4I/multi_store_app/assets/94185789/2beb16bb-2965-4872-b1e8-0cd233241c9d)|![image](https://github.com/R4F4I/multi_store_app/assets/94185789/7275b408-48b3-4afa-82e1-db88b9925ba8)|
 |--|--|--|--|
 
-
 #### $\Rightarrow$ Now finally for guest
 
-| ![image](https://github.com/R4F4I/multi_store_app/assets/94185789/7884017e-61de-4d32-82eb-a1c3785fc7fa)| ![image](https://github.com/R4F4I/multi_store_app/assets/94185789/09b2d9ba-6971-4188-a286-1007a63bd23b)| 
+| ![image](https://github.com/R4F4I/multi_store_app/assets/94185789/7884017e-61de-4d32-82eb-a1c3785fc7fa)| ![image](https://github.com/R4F4I/multi_store_app/assets/94185789/09b2d9ba-6971-4188-a286-1007a63bd23b)|
 |--|--|
 </details>
 
-
-
-
 ### 04 - Upload Product [ Cloud Firestore ]
-
 
 <details>
 <summary>04 - Upload Product [ Cloud Firestore ]</summary>
@@ -77,16 +70,16 @@
 we will now work in the supplier side of the prject,
 like uploading products to the app
 
-
 | ![image](https://github.com/R4F4I/multi_store_app/assets/94185789/dd974e22-64c8-4b0b-b4f8-07c17545132c)|![image](https://github.com/R4F4I/multi_store_app/assets/94185789/cc3d9523-3d1c-4240-8d60-7a4981592a22)| ![image](https://github.com/R4F4I/multi_store_app/assets/94185789/f5492386-e6b2-45d5-9c82-6eb8c9aa5e95)|
 |--|--|--|
 |![image](https://github.com/R4F4I/multi_store_app/assets/94185789/424c7c71-beee-4235-a710-d49dfb54ec1e)|![image](https://github.com/R4F4I/multi_store_app/assets/94185789/5f4005fe-f72e-4247-8ec5-c4d784bde441)|![image](https://github.com/R4F4I/multi_store_app/assets/94185789/daaa21df-8bc3-434c-b0ef-e3931a4e5f8c)|
 
 > **✏️NOTE:**
-> 
+>
 > we can pick multiple Images
 
 the design of upload section is similar to that of signup page
+
 - as it contains textfields which require regex to validate input,
 - and also an image picker,
 
@@ -103,7 +96,7 @@ we also work on stores for the suppliers
 
 <details>
 <summary>05 - Streaming Data to Application</summary>
- 
+
  ![image](https://github.com/R4F4I/multi_store_app/assets/94185789/1352fda7-d915-486c-8227-ddbace3fe107)
 
 clicking on buttons gives:
@@ -121,11 +114,14 @@ clicking on buttons gives:
 <summary>06 - State Management [ Add To Cart - Wishlist ]</summary>
 
 in this section:
+
 #### 1 - Adding to wishlist
+
 |![image](https://github.com/R4F4I/multi_store_app/assets/94185789/5ef3bce7-70ec-4619-9da1-83f963bd83a4)|![image](https://github.com/R4F4I/multi_store_app/assets/94185789/f0f5b4ad-e750-4979-b585-660d602474cf)|
 |-|-|
 
 #### 2 - adding to cart
+
 |![image](https://github.com/R4F4I/multi_store_app/assets/94185789/d3633131-ae89-4e8d-ac12-43b0a813c6b6)|![image](https://github.com/R4F4I/multi_store_app/assets/94185789/a07bab41-c2b8-40ef-acd4-24feb4c57de5)|
 |-|-|
 
@@ -152,11 +148,10 @@ by clicking the 'added to cart' button snackbar appears
 incrementing stops after reaching max items in stock
 and math done for total price of all items
 
-|![image](https://github.com/R4F4I/multi_store_app/assets/94185789/69d6bf1b-7393-491d-9e9f-296149d09da1)| ![image](https://github.com/R4F4I/multi_store_app/assets/94185789/f1451510-91b1-4e34-ba49-011767b61f28)| 
+|![image](https://github.com/R4F4I/multi_store_app/assets/94185789/69d6bf1b-7393-491d-9e9f-296149d09da1)| ![image](https://github.com/R4F4I/multi_store_app/assets/94185789/f1451510-91b1-4e34-ba49-011767b61f28)|
 |-|-|
 
 </details>
-
 
 ### 07 - Checkout & Upload Order
 
@@ -171,11 +166,3 @@ and math done for total price of all items
 |-|-|
 |![image](https://github.com/R4F4I/multi_store_app/assets/94185789/b83dc926-52c3-4590-94ba-a06e81dbf2f4)|![image](https://github.com/R4F4I/multi_store_app/assets/94185789/20914371-e2a6-474a-afd4-b57e80967ae3)|
 </details>
-
-
-
-
-
-
-
-
