@@ -90,7 +90,7 @@ class CartModel extends StatelessWidget {
                                                         product.documentId,
                                                         product.suppId,
                                                     );
-                                                    if (!context.mounted) return; // USE THIS IN ASYNC BUILDCONTEXT https://dart.dev/tools/linter-rules/use_build_context_synchronously
+                                                    if (!context.mounted) return; //* USE THIS IN ASYNC BUILDCONTEXT https://dart.dev/tools/linter-rules/use_build_context_synchronously
                                                     context.read<Cart>().removeItem(product); // after moving to wishlist we want to remove the product from cart regardless
                                                     Navigator.pop(context);
                                                   },
