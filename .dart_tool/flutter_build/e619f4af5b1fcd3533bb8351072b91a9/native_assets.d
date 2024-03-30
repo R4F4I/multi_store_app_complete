@@ -1,0 +1,1 @@
+ C:\\Users\\Administrator\\Documents\\FLUTTER-DEVELOPMENT\\projects\\From\ Udemy\\store_apps\\multi_store_app\\.dart_tool\\flutter_build\\e619f4af5b1fcd3533bb8351072b91a9\\native_assets.yaml: 
