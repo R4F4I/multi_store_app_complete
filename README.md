@@ -22,7 +22,7 @@
 
 ![image](https://github.com/R4F4I/multi_store_app/assets/94185789/7b2472a6-a7d3-40f7-a316-815e4fbaf342)
 
-#### $\Rightarrow$ it will consist of a sign Up page
+#### ⇒ it will consist of a sign Up page
 
 | ![image](https://github.com/R4F4I/multi_store_app/assets/94185789/0b86f8c6-d5f5-4ac4-8459-8fc18882359d) | ![image](https://github.com/R4F4I/multi_store_app/assets/94185789/052acdde-4fc4-4c54-a7dd-6be2dc8b8742) | ![image](https://github.com/R4F4I/multi_store_app/assets/94185789/33517eb6-606f-4bfb-a3a1-6fa106dbe82b) | ![image](https://github.com/R4F4I/multi_store_app/assets/94185789/1b718d17-b5fc-4778-a1e1-fe33dcf18bf9) | ![image](https://github.com/R4F4I/multi_store_app/assets/94185789/82609749-8292-4424-9b44-ac14529c988d) |
 |--|--|--|--|--|
@@ -41,22 +41,22 @@
   - authenticate customers, &
   - store their data in a database, including their images
 
-#### $\Rightarrow$ we will also hold the ability to login into an existing account and switch b/w the login & signup pages
+#### ⇒ we will also hold the ability to login into an existing account and switch b/w the login & signup pages
 
 | ![image](https://github.com/R4F4I/multi_store_app/assets/94185789/1a70f32d-d3be-4a4d-8b94-b81e9cfc2b65)|![image](https://github.com/R4F4I/multi_store_app/assets/94185789/9ac0d52e-f49c-4321-a03f-75774326a8aa)| ![image](https://github.com/R4F4I/multi_store_app/assets/94185789/c65d5c25-9804-4e23-83bf-4c59ae89b971)|![image](https://github.com/R4F4I/multi_store_app/assets/94185789/35faf1a5-9d47-4531-a0ef-9e39fbe47578)|
 |--|--|--|--|
 
-#### $\Rightarrow$ Same for suppliers
+#### ⇒ Same for suppliers
 
 | supplier sign up ![image](https://github.com/R4F4I/multi_store_app/assets/94185789/d1de0544-f295-4cd3-8ad1-9a6d682d1db7)| Store data for supplier![image](https://github.com/R4F4I/multi_store_app/assets/94185789/a84946b6-eee1-47c3-922c-48ae1cb98021)|supplier login ![image](https://github.com/R4F4I/multi_store_app/assets/94185789/031e9783-1290-4457-a275-f7c7cbda3a74)|
 |--|--|--|
 
-#### $\Rightarrow$ now within the login
+#### ⇒ now within the login
 
 | ![image](https://github.com/R4F4I/multi_store_app/assets/94185789/27c2d0c2-3108-4797-acec-53c25db7dc88)|![image](https://github.com/R4F4I/multi_store_app/assets/94185789/f903ceef-404f-43c8-ae21-f0a413e5ff93)|![image](https://github.com/R4F4I/multi_store_app/assets/94185789/2beb16bb-2965-4872-b1e8-0cd233241c9d)|![image](https://github.com/R4F4I/multi_store_app/assets/94185789/7275b408-48b3-4afa-82e1-db88b9925ba8)|
 |--|--|--|--|
 
-#### $\Rightarrow$ Now finally for guest
+#### ⇒ Now finally for guest
 
 | ![image](https://github.com/R4F4I/multi_store_app/assets/94185789/7884017e-61de-4d32-82eb-a1c3785fc7fa)| ![image](https://github.com/R4F4I/multi_store_app/assets/94185789/09b2d9ba-6971-4188-a286-1007a63bd23b)|
 |--|--|
