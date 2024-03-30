@@ -47,3 +47,5 @@ devtools_options.yaml
 linux/flutter/*
 macos/Flutter/*
 windows/flutter/*
+
+assets
