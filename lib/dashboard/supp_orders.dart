@@ -1,4 +1,9 @@
+
+
 import 'package:flutter/material.dart';
+import 'package:multi_store_app/dashboard/delivered_orders.dart';
+import 'package:multi_store_app/dashboard/preparing_orders.dart';
+import 'package:multi_store_app/dashboard/shipping_orders.dart';
 import 'package:multi_store_app/widgets/appbar_widgets.dart';
 
 class SupplierOrders extends StatelessWidget {
@@ -6,11 +11,39 @@ class SupplierOrders extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const AppBarTitle(title: 'Supplier Orders',),
-        leading: const AppBarBackButton(),
+    return DefaultTabController(
+      length: 3,
+      child: Scaffold(
+        appBar: AppBar(
+          title: const AppBarTitle(title: 'Orders',),
+          leading: const AppBarBackButton(),
+          bottom: const TabBar(
+            indicatorColor: Colors.yellow,
+            indicatorWeight: 8,
+            tabs: [
+            RepeatedTab(label: 'Preparing'),
+            RepeatedTab(label: 'Shipping'),
+            RepeatedTab(label: 'Delivered'),
+          ]),
+        ),
+        body: const TabBarView(children: [
+          Preparing(),
+          Shipping(),
+          Delivered(),
+        ],),
       ),
+    );
+  }
+}
+
+class RepeatedTab extends StatelessWidget {
+  final String label;
+  const RepeatedTab({super.key, required this.label});
+
+  @override
+  Widget build(BuildContext context) {
+    return Tab(
+      child: Center(child: Text(label,style: const TextStyle(color: Colors.grey),),),
     );
   }
 }
