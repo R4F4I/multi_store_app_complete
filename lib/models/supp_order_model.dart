@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class SupplierOrderModel extends StatelessWidget {
   final dynamic order;
@@ -95,22 +96,22 @@ class SupplierOrderModel extends StatelessWidget {
                                     Text(order['deliverystatus'], style: const TextStyle(fontSize: 15,color: Colors.green),),
                                   ],
                                 ),
-                                
-                                order['deliverystatus'] == 'shipping'
-                                  ? Text(('Estimated Delivery Date: ')+(order['deliverydate']), style: const TextStyle(fontSize: 15),) 
-                                  : const Text(''),
-                                
-                                order['deliverystatus'] == 'delivered' && order['orderreview'] == false
-                                  ? TextButton(onPressed: (){}, child: const Text('Write Review'))
-                                  : const Text(''),
-              
-                                order['deliverystatus'] == 'delivered' && order['orderreview'] == true
-                                  ? const Row(children: [
-                                      Icon(Icons.check, color: Colors.blue),
-                                      Text('Review added',style: TextStyle(color: Colors.blue,fontStyle: FontStyle.italic),)                                   
-                                    ],)
-              
-                                  : const Text('')
+                                Row(
+                                  children: [
+                                    const Text('Order Date: ', style: TextStyle(fontSize: 15),),
+                                    Text(DateFormat('dd-MM-yyyy').format(order['orderdate'].toDate()).toString(), style: const TextStyle(fontSize: 15,color: Colors.green),),
+                                  ],
+                                ),
+                                order['deliverystatus'] == 'delivered'
+                                ? Text('This order has already been delivered')
+                                : Row(
+                                    children: [
+                                      const Text('Change Delivery Status To: ', style: TextStyle(fontSize: 15),),
+                                      order['deliverystatus']=='preparing'
+                                      ? TextButton(onPressed: (){}, child: const Text('shipping?'))
+                                      : TextButton(onPressed: (){}, child: const Text('delivered?'))
+                                    ],
+                                  ),
                                 ],
                               ),
                             )

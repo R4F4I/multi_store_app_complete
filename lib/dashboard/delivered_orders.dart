@@ -12,7 +12,7 @@ class Delivered extends StatelessWidget {
         stream: FirebaseFirestore.instance
         .collection('orders')
         .where('sid',isEqualTo: FirebaseAuth.instance.currentUser!.uid)
-        .where('deliverystatus',isEqualTo: 'preparing')
+        .where('deliverystatus',isEqualTo: 'delivered') //filter for 'delivered' tab
         .snapshots(), builder: (BuildContext context, AsyncSnapshot<QuerySnapshot>snapshot) {
             if (snapshot.hasError) {
             return const Text('Something went wrong');
