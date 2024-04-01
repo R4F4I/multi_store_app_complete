@@ -163,9 +163,22 @@ and math done for total price of all items
 |![image](readme-material\section-7_img-1.png)|![image](readme-material\section-7_img-2.png)|![image](readme-material\section-7_img-3.png)|![image](readme-material\section-7_img-4.png)|
 ||we land on placeOrder phone and address not present for now|different price generated because of shipping cost (for now payment method will be cash only)|cart is cleared and the the order is placed in the Order page in profile|
 
-
-
 |the orders page has cards which contain confirmation of review and delivery status|this one has status: **preparing**|
 |-|-|
 |![image](readme-material\section-7_img-5.png)|![image](readme-material\section-7_img-6.png)|
+</details>
+
+### 08 - Dashboard Components
+
+<details>
+<summary> dealing with supplier orders in dashboard</summary>
+
+|clicking orders tab|clicking on an order |declaring as delivered|brings it to delivered tab|each order shows customer info.|
+|-|-|-|-|-|
+|![dashboard-orders](readme-material\section-8_img-1.png)|![selecting-order-as-supplier](readme-material\section-8_img-2.png)|![alt text](readme-material\section-8_img-3.png)|![alt text](readme-material\section-8_img-4.png)|![alt text](readme-material\section-8_img-5.png)|
+
+|statics screen|shows statistics|Balance screen|shows balance|
+|-|-|-|-|
+|![alt text](readme-material\section-8_img-6.png)|![alt text](readme-material\section-8_img-7.png)|![alt text](readme-material\section-8_img-8.png)|![alt text](readme-material\section-8_img-9.png)|
+
 </details>
