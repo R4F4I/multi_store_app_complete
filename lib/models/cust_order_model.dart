@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class CustomerOrderModel extends StatelessWidget {
   final dynamic order;
@@ -97,14 +98,14 @@ class CustomerOrderModel extends StatelessWidget {
                                 ),
                                 
                                 order['deliverystatus'] == 'shipping'
-                                  ? Text(('Estimated Delivery Date: ')+(order['deliverydate']), style: const TextStyle(fontSize: 15),) 
+                                  ? Text(('Estimated Delivery Date: ')+(DateFormat('dd-MM-yyyy').format(order['deliverydate'].toDate()).toString()), style: const TextStyle(fontSize: 15),) // updated this model show the date chosen by supplier
                                   : const Text(''),
                                 
-                                order['deliverystatus'] == 'delivered' && order['orderreview'] == false
+                                order['deliverystatus'] == 'delivered' && order['orderreview'] == false //delivered but no review
                                   ? TextButton(onPressed: (){}, child: const Text('Write Review'))
                                   : const Text(''),
               
-                                order['deliverystatus'] == 'delivered' && order['orderreview'] == true
+                                order['deliverystatus'] == 'delivered' && order['orderreview'] == true //delivered and reviewed
                                   ? const Row(children: [
                                       Icon(Icons.check, color: Colors.blue),
                                       Text('Review added',style: TextStyle(color: Colors.blue,fontStyle: FontStyle.italic),)                                   
