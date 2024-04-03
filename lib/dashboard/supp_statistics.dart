@@ -23,7 +23,29 @@ class StatisticsScreen extends StatelessWidget {
                         topRight: Radius.circular(25)
                       )
                   ),
-                child: Center(child: Text('sold out'.toUpperCase())),
+                child: Center(child: Text('sold out'.toUpperCase(),style: const TextStyle(color: Colors.white,fontSize: 20),)),
+              ),
+              Container(
+                height: 90,
+                width: MediaQuery.of(context).size.width*0.7,
+                decoration: BoxDecoration(
+                    color: Colors.blueGrey.shade100,
+                    borderRadius: const BorderRadius.only(
+                        bottomLeft: Radius.circular(25),
+                        bottomRight: Radius.circular(25)
+                      )
+                  ),
+                child: const Center(
+                    child: Text('22',
+                      style: TextStyle(
+                          color: Colors.pink,
+                          fontSize: 40,
+                          fontFamily: 'Acme',
+                          letterSpacing: 2,
+                          fontWeight: FontWeight.bold
+                          ),
+                )
+              ),
               )
         ],)
       ],),
