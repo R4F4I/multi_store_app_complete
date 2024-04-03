@@ -98,7 +98,7 @@ class CustomerOrderModel extends StatelessWidget {
                                 ),
                                 
                                 order['deliverystatus'] == 'shipping'
-                                  ? Text(('Estimated Delivery Date: ')+(DateFormat('dd-MM-yyyy').format(order['deliverydate'].toDate()).toString()), style: const TextStyle(fontSize: 15),) // updated this model show the date chosen by supplier
+                                  ? Text(('Estimated Delivery Date: ')+(DateFormat('dd-MM-yyyy').format(order['deliverydate'].toDate())).toString(), style: const TextStyle(fontSize: 15, color:Colors.blue),) // updated this model show the date chosen by supplier
                                   : const Text(''),
                                 
                                 order['deliverystatus'] == 'delivered' && order['orderreview'] == false //delivered but no review
