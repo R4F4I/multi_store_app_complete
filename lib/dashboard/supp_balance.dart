@@ -30,10 +30,28 @@ class BalanceScreen extends StatelessWidget {
         ),
         body: Center(
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [            
-            BalanceModel(label: 'total balance',value: totalPrice,decimal: 2,symbol: true),
-            const SizedBox(height: 40,)
+            BalanceModel(label: 'total balance',value: totalPrice,decimal: 2,),
+            const SizedBox(height: 100),
+            Container(
+              height: 45,
+              width: MediaQuery.of(context).size.width*0.9,
+              decoration: BoxDecoration(
+                color: Colors.pink,
+                borderRadius: BorderRadius.circular(25)),
+              child: MaterialButton(
+                        onPressed: () {},
+                        child: const Text(
+                          'CASHOUT!',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 20,
+                          ),
+                        ),
+              )
+              ),
+            const SizedBox(height: 60),
           ],),
         ),
       );
@@ -44,10 +62,9 @@ class BalanceScreen extends StatelessWidget {
 class BalanceModel extends StatelessWidget {
   final String label;
   final dynamic value;
-  final int decimal;
-  final bool? symbol;
+  final int decimal;  
   const BalanceModel({
-    super.key, required this.label, required this.value,required this.decimal, this.symbol 
+    super.key, required this.label, required this.value,required this.decimal,
   });
 
   @override
@@ -74,26 +91,24 @@ class BalanceModel extends StatelessWidget {
                     bottomLeft: Radius.circular(25),
                     bottomRight: Radius.circular(25)
                   )
-              ),
-            child: symbol == true
-            ? Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  const SizedBox(width: 90,),
-                  AnimatedCounter(count: value, decimal: decimal),
-                  const Text('\$', 
-                    style: TextStyle(
-                        color: Colors.pink,
-                        fontSize: 40,
-                        fontFamily: 'Acme',
-                        letterSpacing: 2,
-                        fontWeight: FontWeight.bold
-                        ),
-                    ),
+              ),              
+              child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    const SizedBox(width: 90,),
+                    AnimatedCounter(count: value, decimal: decimal),
+                    const Text('\$', 
+                      style: TextStyle(
+                          color: Colors.pink,
+                          fontSize: 40,
+                          fontFamily: 'Acme',
+                          letterSpacing: 2,
+                          fontWeight: FontWeight.bold
+                          ),
+                      ),
                     const SizedBox(width: 90,)
-                  ],
-                )
-            : AnimatedCounter(count: value, decimal: decimal),
+                    ],
+                  ),
           )
     ],);
   }
