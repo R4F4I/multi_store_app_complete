@@ -15,9 +15,9 @@ class StatisticsScreen extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
-          StatisticModel(label: 'sold out',value: '22',),
-          StatisticModel(label: 'item count',value: '12',),
-          StatisticModel(label: 'total balance',value: '1222.0 \$',),
+          StatisticModel(label: 'sold out',value: 22,),
+          StatisticModel(label: 'item count',value: 12,),
+          StatisticModel(label: 'total balance',value: 1222.0,),
           SizedBox(height: 20,)
         ],),
       ),
@@ -57,8 +57,44 @@ class StatisticModel extends StatelessWidget {
                     bottomRight: Radius.circular(25)
                   )
               ),
-            child: Center(
-                child: Text(value,
+            child: AnimatedCounter(count: value),
+          )
+    ],);
+  }
+}
+
+class AnimatedCounter extends StatefulWidget {
+  final dynamic count;
+  const AnimatedCounter({super.key, required this.count});
+
+  @override
+  State<AnimatedCounter> createState() => _AnimatedCounterState();
+}
+
+class _AnimatedCounterState extends State<AnimatedCounter> with TickerProviderStateMixin{
+
+  late AnimationController _controller;
+  late Animation _animation;
+
+  //? this section customises the animation
+  @override
+  void initState() {
+    _controller = AnimationController(vsync: this,duration: const Duration(seconds: 1));
+    _animation = _controller;
+    setState(() {
+      _animation = Tween(begin: _animation.value,end: widget.count).animate(_controller); // "end: widget.count" last number //? reason we do "widget.count." instead of "count." is beacause we are inside a stf,
+    });
+    _controller.forward();
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedBuilder(
+      animation: _animation, // AKA Tween(begin: _animation.value,end: widget.count).animate(_controller);
+      builder: (context, child) {
+        return  Center(
+                child: Text(_animation.value.toStringAsFixed(2), 
                   style: const TextStyle(
                       color: Colors.pink,
                       fontSize: 40,
@@ -67,28 +103,8 @@ class StatisticModel extends StatelessWidget {
                       fontWeight: FontWeight.bold
                       ),
             )
-          ),
-          )
-    ],);
-  }
-}
-
-class AnimatedCounter extends StatefulWidget {
-  const AnimatedCounter({super.key});
-
-  @override
-  State<AnimatedCounter> createState() => _AnimatedCounterState();
-}
-
-class _AnimatedCounterState extends State<AnimatedCounter> {
-
-  late AnimationController _controller;
-  late Animation _animation;
-
-  @override
-  Widget build(BuildContext context) {
-    return AnimatedBuilder(
-      animation: _animation,
+          );
+      },
     );
   }
 }
