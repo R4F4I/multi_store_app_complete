@@ -15,9 +15,9 @@ class StatisticsScreen extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
-          StatisticModel(label: 'sold out',value: 22,),
-          StatisticModel(label: 'item count',value: 12,),
-          StatisticModel(label: 'total balance',value: 1222.0,),
+          StatisticModel(label: 'sold out',value: 22,decimal: 0),
+          StatisticModel(label: 'item count',value: 12,decimal: 0),
+          StatisticModel(label: 'total balance',value: 1222.0,decimal: 2),
           SizedBox(height: 20,)
         ],),
       ),
@@ -28,8 +28,9 @@ class StatisticsScreen extends StatelessWidget {
 class StatisticModel extends StatelessWidget {
   final String label;
   final dynamic value;
+  final int decimal;
   const StatisticModel({
-    super.key, required this.label, required this.value
+    super.key, required this.label, required this.value,required this.decimal
   });
 
   @override
@@ -57,7 +58,7 @@ class StatisticModel extends StatelessWidget {
                     bottomRight: Radius.circular(25)
                   )
               ),
-            child: AnimatedCounter(count: value),
+            child: AnimatedCounter(count: value,decimal: decimal,),
           )
     ],);
   }
@@ -65,7 +66,8 @@ class StatisticModel extends StatelessWidget {
 
 class AnimatedCounter extends StatefulWidget {
   final dynamic count;
-  const AnimatedCounter({super.key, required this.count});
+  final int decimal;
+  const AnimatedCounter({super.key, required this.count, required this.decimal});
 
   @override
   State<AnimatedCounter> createState() => _AnimatedCounterState();
@@ -94,7 +96,7 @@ class _AnimatedCounterState extends State<AnimatedCounter> with TickerProviderSt
       animation: _animation, // AKA Tween(begin: _animation.value,end: widget.count).animate(_controller);
       builder: (context, child) {
         return  Center(
-                child: Text(_animation.value.toStringAsFixed(2), 
+                child: Text(_animation.value.toStringAsFixed(widget.decimal), 
                   style: const TextStyle(
                       color: Colors.pink,
                       fontSize: 40,
