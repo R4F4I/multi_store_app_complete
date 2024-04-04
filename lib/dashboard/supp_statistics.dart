@@ -72,3 +72,23 @@ class StatisticModel extends StatelessWidget {
     ],);
   }
 }
+
+class AnimatedCounter extends StatefulWidget {
+  const AnimatedCounter({super.key});
+
+  @override
+  State<AnimatedCounter> createState() => _AnimatedCounterState();
+}
+
+class _AnimatedCounterState extends State<AnimatedCounter> {
+
+  late AnimationController _controller;
+  late Animation _animation;
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedBuilder(
+      animation: _animation,
+    );
+  }
+}
