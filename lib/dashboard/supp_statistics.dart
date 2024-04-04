@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:multi_store_app/widgets/appbar_widgets.dart';
 
@@ -6,22 +8,43 @@ class StatisticsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const AppBarTitle(title: 'Statistics',),
-        leading: const AppBarBackButton(),
-      ),
-      body: const Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: [
-          StatisticModel(label: 'sold out',value: 22,decimal: 0,),
-          StatisticModel(label: 'item count',value: 12,decimal: 0,),
-          StatisticModel(label: 'total balance',value: 1222.0,decimal: 2,symbol: true),
-          SizedBox(height: 20,)
-        ],),
-      ),
-    );
+    return StreamBuilder<QuerySnapshot>(
+        stream: FirebaseFirestore.instance
+        .collection('orders')
+        .where('sid',isEqualTo: FirebaseAuth.instance.currentUser!.uid)
+        .snapshots(), 
+        builder: (BuildContext context, AsyncSnapshot<QuerySnapshot>snapshot) {           
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Material(child: Center(child: CircularProgressIndicator()));
+          }
+
+          num itemCount = 0;
+          for (var item in snapshot.data!.docs){
+            itemCount += item['orderqty'];
+          }
+
+          double totalPrice = 0.0;
+          for (var item in snapshot.data!.docs){
+            totalPrice += item['orderqty']*item['orderprice'];
+          }
+
+      return Scaffold(
+        appBar: AppBar(
+          title: const AppBarTitle(title: 'Statistics',),
+          leading: const AppBarBackButton(),
+        ),
+        body: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+            StatisticModel(label: 'sold out',value: snapshot.data!.docs.length,decimal: 0,),
+            StatisticModel(label: 'item count',value: itemCount,decimal: 0,),
+            StatisticModel(label: 'total balance',value: totalPrice,decimal: 2,symbol: true),
+            const SizedBox(height: 20,)
+          ],),
+        ),
+      );
+    });
   }
 }
 
