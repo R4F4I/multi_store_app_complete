@@ -15,9 +15,9 @@ class StatisticsScreen extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
-          StatisticModel(label: 'sold out',value: 22,decimal: 0),
-          StatisticModel(label: 'item count',value: 12,decimal: 0),
-          StatisticModel(label: 'total balance',value: 1222.0,decimal: 2),
+          StatisticModel(label: 'sold out',value: 22,decimal: 0,),
+          StatisticModel(label: 'item count',value: 12,decimal: 0,),
+          StatisticModel(label: 'total balance',value: 1222.0,decimal: 2,symbol: true),
           SizedBox(height: 20,)
         ],),
       ),
@@ -29,8 +29,9 @@ class StatisticModel extends StatelessWidget {
   final String label;
   final dynamic value;
   final int decimal;
+  final bool? symbol;
   const StatisticModel({
-    super.key, required this.label, required this.value,required this.decimal
+    super.key, required this.label, required this.value,required this.decimal, this.symbol 
   });
 
   @override
@@ -58,7 +59,25 @@ class StatisticModel extends StatelessWidget {
                     bottomRight: Radius.circular(25)
                   )
               ),
-            child: AnimatedCounter(count: value,decimal: decimal,),
+            child: symbol == true
+            ? Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  const SizedBox(width: 90,),
+                  AnimatedCounter(count: value, decimal: decimal),
+                  const Text('\$', 
+                    style: TextStyle(
+                        color: Colors.pink,
+                        fontSize: 40,
+                        fontFamily: 'Acme',
+                        letterSpacing: 2,
+                        fontWeight: FontWeight.bold
+                        ),
+                    ),
+                    const SizedBox(width: 90,)
+                  ],
+                )
+            : AnimatedCounter(count: value, decimal: decimal),
           )
     ],);
   }
