@@ -2,6 +2,10 @@
 
  flutter app project w/ udemy
 
+<details>
+<summary>creating an empty layout of the app</summary>
+</details>
+
 ## Section Summaries
 
 ### 02 - layout [ V 1.0 ]
@@ -182,3 +186,25 @@ and math done for total price of all items
 |![alt text](readme-material\section-8_img-6.png)|![alt text](readme-material\section-8_img-7.png)|![alt text](readme-material\section-8_img-8.png)|![alt text](readme-material\section-8_img-9.png)|
 
 </details>
+
+### 09 - Adding Discount to products
+
+<details>
+<summary> Adding Discount to products</summary>
+
+|New field for input| Taking Input|
+|-|-|
+|![section-9_img-1](readme-material\section-9_img-1.png)|![section-9_img-2.png](readme-material\section-9_img-2.png)|
+||This textfield takes in a number b/w 1-100 and gives a % discount accordingly,|
+||here the discount will be 14% |
+
+|showcase in home screen|changed price|discount price instead of actual price|
+|-|-|-|
+|![alt text](readme-material\section-9_img-3.png)|![alt text](readme-material\section-9_img-4.png)|![alt text](readme-material\section-9_img-5.png)|
+
+
+
+
+
+</details>
+
