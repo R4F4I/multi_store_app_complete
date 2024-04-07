@@ -256,30 +256,59 @@ class _UploadProductScreenState extends State<UploadProductScreen> {
                             height: 30,
                             child: Divider(color: Colors.yellow,thickness: 1.5,)),
                         ),
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: SizedBox(
-                              width: MediaQuery.of(context).size.width*0.4,
-                              child: TextFormField(
-                                validator: (value){
-                                  if (value!.isEmpty){
-                                    return 'please enter price';
-                                  }
-                                  else if (value.isValidPrice() == false){
-                                    return 'invalid Price';
-                                  }
-                                  return null;
-                                },
-                                onSaved: (value){  //onChanged not used as it has no 'null check': (value in (value!) has nullCheck '!' ) 
-                                  price = double.parse(value!); // value is 'string', price is 'double', (conversion)
-                                },
-                                keyboardType: const TextInputType.numberWithOptions(decimal: true),
-                                decoration: textFormDecoration.copyWith(
-                                  labelText: 'price',
-                                  hintText: 'enter price of product',
-                                )
+                          Row(
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: SizedBox(
+                                  width: MediaQuery.of(context).size.width*0.4,
+                                  child: TextFormField(
+                                    validator: (value){
+                                      if (value!.isEmpty){
+                                        return 'please enter price';
+                                      }
+                                      else if (value.isValidPrice() == false){
+                                        return 'invalid Price';
+                                      }
+                                      return null;
+                                    },
+                                    onSaved: (value){  //onChanged not used as it has no 'null check': (value in (value!) has nullCheck '!' ) 
+                                      price = double.parse(value!); // value is 'string', price is 'double', (conversion)
+                                    },
+                                    keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                                    decoration: textFormDecoration.copyWith(
+                                      labelText: 'price',
+                                      hintText: 'enter price of product',
+                                    )
+                                  ),
+                                ),
                               ),
-                            ),
+                              Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: SizedBox(
+                                  width: MediaQuery.of(context).size.width*0.4,
+                                  child: TextFormField(
+                                    validator: (value){
+                                      if (value!.isEmpty){
+                                        return 'please enter price';
+                                      }
+                                      else if (value.isValidPrice() == false){
+                                        return 'invalid Price';
+                                      }
+                                      return null;
+                                    },
+                                    onSaved: (value){  //onChanged not used as it has no 'null check': (value in (value!) has nullCheck '!' ) 
+                                      price = double.parse(value!); // value is 'string', price is 'double', (conversion)
+                                    },
+                                    keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                                    decoration: textFormDecoration.copyWith(
+                                      labelText: 'price',
+                                      hintText: 'enter price of product',
+                                    )
+                                  ),
+                                ),
+                              ),
+                            ],
                           ),
                           Padding(
                             padding: const EdgeInsets.all(8.0),
