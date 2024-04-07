@@ -19,6 +19,7 @@ class _ProductModelState extends State<ProductModel> {
   late var existingItemWishlist = context.read<Wish>().getWishItems.firstWhereOrNull((product) => product.documentId==widget.products['proid']);
   @override
   Widget build(BuildContext context) {
+    var onSale = widget.products['discount'];
     return InkWell(
       onTap: (){
         Navigator.push(context, MaterialPageRoute(builder: (context)=> ProductDetailsScreen(proList: widget.products)));
@@ -59,14 +60,37 @@ class _ProductModelState extends State<ProductModel> {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Text(
-                                widget.products['price'].toStringAsFixed(2)+('\$'),
-                                 style: const TextStyle(
-                                  color: Colors.red,
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w600
+                              onSale !=0
+                              ?  Row(
+                                children: [
+                                  Text(
+                                      ('\$ ')+widget.products['price'].toStringAsFixed(2), //original price
+                                      style: const TextStyle(
+                                        color: Colors.grey,
+                                        fontSize: 11,
+                                        fontWeight: FontWeight.w600,
+                                        decoration: TextDecoration.lineThrough
+                                      ),
+                                    ),
+                                  const SizedBox(width: 6,),
+                                  Text(
+                                      ('\$ ')+((1-(onSale/100))*widget.products['price']).toStringAsFixed(2)+(' !!!'), //discounted price
+                                      style: const TextStyle(
+                                        color: Colors.red,
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w600
+                                        ),
+                                      ),
+                                  ],
+                              )
+                              : Text(
+                                  ('\$ ')+widget.products['price'].toStringAsFixed(2), //original price
+                                  style: const TextStyle(
+                                    color: Colors.red,
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w600
+                                  ),
                                 ),
-                              ),
                               widget.products['sid'] == FirebaseAuth.instance.currentUser!.uid
                                   ? IconButton(
                                     onPressed: (){},
@@ -102,7 +126,7 @@ class _ProductModelState extends State<ProductModel> {
                   ),
                   ])
             ),
-            widget.products['discount'] != 0
+            onSale != 0
             ? Positioned(
               top: 30,
               left: 0,
@@ -116,7 +140,7 @@ class _ProductModelState extends State<ProductModel> {
                     bottomRight: Radius.circular(15),
                   )
                 ),
-                child: Center(child: Text('Save ${widget.products['discount']} %')),
+                child: Center(child: Text('Save $onSale %')),
               ),
             )
             : Container(color: Colors.transparent,),
