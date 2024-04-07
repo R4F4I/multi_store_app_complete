@@ -31,6 +31,7 @@ class _UploadProductScreenState extends State<UploadProductScreen> {
   late String proName;
   late String proDesc;
   late String proId;
+  int? discount = 0; //nullable
   String mainCategdropDownVal='select category';
   String subCategdropDownVal='subcategory';
   List<String> subCategList=[];
@@ -141,7 +142,7 @@ class _UploadProductScreenState extends State<UploadProductScreen> {
                 'prodesc': proDesc,
                 'sid': FirebaseAuth.instance.currentUser!.uid,
                 'proimages': imagesUrlList,
-                'discount': 0,
+                'discount': discount,
                   }).whenComplete(() {
                 setState(() {
                   processing=false; // when all is complete, processing is not happening
@@ -260,7 +261,7 @@ class _UploadProductScreenState extends State<UploadProductScreen> {
                             children: [
                               Padding(
                                 padding: const EdgeInsets.all(8.0),
-                                child: SizedBox(
+                                child: SizedBox(                                  
                                   width: MediaQuery.of(context).size.width*0.4,
                                   child: TextFormField(
                                     validator: (value){
@@ -288,22 +289,23 @@ class _UploadProductScreenState extends State<UploadProductScreen> {
                                 child: SizedBox(
                                   width: MediaQuery.of(context).size.width*0.4,
                                   child: TextFormField(
+                                    maxLength: 2,
                                     validator: (value){
                                       if (value!.isEmpty){
-                                        return 'please enter price';
+                                        return null;
                                       }
-                                      else if (value.isValidPrice() == false){
-                                        return 'invalid Price';
+                                      else if (value.isValidDiscount() == false){
+                                        return 'invalid discount';
                                       }
                                       return null;
                                     },
                                     onSaved: (value){  //onChanged not used as it has no 'null check': (value in (value!) has nullCheck '!' ) 
-                                      price = double.parse(value!); // value is 'string', price is 'double', (conversion)
+                                      discount = int.parse(value!); // value is 'string', discount is 'int', (conversion)
                                     },
                                     keyboardType: const TextInputType.numberWithOptions(decimal: true),
                                     decoration: textFormDecoration.copyWith(
-                                      labelText: 'price',
-                                      hintText: 'enter price of product',
+                                      labelText: 'discount',
+                                      hintText: 'enter discount for product',
                                     )
                                   ),
                                 ),
@@ -485,3 +487,17 @@ e.g: 0.9: 'yes', 01.9: 'no',
 e.g: 1.0: 'yes',1.: 'no',
 
  */
+
+extension DiscountValidator on String{
+  bool isValidDiscount(){
+    return RegExp(r'^([0-9]*)$').hasMatch(this);
+  }
+}
+
+/* 
+above regex :
+
+> only integers, no limit to length
+> e.g: 0: 'yes', 12: 'yes', wq: 'no',
+
+*/
