@@ -142,7 +142,9 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                               ? context.read<Wish>().removeThis(widget.proList['proid']) //now reclicking the heart icon removes the product from wishlist
                               : context.read<Wish>().addWishItem(          
                                   widget.proList['proname'],
-                                  widget.proList['price'],
+                                  onSale!=0
+                                    ? (1-(onSale/100))*widget.proList['price']
+                                    : widget.proList['price'],
                                   1,
                                   widget.proList['instock'],
                                   widget.proList['proimages'],
@@ -273,7 +275,9 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                       else {
                         context.read<Cart>().addItem(          
                           widget.proList['proname'],
-                          widget.proList['price'],
+                          onSale!=0
+                            ? (1-(onSale/100))*widget.proList['price']
+                            : widget.proList['price'],
                           1,
                           widget.proList['instock'],
                           widget.proList['proimages'],
