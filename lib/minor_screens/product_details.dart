@@ -35,6 +35,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
   late List<dynamic> imagesList = widget.proList['proimages'];
   @override
   Widget build(BuildContext context) {
+    var onSale = widget.proList['discount'];
     var existingItemCart = context.read<Cart>().getItems.firstWhereOrNull((product) => product.documentId==widget.proList['proid']);
     return Material(
       child: SafeArea(
@@ -103,22 +104,37 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                         Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,  
                         children: [
-                           Row(
-                            children: [
-                              const Text('USD  ',style: TextStyle(
-                                color: Colors.red,
-                                fontSize: 16,
-                                fontWeight: FontWeight.w600,
+                           onSale !=0
+                              ?  Row(
+                                children: [
+                                  Text(
+                                      ('USD ')+widget.proList['price'].toStringAsFixed(2), //original price
+                                      style: const TextStyle(
+                                        color: Colors.grey,
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w600,
+                                        decoration: TextDecoration.lineThrough
+                                      ),
+                                    ),
+                                  const SizedBox(width: 6,),
+                                  Text(
+                                      ('USD ')+((1-(onSale/100))*widget.proList['price']).toStringAsFixed(2)+(' !!!'), //discounted price
+                                      style: const TextStyle(
+                                        color: Colors.red,
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.w600
+                                        ),
+                                      ),
+                                  ],
+                              )
+                              : Text(
+                                  ('USD ')+widget.proList['price'].toStringAsFixed(2), //original price
+                                  style: const TextStyle(
+                                    color: Colors.red,
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.w600
+                                  ),
                                 ),
-                              ),
-                              Text(widget.proList['price'].toStringAsFixed(2),style: const TextStyle(
-                                color: Colors.red,
-                                fontSize: 16,
-                                fontWeight: FontWeight.w600,
-                                ),
-                              ),
-                            ],
-                          ),
                           IconButton(
                             onPressed: (){
                               var existingItemWishlist = context.read<Wish>().getWishItems.firstWhereOrNull((product) => product.documentId==widget.proList['proid']);
