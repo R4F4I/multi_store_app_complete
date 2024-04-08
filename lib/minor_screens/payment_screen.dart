@@ -188,7 +188,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
                                           onPressed: () async{
                                             showProgress();
                                             //if (!mounted) return;  //* USE THIS IN ASYNC BUILDCONTEXT https://dart.dev/tools/linter-rules/use_build_context_synchronously
-                                            // ignore: use_build_context_synchronously
+                                            // ignore: use_build_context_synchronously  
                                             for (var item in context.read<Cart>().getItems){
                                               CollectionReference orderRef = FirebaseFirestore.instance.collection('orders');
                                               orderId = const Uuid().v4();

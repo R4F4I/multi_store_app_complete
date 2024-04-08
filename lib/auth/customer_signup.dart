@@ -1,6 +1,6 @@
 //import 'dart:ffi';
 
-// ignore_for_file: avoid_print, use_build_context_synchronously
+// ignore_for_file: avoid_print,
 
 
 import 'dart:io';
@@ -120,7 +120,7 @@ void signUp() async {
           _imageFile=null;
           });
 
-        Navigator.pushReplacementNamed(context, '/customer_login');
+        await Future.delayed(const Duration(microseconds: 100)).whenComplete(()=>Navigator.pushReplacementNamed(context, '/customer_login'));
 
         } on FirebaseAuthException 
         catch(e){

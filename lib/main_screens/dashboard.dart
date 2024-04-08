@@ -58,10 +58,9 @@ class DashboardScreen extends StatelessWidget {
                     Navigator.pop(context);
                   },
                   tapYes: () async {
-                    await FirebaseAuth.instance.signOut();
-                    if (!context.mounted) return;
-                    Navigator.pop(context);
-                    Navigator.pushReplacementNamed(context, '/welcome_screen');
+                    await FirebaseAuth.instance.signOut();                    
+                    await Future.delayed(const Duration(microseconds: 100)).whenComplete(()=>Navigator.pop(context));
+                    await Future.delayed(const Duration(microseconds: 100)).whenComplete(()=>Navigator.pushReplacementNamed(context, '/welcome_screen'));
                   },
                 );
               },
