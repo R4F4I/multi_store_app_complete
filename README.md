@@ -14,7 +14,7 @@
 <summary>creating an empty layout of the app</summary>
  creating an empty layout of the app
 
-|![image](readme-material\section-2_img-1.png)|![image](readme-material\section-2_img-2.png)|![image](readme-material\section-2_img-3.png)|
+|[readme-material\section-2_img-1](https://i.ibb.co/Nx9Y4Pb/section-2-img-1.png)|[readme-material\section-2_img-2.png](https://i.ibb.co/FYqCvcV\section-2_img-2.png)|[readme-material\section-2_img-3.png](https://i.ibb.co/kyvZz61/section-2-img-3.png)|
 |--|--|--|
 </details>
 
