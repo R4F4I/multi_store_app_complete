@@ -4,6 +4,9 @@
 
 <details>
 <summary>creating an empty layout of the app</summary>
+
+![](https://raw.githubusercontent.com/R4F4I/Myimages/main/C1_W1_Quiz_3.png)
+
 </details>
 
 ## Section Summaries
