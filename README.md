@@ -14,7 +14,7 @@
 <summary>creating an empty layout of the app</summary>
  creating an empty layout of the app
 
-|![readme-material\section-2_img-1](https://i.ibb.co/Nx9Y4Pb/section-2-img-1.png)|![readme-material\section-2_img-2](https://i.ibb.co/FYqCvcV\section-2_img-2.png)|![readme-material\section-2_img-3.png](https://i.ibb.co/kyvZz61/section-2-img-3.png)|
+|![section-2_img-1](https://github.com/R4F4I/multi_store_app/assets/94185789/e3661672-cb62-45a9-87ed-5334826faa95)|![section-2_img-2](https://github.com/R4F4I/multi_store_app/assets/94185789/defd73b7-26af-413d-910e-680fade173e8)|![section-2_img-3](https://github.com/R4F4I/multi_store_app/assets/94185789/faa9ed7f-ab1d-460f-a351-3eedff18e6b3)|
 |--|--|--|
 </details>
 
