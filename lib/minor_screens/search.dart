@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:multi_store_app/minor_screens/product_details.dart';
 
 class SearchScreen extends StatefulWidget {
   const SearchScreen({super.key});
@@ -81,16 +82,64 @@ class SearchModel extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(children: [
-      ClipRRect(
-        child: Image(image: NetworkImage(e['proimages'][0])),
+    return InkWell(
+      onTap: () {
+        Navigator.push(context, MaterialPageRoute(builder: (context)=> ProductDetailsScreen(proList: e)));
+      },
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 8,horizontal: 20),
+        child: Container(
+          decoration: BoxDecoration(color: Colors.white,borderRadius: BorderRadius.circular(12)),
+          height: 100,
+          width: double.infinity,
+          child: Padding(
+            padding: const EdgeInsets.only(right: 10),
+            child: Row(children: [
+              ClipRRect(
+                borderRadius: BorderRadius.circular(8),
+                child: SizedBox(
+                  height: 100,
+                  width: 100,
+                  child: Image(
+                    image: NetworkImage(e['proimages'][0]),
+                    fit: BoxFit.contain,
+                    )
+                  ),
+                ),
+              const SizedBox(width: 10,),
+              Flexible(
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Column(children: [
+
+                      Text(
+                        e['proname'],
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 1,
+                        style: const TextStyle(
+                          fontSize: 14,
+                          color: Colors.black,
+                          fontWeight: FontWeight.w800,
+                        ),
+                      ),
+
+                      Text(
+                      e['prodesc'],
+                      overflow: TextOverflow.ellipsis,
+                      maxLines: 2,
+                      style: const TextStyle(
+                          fontSize: 12,
+                          color: Colors.grey,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              )
+            ],),
+          ),
+        ),
       ),
-      Column(
-        children: [
-          Text(e['proname']),
-          Text(e['prodesc'])
-        ],
-      )
-    ],);
+    );
   }
 }
