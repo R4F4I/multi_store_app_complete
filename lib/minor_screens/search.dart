@@ -68,9 +68,29 @@ class _SearchScreenState extends State<SearchScreen> {
 
                 return ListView(
                 children:
-                    result.map((e) => Text(e['proname'])).toList(), //in snapshot each unique record is passed into 'e' via .map where a Text widget with val. 'e[proname]' is returned, these returned text widgets are again turned into a list to be passed into list view
+                    result.map((e) => SearchModel(e: e)).toList(), //in snapshot each unique record is passed into 'e' via .map where a Text widget with val. 'e[proname]' is returned, these returned text widgets are again turned into a list to be passed into list view
               );
               }),
   );
+  }
+}
+
+class SearchModel extends StatelessWidget {
+  final dynamic e;
+  const SearchModel({super.key, required this.e});
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(children: [
+      ClipRRect(
+        child: Image(image: NetworkImage(e['proimages'][0])),
+      ),
+      Column(
+        children: [
+          Text(e['proname']),
+          Text(e['prodesc'])
+        ],
+      )
+    ],);
   }
 }
