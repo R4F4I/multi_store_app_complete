@@ -19,7 +19,7 @@ class WishlistModel extends StatelessWidget {
       padding: const EdgeInsets.all(5.0),
       child: Card(
           child: SizedBox(
-            height: 100,
+            height: 106,
             child: Row(
               children: [
                 SizedBox(
