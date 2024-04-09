@@ -10,6 +10,7 @@ import "package:multi_store_app/widgets/yellow_button.dart";
 import "package:provider/provider.dart";
 import "package:uuid/uuid.dart";
 import 'package:sn_progress_dialog/sn_progress_dialog.dart';
+import 'package:flutter_stripe/flutter_stripe.dart';
 
 class PaymentScreen extends StatefulWidget {
   const PaymentScreen({super.key});
