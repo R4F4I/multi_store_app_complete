@@ -1,2 +1,0 @@
-const stripePublishibleKey = '';
-const stripeSecretKey = '';

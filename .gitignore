@@ -47,3 +47,6 @@ devtools_options.yaml
 linux/flutter/*
 macos/Flutter/*
 windows/flutter/*
+
+# Stripe ignore
+lib/providers/stripe_id.dart
