@@ -236,7 +236,9 @@ class _PaymentScreenState extends State<PaymentScreen> {
                                   )
                                 );
                             }
-                            else if (selectedValue==2){print('visa');}
+                            else if (selectedValue==2){
+                              makePayment();
+                            }
                             else if (selectedValue==3){print('paypal');}
                           },
                         ),
@@ -250,6 +252,26 @@ class _PaymentScreenState extends State<PaymentScreen> {
           child: CircularProgressIndicator(),
       );
     });
+  }
+  void makePayment() async{
+    // createPaymentIntent
+    // initPaymentSheet
+    // displayPaymentSheet
+
+    await createPaymentIntent();
+    await initPaymentSheet();
+    await displayPaymentSheet();
+    
+
+  }
+  createPaymentIntent(){
+
+  }
+  initPaymentSheet(){
+
+  }
+  displayPaymentSheet(){
+
   }
 }
 
