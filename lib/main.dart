@@ -21,7 +21,7 @@ Future<void> main()async{
   WidgetsFlutterBinding.ensureInitialized();
   Stripe.publishableKey = stripePublishibleKey;
   Stripe.merchantIdentifier = 'merchant.flutter.stripe.test';
-  Stripe.urlScheme = 'flutterstripe';
+  //Stripe.urlScheme = 'flutterstripe';
   await Stripe.instance.applySettings();
 
   

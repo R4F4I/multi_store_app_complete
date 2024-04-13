@@ -1,16 +1,20 @@
 // ignore_for_file: avoid_print
 
+import "dart:convert";
+
 import "package:cloud_firestore/cloud_firestore.dart";
 import "package:firebase_auth/firebase_auth.dart";
 import "package:flutter/material.dart";
 import "package:font_awesome_flutter/font_awesome_flutter.dart";
 import "package:multi_store_app/providers/cart_provider.dart";
+import "package:multi_store_app/providers/stripe_id.dart";
 import "package:multi_store_app/widgets/appbar_widgets.dart";
 import "package:multi_store_app/widgets/yellow_button.dart";
 import "package:provider/provider.dart";
 import "package:uuid/uuid.dart";
 import 'package:sn_progress_dialog/sn_progress_dialog.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
+import 'package:http/http.dart' as http;
 
 class PaymentScreen extends StatefulWidget {
   const PaymentScreen({super.key});
@@ -253,25 +257,70 @@ class _PaymentScreenState extends State<PaymentScreen> {
       );
     });
   }
-  void makePayment() async{
+
+  Map<String,dynamic>? paymentIntentData; 
+
+  Future<void> makePayment() async{
     // createPaymentIntent
     // initPaymentSheet
     // displayPaymentSheet
 
-    await createPaymentIntent();
+    print('Test - 1: starting: createPaymentIntent()');
+    paymentIntentData = await createPaymentIntent();
+    print('Test - 1: complete: createPaymentIntent()');
+    print('Test - 2: starting: initPaymentSheet()');
     await initPaymentSheet();
+    
+    print('Test - 2: complete: initPaymentSheet()');
+    print('Test - 3: starting: displayPaymentSheet()');
     await displayPaymentSheet();
+    print('Test - 3: complete: displayPaymentSheet()');
     
 
   }
-  createPaymentIntent(){
+  
+  createPaymentIntent() async{
+    print('Test - 1.1: starting: body');
+    Map<String,dynamic> body = {
+      'amount': '1200',
+      'currency': 'USD',
+      'payment_method_types[]': 'card'
+    };
+    print('Test - 1.1: complete: body');
+    print('Test - 1.2: starting: response');
+    final response = await http.post(
+        Uri.parse('https://api.stripe.com/v1/payment_intents'),
+        body: body,
+        headers: {
+          'Authorization': 'Bearer $stripeSecretKey',
+          'content_type': "application/x-www-form-urlencoded"
+        }
+
+    );
+    print('secret key: $stripeSecretKey');
+    print('Test - 1.2: complete: response');
+    return jsonDecode(response.body);
 
   }
-  initPaymentSheet(){
 
+  initPaymentSheet() async{
+    await Stripe.instance.initPaymentSheet(
+        paymentSheetParameters: SetupPaymentSheetParameters(
+          merchantDisplayName: 'ANNIE',
+          paymentIntentClientSecret: paymentIntentData?['client_secret'],
+
+        )
+      );
+    print(paymentIntentData?['client_secret']);
   }
-  displayPaymentSheet(){
-
+  displayPaymentSheet()async{
+    try {
+      await Stripe.instance.presentPaymentSheet(
+      //options: PresentPaymentSheetPameters(clientSecret: paymentIntentData!['client_secret'],confirmPayment: true ),
+    );
+    } catch (e) {
+      print('stripe presentation error:${e.toString()}');
+    }
   }
 }
 
