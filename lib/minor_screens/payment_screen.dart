@@ -1,4 +1,4 @@
-// ignore_for_file: avoid_print
+// ignore_for_file: avoid_print, use_build_context_synchronously
 
 import "dart:convert";
 
@@ -193,7 +193,6 @@ class _PaymentScreenState extends State<PaymentScreen> {
                                           onPressed: () async{
                                             showProgress();
                                             //if (!mounted) return;  //* USE THIS IN ASYNC BUILDCONTEXT https://dart.dev/tools/linter-rules/use_build_context_synchronously
-                                            // ignore: use_build_context_synchronously  
                                             for (var item in context.read<Cart>().getItems){
                                               CollectionReference orderRef = FirebaseFirestore.instance.collection('orders');
                                               orderId = const Uuid().v4();
@@ -241,7 +240,10 @@ class _PaymentScreenState extends State<PaymentScreen> {
                                 );
                             }
                             else if (selectedValue==2){
-                              makePayment();
+
+                              // convert dollar to cents
+                              int payment = (totalPaid.round())*100;
+                              makePayment(data, payment.toString());
                             }
                             else if (selectedValue==3){print('paypal');}
                           },
@@ -260,21 +262,21 @@ class _PaymentScreenState extends State<PaymentScreen> {
 
   Map<String,dynamic>? paymentIntentData; 
 
-  Future<void> makePayment() async{
+  Future<void> makePayment(dynamic data, String total) async{
     // createPaymentIntent
     // initPaymentSheet
     // displayPaymentSheet
 
-    paymentIntentData = await createPaymentIntent();
+    paymentIntentData = await createPaymentIntent(total, 'USD');
     await initPaymentSheet();
-    await displayPaymentSheet();
+    await displayPaymentSheet(data);
 
   }
   
-  createPaymentIntent() async{
+  createPaymentIntent(String total, String currency) async{
     Map<String,dynamic> body = {
-      'amount': '1200',
-      'currency': 'USD',
+      'amount': total,
+      'currency': currency,
       'payment_method_types[]': 'card'
     };
     final response = await http.post(
@@ -306,9 +308,54 @@ class _PaymentScreenState extends State<PaymentScreen> {
         )
       );
   }
-  displayPaymentSheet()async{
+  displayPaymentSheet(var data)async{
     try {
-      await Stripe.instance.presentPaymentSheet();
+      await Stripe.instance.presentPaymentSheet().then((value) async{
+        paymentIntentData = null;
+        print('paid');
+        
+        // upload to firebase
+        showProgress();
+        //if (!mounted) return;  //* USE THIS IN ASYNC BUILDCONTEXT https://dart.dev/tools/linter-rules/use_build_context_synchronously
+        for (var item in context.read<Cart>().getItems){
+          CollectionReference orderRef = FirebaseFirestore.instance.collection('orders');
+          orderId = const Uuid().v4();
+          await orderRef.doc(orderId).set({
+
+            'cid': data['cid'],
+            'custname': data['name'],
+            'email': data['email'],
+            'address': data['address'],
+            'phone': data['phone'],
+            'profileimage': data['profileimage'],
+
+            'sid': item.suppId,
+
+            'proid': item.documentId,
+            'orderid': orderId,
+            'orderimage': item.imagesUrl.first,
+            'orderqty':item.qty,
+            'orderprice': item.qty*item.price,
+            'ordername':item.name,
+
+            'deliverystatus': 'preparing',
+            'deliverydate':'',
+            'orderdate':DateTime.now(),
+            'paymentstatus':'paid online',
+            'orderreview':false,
+
+          }).whenComplete(() async{
+            await FirebaseFirestore.instance.runTransaction((transaction) async{
+              DocumentReference documentReference = FirebaseFirestore.instance.collection('products').doc(item.documentId);
+              DocumentSnapshot snapshot2 = await transaction.get(documentReference);
+              transaction.update(documentReference, {'instock':snapshot2['instock'] - item.qty});
+            });
+          });
+        }
+        context.read<Cart>().clearCart;
+        Navigator.popUntil(context,ModalRoute.withName('/customer_home'));
+      });
+
     } catch (e) {
       print('stripe presentation error:${e.toString()}');
     }
