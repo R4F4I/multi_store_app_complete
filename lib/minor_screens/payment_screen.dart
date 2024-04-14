@@ -265,29 +265,18 @@ class _PaymentScreenState extends State<PaymentScreen> {
     // initPaymentSheet
     // displayPaymentSheet
 
-    print('Test - 1: starting: createPaymentIntent()');
     paymentIntentData = await createPaymentIntent();
-    print('Test - 1: complete: createPaymentIntent()');
-    print('Test - 2: starting: initPaymentSheet()');
     await initPaymentSheet();
-    
-    print('Test - 2: complete: initPaymentSheet()');
-    print('Test - 3: starting: displayPaymentSheet()');
     await displayPaymentSheet();
-    print('Test - 3: complete: displayPaymentSheet()');
-    
 
   }
   
   createPaymentIntent() async{
-    print('Test - 1.1: starting: body');
     Map<String,dynamic> body = {
       'amount': '1200',
       'currency': 'USD',
       'payment_method_types[]': 'card'
     };
-    print('Test - 1.1: complete: body');
-    print('Test - 1.2: starting: response');
     final response = await http.post(
         Uri.parse('https://api.stripe.com/v1/payment_intents'),
         body: body,
@@ -297,8 +286,6 @@ class _PaymentScreenState extends State<PaymentScreen> {
         }
 
     );
-    print('secret key: $stripeSecretKey');
-    print('Test - 1.2: complete: response');
     return jsonDecode(response.body);
 
   }
@@ -308,16 +295,20 @@ class _PaymentScreenState extends State<PaymentScreen> {
         paymentSheetParameters: SetupPaymentSheetParameters(
           merchantDisplayName: 'ANNIE',
           paymentIntentClientSecret: paymentIntentData?['client_secret'],
+          applePay: const PaymentSheetApplePay(
+            merchantCountryCode: 'US',
+          ),
+          googlePay: const PaymentSheetGooglePay(
+            merchantCountryCode: 'US',
+            testEnv: true,
+          ),
 
         )
       );
-    print(paymentIntentData?['client_secret']);
   }
   displayPaymentSheet()async{
     try {
-      await Stripe.instance.presentPaymentSheet(
-      //options: PresentPaymentSheetPameters(clientSecret: paymentIntentData!['client_secret'],confirmPayment: true ),
-    );
+      await Stripe.instance.presentPaymentSheet();
     } catch (e) {
       print('stripe presentation error:${e.toString()}');
     }
