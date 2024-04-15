@@ -1,10 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:multi_store_app/widgets/yellow_button.dart';
 
-class CustomerOrderModel extends StatelessWidget {
+class CustomerOrderModel extends StatefulWidget {
   final dynamic order;
   const CustomerOrderModel({super.key, required this.order});
 
+  @override
+  State<CustomerOrderModel> createState() => _CustomerOrderModelState();
+}
+
+class _CustomerOrderModelState extends State<CustomerOrderModel> {
+
+  late double rate;
+  late String comment;
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -25,7 +35,7 @@ class CustomerOrderModel extends StatelessWidget {
                                     child: Container(
                                       constraints:
                                           const BoxConstraints(maxHeight: 80, maxWidth: 80),
-                                      child: Image.network(order['orderimage']),
+                                      child: Image.network(widget.order['orderimage']),
                                     ),
                                 ),
                                 Flexible(
@@ -33,7 +43,7 @@ class CustomerOrderModel extends StatelessWidget {
                                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                       children: [
                                       Text(
-                                        order['ordername'],
+                                        widget.order['ordername'],
                                         overflow: TextOverflow.ellipsis,
                                         maxLines: 2,
                                         style: TextStyle(
@@ -47,8 +57,8 @@ class CustomerOrderModel extends StatelessWidget {
                                           child: Row(
                                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                             children: [
-                                            Text(('\$ ')+(order['orderprice'].toStringAsFixed(2))),
-                                            Text((' x ')+(order['orderqty'].toString()))
+                                            Text(('\$ ')+(widget.order['orderprice'].toStringAsFixed(2))),
+                                            Text((' x ')+(widget.order['orderqty'].toString()))
                                           ],
                                           ),
                                         )
@@ -62,14 +72,14 @@ class CustomerOrderModel extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                         const Text('See more...'),
-                        Text(order['deliverystatus'])
+                        Text(widget.order['deliverystatus'])
                       ],),
                       children: [
                         Container(
                           //height: 200,
                           width: double.infinity,
                           decoration: BoxDecoration(
-                            color: order['deliverystatus'] == 'delivered'
+                            color: widget.order['deliverystatus'] == 'delivered'
                               ? Colors.blue.withOpacity(0.2)
                               : Colors.yellow.withOpacity(0.2),
                             borderRadius: BorderRadius.circular(15),
@@ -79,33 +89,92 @@ class CustomerOrderModel extends StatelessWidget {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text(('Name: ')+(order['custname']), style: const TextStyle(fontSize: 15),),
-                                Text(('Phone No.: ')+(order['phone']), style: const TextStyle(fontSize: 15),),
-                                Text(('Email Address: ')+(order['email']), style: const TextStyle(fontSize: 15),),
-                                Text(('Address: ')+(order['address']), style: const TextStyle(fontSize: 15),),
+                                Text(('Name: ')+(widget.order['custname']), style: const TextStyle(fontSize: 15),),
+                                Text(('Phone No.: ')+(widget.order['phone']), style: const TextStyle(fontSize: 15),),
+                                Text(('Email Address: ')+(widget.order['email']), style: const TextStyle(fontSize: 15),),
+                                Text(('Address: ')+(widget.order['address']), style: const TextStyle(fontSize: 15),),
               
                                 Row(
                                   children: [
                                     const Text( 'Payment Status: ',style: TextStyle(fontSize: 15)),
-                                    Text(order['paymentstatus'], style: const TextStyle(fontSize: 15,color: Colors.purple))
+                                    Text(widget.order['paymentstatus'], style: const TextStyle(fontSize: 15,color: Colors.purple))
                                   ]
                                 ),
                                 Row(
                                   children: [
                                     const Text('Delivery Status: ', style: TextStyle(fontSize: 15),),
-                                    Text(order['deliverystatus'], style: const TextStyle(fontSize: 15,color: Colors.green),),
+                                    Text(widget.order['deliverystatus'], style: const TextStyle(fontSize: 15,color: Colors.green),),
                                   ],
                                 ),
                                 
-                                order['deliverystatus'] == 'shipping'
-                                  ? Text(('Estimated Delivery Date: ')+(DateFormat('dd-MM-yyyy').format(order['deliverydate'].toDate())).toString(), style: const TextStyle(fontSize: 15, color:Colors.blue),) // updated this model show the date chosen by supplier
+                                widget.order['deliverystatus'] == 'shipping'
+                                  ? Text(('Estimated Delivery Date: ')+(DateFormat('dd-MM-yyyy').format(widget.order['deliverydate'].toDate())).toString(), style: const TextStyle(fontSize: 15, color:Colors.blue),) // updated this model show the date chosen by supplier
                                   : const Text(''),
                                 
-                                order['deliverystatus'] == 'delivered' && order['orderreview'] == false //delivered but no review
-                                  ? TextButton(onPressed: (){}, child: const Text('Write Review'))
+                                widget.order['deliverystatus'] == 'delivered' && widget.order['orderreview'] == false //delivered but no review
+                                  ? TextButton(
+                                    onPressed: (){
+                                      showDialog(
+                                        context: context, 
+                                        builder: (context)=> Material(
+                                          color: Colors.white,
+                                          child: Padding(
+                                            padding: const EdgeInsets.symmetric(horizontal: 20,vertical: 250),
+                                            child: Column(
+                                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                              children: [
+                                                RatingBar.builder(
+                                                  initialRating: 1,
+                                                  minRating: 1,
+                                                  allowHalfRating: true,
+                                                  itemBuilder: (context, _){
+                                                    return const Icon(Icons.star, color: Colors.amber,);
+                                                  }, 
+                                                    onRatingUpdate: (value){
+                                                      rate = value;
+                                                    }
+                                                ),
+                                                TextField(
+                                                  decoration: InputDecoration(
+                                                    hintText: 'Enter your Review',
+                                                    border: OutlineInputBorder(
+                                                      borderRadius: BorderRadius.circular(15),
+                                                    ),
+                                                    enabledBorder: OutlineInputBorder(
+                                                      borderSide: const BorderSide(color: Colors.grey,width: 1),
+                                                      borderRadius: BorderRadius.circular(15),
+                                                    ),
+                                                    focusedBorder: OutlineInputBorder(
+                                                      borderSide: const BorderSide(color: Colors.amber,width: 2),
+                                                      borderRadius: BorderRadius.circular(15),
+                                                    ),
+                                                  ),
+                                                  onChanged: (value){
+                                                    comment = value;
+                                                  }
+                                                ),
+                                                const SizedBox(height: 12,),
+                                                Row(
+                                                  mainAxisAlignment: MainAxisAlignment.end,
+                                                  children: [
+                                                    const SizedBox(width: 12,),
+                                                    YellowButton(label: 'cancel', onPressed: (){
+                                                      Navigator.pop(context);
+                                                    }, width: 0.3),
+                                                    const SizedBox(width: 12,),
+                                                    YellowButton(label: 'ok', onPressed: (){
+                                                      Navigator.pop(context);
+                                                    }, width: 0.3),
+                                                    const SizedBox(width: 12,),
+                                              ],)
+                                            ],),
+                                          ),
+                                      ));
+                                    }, 
+                                    child: const Text('Write Review'))
                                   : const Text(''),
               
-                                order['deliverystatus'] == 'delivered' && order['orderreview'] == true //delivered and reviewed
+                                widget.order['deliverystatus'] == 'delivered' && widget.order['orderreview'] == true //delivered and reviewed
                                   ? const Row(children: [
                                       Icon(Icons.check, color: Colors.blue),
                                       Text('Review added',style: TextStyle(color: Colors.blue,fontStyle: FontStyle.italic),)                                   
