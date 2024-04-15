@@ -50,3 +50,6 @@ windows/flutter/*
 
 # Stripe ignore
 lib/providers/stripe_id.dart
+
+# personal workspace
+.vscode/
