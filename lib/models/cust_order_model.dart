@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
@@ -13,8 +15,9 @@ class CustomerOrderModel extends StatefulWidget {
 
 class _CustomerOrderModelState extends State<CustomerOrderModel> {
 
-  late double rate;
-  late String comment;
+  late double rate = 1;
+  late String comment = '';
+  var processing = false;
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -162,9 +165,31 @@ class _CustomerOrderModelState extends State<CustomerOrderModel> {
                                                       Navigator.pop(context);
                                                     }, width: 0.3),
                                                     const SizedBox(width: 12,),
-                                                    YellowButton(label: 'ok', onPressed: (){
-                                                      Navigator.pop(context);
-                                                    }, width: 0.3),
+                                                    YellowButton(
+                                                        label: 'ok', 
+                                                        onPressed: () async{
+
+                                                          CollectionReference collRef = FirebaseFirestore.instance.collection('products').doc(widget.order['proid']).collection('reviews') ;
+
+                                                          await collRef.doc(FirebaseAuth.instance.currentUser!.uid).set({
+                                                            //* to store all info relevant to a comment/review such as name, profile pic, rating etc..
+                                                            'name': widget.order['custname'],
+                                                            'email': widget.order['email'],
+                                                            'profileimage': widget.order['profileimage'],
+                                                            'comment': comment,
+                                                            'rate': rate,
+                                                          }).whenComplete(() async{ //* set orderreview to true after writing review to prevent rewrites directly from order page
+                                                            await FirebaseFirestore.instance.runTransaction(
+                                                              (transaction) async{
+                                                                DocumentReference documentReference = FirebaseFirestore.instance.collection('orders').doc(widget.order['orderid']);
+
+                                                                transaction.update(documentReference, {'orderreview': true});
+                                                            }
+                                                            );
+                                                          });
+                                                          if (!context.mounted) return;
+                                                          Navigator.pop(context); //* pop after all running all the processes
+                                                      }, width: 0.3),
                                                     const SizedBox(width: 12,),
                                               ],)
                                             ],),
