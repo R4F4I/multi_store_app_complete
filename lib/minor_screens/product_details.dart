@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_swiper_null_safety/flutter_swiper_null_safety.dart';
+//import 'package:flutter_swiper_null_safety/flutter_swiper_null_safety.dart';
+import 'package:card_swiper/card_swiper.dart';
 import 'package:multi_store_app/main_screens/cart.dart';
 import 'package:multi_store_app/main_screens/visit_store.dart';
 import 'package:multi_store_app/minor_screens/full_screen_view.dart';
@@ -14,6 +15,7 @@ import 'package:provider/provider.dart';
 import 'package:staggered_grid_view_flutter/widgets/staggered_grid_view.dart';
 import 'package:staggered_grid_view_flutter/widgets/staggered_tile.dart';
 import 'package:collection/collection.dart';
+import 'package:expandable/expandable.dart';
 import 'package:badges/badges.dart' as badges;
 
 
@@ -30,6 +32,9 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
       .collection('products')
       .where('maincateg',isEqualTo: widget.proList['maincateg'])
       .where('subcateg',isEqualTo: widget.proList['subcateg'])
+      .snapshots();
+  late final Stream<QuerySnapshot> reviewsStream = FirebaseFirestore.instance
+      .collection('products').doc(widget.proList['proid']).collection('reviews')
       .snapshots();
   final GlobalKey<ScaffoldMessengerState> _scaffoldKey = GlobalKey<ScaffoldMessengerState>();
   late List<dynamic> imagesList = widget.proList['proimages'];
@@ -52,7 +57,8 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                     children: [SizedBox(
                       height: MediaQuery.of(context).size.height*0.45,
                       child: Swiper(
-                        pagination: const SwiperPagination(builder: SwiperPagination.fraction),
+                        autoplay: true,
+                        pagination: const SwiperPagination(builder: DotSwiperPaginationBuilder(color: Colors.grey, activeColor: Colors.amber)),
                         itemBuilder: (context,index){
                         return Image(image: NetworkImage(imagesList[index]),);
                       }, 
@@ -189,6 +195,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                             fontWeight: FontWeight.w600,
                           ),
                         ),
+                        review(reviewsStream),
                         const ProductDetailsHeaderLabel(label: '  Recommended Items  ',),
                           SizedBox(child: StreamBuilder<QuerySnapshot>(
                                       stream: productsStream,
@@ -313,4 +320,47 @@ class ProductDetailsHeaderLabel extends StatelessWidget {
     ]),
             );
   }
+}
+
+Widget review(reviewsStream){
+  return ExpandablePanel(
+    header: const Padding(
+      padding: EdgeInsets.all(10.0),
+      child: Text('Reviews',style: TextStyle(color: Colors.blue,fontSize: 24,fontWeight: FontWeight.bold),),
+    ),
+    collapsed: const Text('Collapsed'), 
+    expanded: reviewsAll(reviewsStream));
+}
+
+Widget reviewsAll(var reviewsStream){
+  return StreamBuilder<QuerySnapshot>(
+      stream: reviewsStream,
+      builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot2) {
+
+        if (snapshot2.connectionState == ConnectionState.waiting) {
+          return const Center(child: CircularProgressIndicator());
+        }
+        if (snapshot2.data!.docs.isEmpty){ //when a section, filtered with '.where(,isEqualTo: )' returns an empty output
+          return const Center(child: Text(
+            'This product has no reviews yet!',
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              fontSize: 26,
+              fontWeight: FontWeight.bold,
+              fontFamily: 'Acme',
+              letterSpacing: 1.5,
+              color: Colors.blueGrey,
+            ),
+            ));
+        }
+        return ListView.builder(
+          physics: const NeverScrollableScrollPhysics(),
+          shrinkWrap: true,
+          itemCount: snapshot2.data!.docs.length,
+          itemBuilder: (context,index){
+            return ListTile(leading: CircleAvatar(backgroundImage: NetworkImage(snapshot2.data!.docs[index]['profileimage']),),);
+
+        });
+      },
+    );
 }
