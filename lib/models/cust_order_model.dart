@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:multi_store_app/widgets/yellow_button.dart';
+import 'package:sn_progress_dialog/progress_dialog.dart';
 
 class CustomerOrderModel extends StatefulWidget {
   final dynamic order;
@@ -18,6 +19,11 @@ class _CustomerOrderModelState extends State<CustomerOrderModel> {
   late double rate = 1;
   late String comment = '';
   var processing = false;
+  void showProgress(){
+    ProgressDialog progress = ProgressDialog(context: context);
+    progress.show(max: 100,msg:'Please Wait...',progressBgColor: Colors.red);
+  }
+  
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -168,6 +174,7 @@ class _CustomerOrderModelState extends State<CustomerOrderModel> {
                                                     YellowButton(
                                                         label: 'ok', 
                                                         onPressed: () async{
+                                                          showProgress();
 
                                                           CollectionReference collRef = FirebaseFirestore.instance.collection('products').doc(widget.order['proid']).collection('reviews') ;
 

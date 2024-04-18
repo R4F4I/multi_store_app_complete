@@ -4,8 +4,12 @@ import 'package:flutter/material.dart';
 import 'package:multi_store_app/customer_screens/customer_orders.dart';
 import 'package:multi_store_app/customer_screens/wishlist.dart';
 import 'package:multi_store_app/main_screens/cart.dart';
+import 'package:multi_store_app/providers/cart_provider.dart';
+import 'package:multi_store_app/providers/wish_provider.dart';
 import 'package:multi_store_app/widgets/alert_dialog.dart';
 import 'package:multi_store_app/widgets/appbar_widgets.dart';
+import 'package:badges/badges.dart' as badges;
+import 'package:provider/provider.dart';
 
 
 class ProfileScreen extends StatefulWidget {
@@ -19,6 +23,7 @@ class ProfileScreen extends StatefulWidget {
 class _ProfileScreenState extends State<ProfileScreen> {
   CollectionReference customers = FirebaseFirestore.instance.collection('customers');
   CollectionReference anonymous = FirebaseFirestore.instance.collection('anonymous');
+  
 
   @override
   Widget build(BuildContext context) {
@@ -124,21 +129,21 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           onPressed: (){
                             Navigator.push(context, MaterialPageRoute(builder: (context)=>const CartScreen(back: AppBarBackButton(),)));
                           },
-                           child:  SizedBox(
-                            height: 50,
-                            width: MediaQuery.of(context).size.width*0.2,
-                             child: const Center(
-                               child: Text(
-                                'cart', 
-                                  style: TextStyle(
-                                    color: Colors.yellow,
-                                    fontSize: 23),
-                                    ),
-                             ),
-                           ))
+                            child: IconButton(icon: badges.Badge(
+                                  showBadge: context.read<Cart>().getItems.isEmpty ? false : true,
+                                  badgeStyle: const badges.BadgeStyle(
+                                    badgeColor: Colors.black,
+                                  ),
+                                  badgeContent:Text(context.watch<Cart>().getItems.length.toString(),style: const TextStyle(color: Colors.white),),
+                                  child: const Text(
+                                        'Cart', 
+                                          style: TextStyle(
+                                            color: Colors.yellow,
+                                            fontSize: 23),
+                                            )),onPressed: (){Navigator.push(context, MaterialPageRoute(builder: (context) => const CustomerOrders()));},),)
                       ),
                     
-                      Container(
+                       Container(
                           color: Colors.yellow,
                         child: TextButton(
                           onPressed: (){
@@ -146,15 +151,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           },
                            child:  SizedBox(
                             height: 50,
-                            width: MediaQuery.of(context).size.width*0.2,
+                            width: MediaQuery.of(context).size.width*0.25,
                              child: const Center(
                                child: Text(
-                                'Orders', 
-                                  style: TextStyle(
-                                    color: Colors.black54,
-                                    fontSize: 23),
-                                    ),
-                             ),
+                                       'Orders', 
+                                         style: TextStyle(
+                                           color: Colors.black54,
+                                           fontSize: 23),
+                                           ))
+                             ,
                            ))
                       ),
                     
@@ -171,15 +176,21 @@ class _ProfileScreenState extends State<ProfileScreen> {
                            child:  SizedBox(
                             height: 50,
                             width: MediaQuery.of(context).size.width*0.2,
-                             child: const Center(
-                               child: Text(
-                                'wishlist', 
-                                  style: TextStyle(
-                                    color: Colors.yellow,
-                                    fontSize: 23),
-                                    ),
-                             ),
-                           ))
+                             child: Center(
+                               child: IconButton(icon: badges.Badge(
+                                  showBadge: context.read<Wish>().getWishItems.isEmpty ? false : true,
+                                  badgeStyle: const badges.BadgeStyle(
+                                    badgeColor: Colors.black,
+                                  ),
+                                  badgeContent:Text(context.watch<Wish>().getWishItems.length.toString(),style: const TextStyle(color: Colors.white),),
+                                  child: const Text(
+                                        'Cart', 
+                                          style: TextStyle(
+                                            color: Colors.yellow,
+                                            fontSize: 23),
+                                            )),onPressed: (){Navigator.push(context, MaterialPageRoute(builder: (context) => const CustomerOrders()));},),)
+                           )
+                           )
                       ),
                     ],),
                     ),
@@ -244,21 +255,21 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             RepeatedListTIle(title: 'Change Password',icon: Icons.lock,onPressed:() {} ,),
                             const YellowDivider(),
                             RepeatedListTIle(title: 'Log Out',icon: Icons.logout,
-                            
-                            onPressed:() async{
 
-                              MyAlertDialog.showMyDialog(
-                                context: context,
-                                title:'Logging Out',
-                                content: 'Are you sure you want to logout?',
-                                tapNo: () {Navigator.pop(context);},
-                                tapYes: () async {
-                                        await FirebaseAuth.instance.signOut();
-                                        if (!context.mounted) return;
-                                        Navigator.pop(context);
-                                        Navigator.pushReplacementNamed(context, '/welcome_screen');
-                                            },); 
-                              },
+                              onPressed:() async{
+
+                                MyAlertDialog.showMyDialog(
+                                  context: context,
+                                  title:'Logging Out',
+                                  content: 'Are you sure you want to logout?',
+                                  tapNo: () {Navigator.pop(context);},
+                                  tapYes: () async {
+                                          await FirebaseAuth.instance.signOut();
+                                          if (!context.mounted) return;
+                                          Navigator.pop(context);
+                                          Navigator.pushReplacementNamed(context, '/welcome_screen');
+                                              },); 
+                                },
                             ),
                           ]
                         ),
