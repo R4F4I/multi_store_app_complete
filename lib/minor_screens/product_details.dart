@@ -328,7 +328,7 @@ Widget review(reviewsStream){
       padding: EdgeInsets.all(10.0),
       child: Text('Reviews',style: TextStyle(color: Colors.blue,fontSize: 24,fontWeight: FontWeight.bold),),
     ),
-    collapsed: const Text('Collapsed'), 
+    collapsed: SizedBox(height: 130,child: reviewsAll(reviewsStream),), 
     expanded: reviewsAll(reviewsStream));
 }
 
@@ -358,7 +358,22 @@ Widget reviewsAll(var reviewsStream){
           shrinkWrap: true,
           itemCount: snapshot2.data!.docs.length,
           itemBuilder: (context,index){
-            return ListTile(leading: CircleAvatar(backgroundImage: NetworkImage(snapshot2.data!.docs[index]['profileimage']),),);
+            return ListTile(
+              leading: CircleAvatar(backgroundImage: NetworkImage(snapshot2.data!.docs[index]['profileimage']),
+                ),
+              title: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(snapshot2.data!.docs[index]['name']),
+                  Row(
+                    children: [
+                      Text(snapshot2.data!.docs[index]['rate'].toString()),
+                      const Icon(Icons.star,color: Colors.amber,)
+                      ],
+                     )
+                  ],),
+              subtitle: Text(snapshot2.data!.docs[index]['comment']),
+              );
 
         });
       },

@@ -110,8 +110,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
             SliverToBoxAdapter(
               child: Column(children: [
                 Container(
-                  height: 80,
-                  width: MediaQuery.of(context).size.width*0.90,
+                  height: 75,
+                  width: MediaQuery.of(context).size.width*0.98,
                   decoration: BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(50)),
@@ -125,22 +125,24 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           borderRadius: BorderRadius.only(
                             topLeft: Radius.circular(30),
                             bottomLeft: Radius.circular(30),)),
-                        child: TextButton(
-                          onPressed: (){
-                            Navigator.push(context, MaterialPageRoute(builder: (context)=>const CartScreen(back: AppBarBackButton(),)));
-                          },
-                            child: IconButton(icon: badges.Badge(
-                                  showBadge: context.read<Cart>().getItems.isEmpty ? false : true,
-                                  badgeStyle: const badges.BadgeStyle(
-                                    badgeColor: Colors.black,
-                                  ),
-                                  badgeContent:Text(context.watch<Cart>().getItems.length.toString(),style: const TextStyle(color: Colors.white),),
-                                  child: const Text(
-                                        'Cart', 
-                                          style: TextStyle(
-                                            color: Colors.yellow,
-                                            fontSize: 23),
-                                            )),onPressed: (){Navigator.push(context, MaterialPageRoute(builder: (context) => const CustomerOrders()));},),)
+                        child: SizedBox(
+                              height: 55,
+                              width: MediaQuery.of(context).size.width*0.25,
+                              child: Center(
+                                child: IconButton(icon: badges.Badge(
+                                      showBadge: context.read<Cart>().getItems.isEmpty ? false : true,
+                                      badgeStyle: const badges.BadgeStyle(
+                                        badgeColor: Colors.black,
+                                      ),
+                                      badgeContent:Text(context.watch<Cart>().getItems.length.toString(),style: const TextStyle(color: Colors.white),),
+                                      child: const Text(
+                                            'Cart', 
+                                              style: TextStyle(
+                                                color: Colors.yellow,
+                                                fontSize: 23),
+                                                )),onPressed: (){Navigator.push(context, MaterialPageRoute(builder: (context)=>const CartScreen(back: AppBarBackButton(),)));},),
+                              ),
+                            ),
                       ),
                     
                        Container(
@@ -150,7 +152,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             Navigator.push(context, MaterialPageRoute(builder: (context) => const CustomerOrders()));
                           },
                            child:  SizedBox(
-                            height: 50,
+                            height: 40,
                             width: MediaQuery.of(context).size.width*0.25,
                              child: const Center(
                                child: Text(
@@ -169,27 +171,21 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           borderRadius: BorderRadius.only(
                             topRight: Radius.circular(30),
                             bottomRight: Radius.circular(30),)),
-                        child: TextButton(
-                          onPressed: (){
-                            Navigator.push(context, MaterialPageRoute(builder: (context) => const WishlistScreen()));
-                          },
-                           child:  SizedBox(
-                            height: 50,
-                            width: MediaQuery.of(context).size.width*0.2,
-                             child: Center(
-                               child: IconButton(icon: badges.Badge(
-                                  showBadge: context.read<Wish>().getWishItems.isEmpty ? false : true,
-                                  badgeStyle: const badges.BadgeStyle(
-                                    badgeColor: Colors.black,
-                                  ),
-                                  badgeContent:Text(context.watch<Wish>().getWishItems.length.toString(),style: const TextStyle(color: Colors.white),),
-                                  child: const Text(
-                                        'Cart', 
-                                          style: TextStyle(
-                                            color: Colors.yellow,
-                                            fontSize: 23),
-                                            )),onPressed: (){Navigator.push(context, MaterialPageRoute(builder: (context) => const CustomerOrders()));},),)
-                           )
+                        child: SizedBox(
+                            height: 55,
+                            width: MediaQuery.of(context).size.width*0.25,
+                             child: IconButton(icon: badges.Badge(
+                                showBadge: context.read<Wish>().getWishItems.isEmpty ? false : true,
+                                badgeStyle: const badges.BadgeStyle(
+                                  badgeColor: Colors.black,
+                                ),
+                                badgeContent:Text(context.watch<Wish>().getWishItems.length.toString(),style: const TextStyle(color: Colors.white),),
+                                child: const Text(
+                                      'Wishlist', 
+                                        style: TextStyle(
+                                          color: Colors.yellow,
+                                          fontSize: 21),
+                                          )),onPressed: (){Navigator.push(context, MaterialPageRoute(builder: (context) => const WishlistScreen()));},)
                            )
                       ),
                     ],),

@@ -196,6 +196,7 @@ class _CustomerOrderModelState extends State<CustomerOrderModel> {
                                                           });
                                                           if (!context.mounted) return;
                                                           Navigator.pop(context); //* pop after all running all the processes
+                                                          Navigator.pop(context);
                                                       }, width: 0.3),
                                                     const SizedBox(width: 12,),
                                               ],)
