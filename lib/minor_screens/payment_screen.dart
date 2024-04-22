@@ -171,7 +171,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
                         child: YellowButton(
                           label: 'Confirm ${totalPaid.toStringAsFixed(2)} USD',
                           width: 1,
-                          onPressed: (){
+                          onPressed: () async{
                             if (selectedValue==1){
                               showModalBottomSheet(
                                 context: context, 
@@ -229,7 +229,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
                                               });
                                             }
                                             if (!context.mounted) return;
-                                            context.read<Cart>().clearCart;
+                                            context.read<Cart>().clearCart();
                                             Navigator.popUntil(context,ModalRoute.withName('/customer_home'));
                                           }, 
                                           width: 0.9,),
@@ -352,7 +352,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
             });
           });
         }
-        context.read<Cart>().clearCart;
+        context.read<Cart>().clearCart();
         Navigator.popUntil(context,ModalRoute.withName('/customer_home'));
       });
 
