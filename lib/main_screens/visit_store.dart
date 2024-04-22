@@ -100,7 +100,7 @@ class _VisitStoreState extends State<VisitStore> {
                                 ),
                                 child: MaterialButton(
                                   onPressed: (){
-                                    Navigator.push(context, MaterialPageRoute(builder: (context)=> const EditStore()));
+                                    Navigator.push(context, MaterialPageRoute(builder: (context)=> EditStore(data: data,)));
                                   },
                                   child: const Center(
                                     child: Row(
