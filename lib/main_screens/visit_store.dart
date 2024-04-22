@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:multi_store_app/minor_screens/edit_store.dart';
 import 'package:multi_store_app/widgets/appbar_widgets.dart';
 import 'package:staggered_grid_view_flutter/widgets/staggered_grid_view.dart';
 import 'package:staggered_grid_view_flutter/widgets/staggered_tile.dart';
@@ -98,7 +99,9 @@ class _VisitStoreState extends State<VisitStore> {
                                   borderRadius: BorderRadius.circular(25),
                                 ),
                                 child: MaterialButton(
-                                  onPressed: (){},
+                                  onPressed: (){
+                                    Navigator.push(context, MaterialPageRoute(builder: (context)=> const EditStore()));
+                                  },
                                   child: const Center(
                                     child: Row(
                                       mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -113,7 +116,7 @@ class _VisitStoreState extends State<VisitStore> {
                               )
                             : Container(
                                 height: 35,
-                                width: MediaQuery.of(context).size.width*0.3,
+                                width: MediaQuery.of(context).size.width*0.35,
                                 decoration: BoxDecoration(
                                   color: Colors.yellow,
                                   border: Border.all(
@@ -129,18 +132,36 @@ class _VisitStoreState extends State<VisitStore> {
                                   },
                                   child: Center(
                                     child: following == true
-                                        ? const Text('UNFOLLOW',
-                                      style: TextStyle(
-                                        color: Colors.black,
-                                        fontSize: 16,
-                                      ),
-                                    )
-                                        : const Text('FOLLOW',
-                                      style: TextStyle(
-                                        color: Colors.black,
-                                        fontSize: 16,
-                                      ),
-                                    ),
+                                        ? const Row(
+                                          mainAxisAlignment: MainAxisAlignment.start,
+                                          children: [
+                                            Icon(
+                                              Icons.favorite,
+                                              color: Colors.red,size: 20,),
+                                            SizedBox(width: 1,),
+                                            Text('UNFOLLOW',
+                                            style: TextStyle(
+                                              color: Colors.black,
+                                              fontSize: 16,
+                                              ),
+                                            ),
+                                          ],
+                                        )
+                                        : const Row(
+                                          mainAxisAlignment: MainAxisAlignment.start,
+                                          children: [
+                                            Icon(
+                                              Icons.favorite_border_outlined,
+                                              color: Colors.red,size: 20,),
+                                            SizedBox(width: 1,),
+                                            Text('FOLLOW',
+                                            style: TextStyle(
+                                              color: Colors.black,
+                                              fontSize: 16,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
                                   ),
                                 ),
                               )
