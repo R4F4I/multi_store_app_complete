@@ -202,10 +202,6 @@ and math done for total price of all items
 |-|-|-|
 |![alt text](https://raw.githubusercontent.com/r4f4i/myimages/main/section-9_img-3.png)|![alt text](https://raw.githubusercontent.com/r4f4i/myimages/main/section-9_img-4.png)|![alt text](https://raw.githubusercontent.com/r4f4i/myimages/main/section-9_img-5.png)|
 
-
-
-
-
 </details>
 
 ### 10 - Search Engine ====== end of v1.0
@@ -215,7 +211,7 @@ and math done for total price of all items
 
 |by clicking the search bar|Empty prompt screen|Results in search bar correspond to prompt|result for 'ja', 'je', 'phone' |
 |-|-|-|-|
-|![alt text](readme-material/section-10_img-1.png)|![alt text](readme-material/section-10_img-2.png)|![alt text](readme-material/section-10_img-3.png)|![alt text](readme-material/section-10_img-4.png)|
+|![alt text](https://raw.githubusercontent.com/r4f4i/myimages/main/section-10_img-1.png)|![alt text](https://raw.githubusercontent.com/r4f4i/myimages/main/section-10_img-2.png)|![alt text](https://raw.githubusercontent.com/r4f4i/myimages/main/section-10_img-3.png)|![alt text](https://raw.githubusercontent.com/r4f4i/myimages/main/section-10_img-4.png)|
 |we are sent to a page that showcases all the results matching the prompt|| E.g: 's' shows all results with the letter 's' in their name|gives results such as 'ja'cket, 'je'ans, and various products with 'phone in their name |
 </details>
 
@@ -296,6 +292,7 @@ and math done for total price of all items
 </details>
 
 ### 17 - Authentication [ Level 2 ]
+
 <details>
 <summary> </summary>
 
