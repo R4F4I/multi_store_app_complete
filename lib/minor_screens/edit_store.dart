@@ -28,6 +28,7 @@ class _EditStoreState extends State<EditStore> {
   late String phoneNumber;
   late String storeLogo;
   late String storeCover;
+  var processing = false;
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
   final GlobalKey<ScaffoldMessengerState> scaffoldKey = GlobalKey<ScaffoldMessengerState>();
 
@@ -129,6 +130,9 @@ class _EditStoreState extends State<EditStore> {
     if (formKey.currentState!.validate()){
       //continue
       formKey.currentState!.save();
+      setState(() {
+        processing = true;
+      });
       await uploadStoreLogo().whenComplete(() async=> await uploadStoreCover().whenComplete(()=>editStoreData()));
     }
     else{
@@ -306,12 +310,14 @@ class _EditStoreState extends State<EditStore> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           YellowButton(label: 'cancel', onPressed: (){Navigator.pop(context);}, width: 0.25),
-                          YellowButton(
-                              label: 'save',
-                              onPressed: () {
-                                saveChanges();
-                              },
-                              width: 0.25),
+                          processing == false
+                          ? YellowButton(
+                                label: 'save',
+                                onPressed: () {
+                                  saveChanges();
+                                },
+                                width: 0.25)
+                          : const SizedBox(child: CircularProgressIndicator())
                         ],
                       ),
                     ),
