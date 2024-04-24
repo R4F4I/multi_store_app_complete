@@ -1,5 +1,7 @@
 import 'dart:io';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage; 
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -111,11 +113,23 @@ class _EditStoreState extends State<EditStore> {
     }
   }
 
+  editStoreData() async{
+    await FirebaseFirestore.instance.runTransaction((transaction) async{
+      DocumentReference documentReference = FirebaseFirestore.instance.collection('suppliers').doc(FirebaseAuth.instance.currentUser!.uid);
+      transaction.update(documentReference, {
+        'storename': storeName,
+        'phone':phoneNumber,
+        'storelogo': storeLogo,
+        'coverimage': storeCover,
+      });
+    }).whenComplete(() => Navigator.pop(context));
+  }
+
   saveChanges() async{
     if (formKey.currentState!.validate()){
       //continue
       formKey.currentState!.save();
-      await uploadStoreLogo().whenComplete(() async=> await uploadStoreCover().whenComplete(()=>null));
+      await uploadStoreLogo().whenComplete(() async=> await uploadStoreCover().whenComplete(()=>editStoreData()));
     }
     else{
       MyMessageHandler.showSnackBar(scaffoldKey, 'Please fill all fields');

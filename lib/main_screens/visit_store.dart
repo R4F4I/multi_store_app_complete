@@ -48,10 +48,15 @@ class _VisitStoreState extends State<VisitStore> {
             appBar: AppBar(
               leading: const YellowBackButton(),
               toolbarHeight: 100,
-              flexibleSpace: Image.asset(
+              flexibleSpace: data['coverimage'] == ''
+              ? Image.asset(
                 'images/inapp/coverimage.jpg',
                 fit: BoxFit.cover,
-              ),
+              )
+              : Image.network(
+                data['coverimage'],
+                fit: BoxFit.cover,
+                ),
               title: Row(
                 children: [
                   Container(
