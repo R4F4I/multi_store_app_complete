@@ -98,7 +98,7 @@ class _ProductModelState extends State<ProductModel> {
                                 widget.products['sid'] == FirebaseAuth.instance.currentUser!.uid
                                     ? IconButton(
                                       onPressed: (){
-                                        Navigator.push(context, MaterialPageRoute(builder: (context)=> const EditProduct()));
+                                        Navigator.push(context, MaterialPageRoute(builder: (context)=> EditProduct(items: widget.products)));
                                       },
                                       icon: const Icon(Icons.edit,color: Colors.black,))
                                     : IconButton(

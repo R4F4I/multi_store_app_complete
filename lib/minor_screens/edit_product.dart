@@ -5,18 +5,21 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:multi_store_app/utilities/categ_list.dart';
 import 'package:multi_store_app/widgets/snackbar.dart';
 
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
+import 'package:multi_store_app/widgets/yellow_button.dart';
 import 'package:path/path.dart' as path;
 import 'package:uuid/uuid.dart';
 
 
 
 class EditProduct extends StatefulWidget {
-  const EditProduct({super.key});
+  final dynamic items;
+  const EditProduct({super.key, required this.items});
 
   @override
   State<EditProduct> createState() => _EditProductScreenState();
@@ -80,6 +83,14 @@ class _EditProductScreenState extends State<EditProduct> {
         ),
       );
     }
+  }
+  previewCurrentImages(){
+    List<dynamic> itemImages = widget.items['proimages'];
+    return ListView.builder(
+      itemCount: itemImages.length,
+      itemBuilder: (context,index){
+        return Image.network(itemImages[index]);
+    });
   }
 
   void selectedMainCateg(String ? value){
@@ -183,14 +194,7 @@ class _EditProductScreenState extends State<EditProduct> {
                         color: Colors.blueGrey.shade100,
                         height: size.width*0.5,
                         width: size.width*0.5,
-                        child:imagesFileList != null
-                          ?previewImages()
-                          :const Center(
-                          child: Text('you haven\'t picked \n \n any images yet!',
-                            style: TextStyle(fontSize: 16),
-                            textAlign: TextAlign.center,
-                              ),
-                            ),
+                        child:previewCurrentImages()
                           ),
                       SizedBox(
                         height: size.width*0.5,
@@ -201,56 +205,120 @@ class _EditProductScreenState extends State<EditProduct> {
                             children: [
                             Column( //both wrapped in column to keep them together,
                               children: [
-                                const Text('*select main category',style: TextStyle(color: Colors.red),),
+                                const Text('main category',style: TextStyle(color: Colors.red),),
                                 // DropDownButton is one widget that contains several widgets, hence list
                                 // these widget here, are the DropDownButtonMenuItem which contains: a 'child' & 'value' 
                                 // clicking on a 'child' of DropDownButtonMenuItem uses the 'value'
-                                DropdownButton(
-                                  iconSize: 40,
-                                  iconEnabledColor: Colors.red,
-                                  dropdownColor: Colors.yellow.shade400,
-                                  value:mainCategdropDownVal, //! value here MUST exist in [DropdownMenuItem(value: )] /// aka: "DropdownButton(value) == DropdownMenuItem(value)"" /// the values within "DropdownMenuItem" MUST also be unique 
-                                  items: maincateg
-                                  .map<DropdownMenuItem<String>>((value){
-                                    return DropdownMenuItem(child: Text(value),value: value,);
-                                  }).toList(),
-                                  onChanged: (String? value){
-                                  print(value);
-                                  setState(() {
-                                    mainCategdropDownVal=value!;
-                                    subCategdropDownVal='subcategory';
-                                  });
-                                  selectedMainCateg(value);
-                                }),
+                                Container(
+                                  padding: const EdgeInsets.all(6),
+                                  margin: const EdgeInsets.all(6),
+                                  constraints: BoxConstraints(minWidth: size.width*0.3),
+                                  decoration: BoxDecoration(
+                                    color: Colors.yellow,
+                                    borderRadius: BorderRadius.circular(10)
+                                  ),
+                                  child: Center(child: Text(widget.items['maincateg'])),
+                                )
                               ],
                             ),
                             Column( //both wrapped in column to keep them together,
                               children: [
-                                const Text('*select sub category',style: TextStyle(color: Colors.red),),
-                                
-                                DropdownButton(
-                                  iconSize: 40,
-                                  iconEnabledColor: Colors.red,
-                                  iconDisabledColor: Colors.black,
-                                  dropdownColor: Colors.yellow.shade400,
-                                  menuMaxHeight: 500,
-                                  disabledHint: const Text('select category'),
-                                  value:subCategdropDownVal, 
-                                  items: subCategList
-                                  .map<DropdownMenuItem<String>>((value){
-                                    return DropdownMenuItem(child: Text(value),value: value,);
-                                  }).toList(),
-                                  onChanged: (String? value){
-                                  print(value);
-                                  setState(() {
-                                    subCategdropDownVal=value!;
-                                  });
-                                }),
+                                const Text('sub category',style: TextStyle(color: Colors.red),),
+                                Container(
+                                  padding: const EdgeInsets.all(6),
+                                  margin: const EdgeInsets.all(6),
+                                  constraints: BoxConstraints(minWidth: size.width*0.3),
+                                  decoration: BoxDecoration(
+                                    color: Colors.yellow,
+                                    borderRadius: BorderRadius.circular(10)
+                                  ),
+                                  child: Center(child: Text(widget.items['subcateg'])),
+                                )
                               ],
                             )
                           ],),
                         )
                         ],),
+
+                    const Padding(
+                          padding: EdgeInsets.all(8.0),
+                          child: SizedBox(
+                            height: 30,
+                            child: Divider(color: Colors.yellow,thickness: 1.5,)),
+                        ),
+                    Row(
+                      children: [
+                        Container(
+                          color: Colors.blueGrey.shade100,
+                          height: size.width*0.5,
+                          width: size.width*0.5,
+                          child:imagesFileList != null
+                            ?previewImages()
+                            :const Center(
+                            child: Text('you haven\'t picked \n \n any images yet!',
+                              style: TextStyle(fontSize: 16),
+                              textAlign: TextAlign.center,
+                                ),
+                              ),
+                            ),
+                        SizedBox(
+                          height: size.width*0.5,
+                          width: size.width*0.5,
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                              Column( //both wrapped in column to keep them together,
+                                children: [
+                                  const Text('*select main category',style: TextStyle(color: Colors.red),),
+                                  // DropDownButton is one widget that contains several widgets, hence list
+                                  // these widget here, are the DropDownButtonMenuItem which contains: a 'child' & 'value' 
+                                  // clicking on a 'child' of DropDownButtonMenuItem uses the 'value'
+                                  DropdownButton(
+                                    iconSize: 40,
+                                    iconEnabledColor: Colors.red,
+                                    dropdownColor: Colors.yellow.shade400,
+                                    value:mainCategdropDownVal, //! value here MUST exist in [DropdownMenuItem(value: )] /// aka: "DropdownButton(value) == DropdownMenuItem(value)"" /// the values within "DropdownMenuItem" MUST also be unique 
+                                    items: maincateg
+                                    .map<DropdownMenuItem<String>>((value){
+                                      return DropdownMenuItem(child: Text(value),value: value,);
+                                    }).toList(),
+                                    onChanged: (String? value){
+                                    print(value);
+                                    setState(() {
+                                      mainCategdropDownVal=value!;
+                                      subCategdropDownVal='subcategory';
+                                    });
+                                    selectedMainCateg(value);
+                                  }),
+                                ],
+                              ),
+                              Column( //both wrapped in column to keep them together,
+                                children: [
+                                  const Text('*select sub category',style: TextStyle(color: Colors.red),),
+                                  DropdownButton(
+                                    iconSize: 40,
+                                    iconEnabledColor: Colors.red,
+                                    iconDisabledColor: Colors.black,
+                                    dropdownColor: Colors.yellow.shade400,
+                                    menuMaxHeight: 500,
+                                    disabledHint: const Text('select category'),
+                                    value:subCategdropDownVal, 
+                                    items: subCategList
+                                    .map<DropdownMenuItem<String>>((value){
+                                      return DropdownMenuItem(child: Text(value),value: value,);
+                                    }).toList(),
+                                    onChanged: (String? value){
+                                    print(value);
+                                    setState(() {
+                                      subCategdropDownVal=value!;
+                                    });
+                                  }),
+                                ],
+                              )
+                            ],),
+                          )
+                          ],),
                         const Padding(
                           padding: EdgeInsets.all(8.0),
                           child: SizedBox(
@@ -383,50 +451,17 @@ class _EditProductScreenState extends State<EditProduct> {
                               ),
                             ),
                           ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            children: [
+                            YellowButton(label: 'cancel', onPressed:(){Navigator.pop(context);}, width:0.25),
+                            YellowButton(label: 'Save', onPressed:(){Navigator.pop(context);}, width:0.25),
+                          ],),
+                          const SizedBox(height: 15,)
                       ],),
             ),
           ),
         ),
-        floatingActionButton: Row(
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: [
-          Padding(
-            padding: const EdgeInsets.only(right: 10.0),
-            child: 
-            FloatingActionButton(
-              //shape: const CircleBorder(),
-              onPressed: imagesFileList!.isEmpty 
-              ?(){ 
-                _pickProductImages();
-                } 
-              :(){
-                setState(() {
-                  imagesFileList=[];
-                });
-              },
-              backgroundColor: Colors.yellow,
-              child: imagesFileList!.isEmpty 
-
-              ?const Icon(Icons.photo_library,
-                color: Colors.black,)
-              
-              :const Icon(Icons.delete_forever, //to allow user to remove & pick images with the same button
-                color: Colors.black,),
-                ),
-              ),
-            FloatingActionButton(
-              //shape: const CircleBorder(),
-              onPressed: (){
-                processing==true
-                ?null // disable button during processing to prevent duplicates from accidental clicking
-                :uploadProduct();
-              },
-              backgroundColor: Colors.yellow,
-              child: processing == true
-              ? const CircularProgressIndicator(color: Colors.black,) // display to user that the data is processing
-              : const Icon(Icons.upload,
-                color: Colors.black,) ,),
-        ]),
       ),
     );
   }
@@ -477,7 +512,7 @@ extension PriceValidator on String{
 above regex :
 > qualities of prev. +
 
-> allows decimals(optional) only upto 2 decmial place, 
+> allows decimals(optional) only upto 2 decimal place, 
 e.g: 12.3: 'yes',12.34: 'yes', 12.345: 'no',
 
 > or can start with 0 only once before decimal,
