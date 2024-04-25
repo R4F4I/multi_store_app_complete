@@ -27,7 +27,7 @@ class _SupplierHomeScreenState extends State<SupplierHomeScreen> {
 
   ];
   /*in the widget '_tabs' all values are stored in indexed form hence
-  the body in Scaffold calles a value from _tab it uses the _selectedIndex */
+  the body in Scaffold calls a value from _tab it uses the _selectedIndex */
 
 
   @override
@@ -56,7 +56,7 @@ class _SupplierHomeScreenState extends State<SupplierHomeScreen> {
           items: [
 
           const BottomNavigationBarItem(icon:Icon(Icons.home),label: 'Home',),
-          const BottomNavigationBarItem(icon:Icon(Icons.search),label: 'Categores',),
+          const BottomNavigationBarItem(icon:Icon(Icons.search),label: 'Categories',),
           const BottomNavigationBarItem(icon:Icon(Icons.shop),label: 'Stores',),
           BottomNavigationBarItem(
             icon: badges.Badge(
