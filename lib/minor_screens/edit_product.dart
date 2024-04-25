@@ -3,6 +3,7 @@
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:expandable/expandable.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -188,137 +189,77 @@ class _EditProductScreenState extends State<EditProduct> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Row(
+                  Column(
                     children: [
-                      Container(
-                        color: Colors.blueGrey.shade100,
-                        height: size.width*0.5,
-                        width: size.width*0.5,
-                        child:previewCurrentImages()
-                          ),
-                      SizedBox(
-                        height: size.width*0.5,
-                        width: size.width*0.5,
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                            Column( //both wrapped in column to keep them together,
-                              children: [
-                                const Text('main category',style: TextStyle(color: Colors.red),),
-                                // DropDownButton is one widget that contains several widgets, hence list
-                                // these widget here, are the DropDownButtonMenuItem which contains: a 'child' & 'value' 
-                                // clicking on a 'child' of DropDownButtonMenuItem uses the 'value'
-                                Container(
-                                  padding: const EdgeInsets.all(6),
-                                  margin: const EdgeInsets.all(6),
-                                  constraints: BoxConstraints(minWidth: size.width*0.3),
-                                  decoration: BoxDecoration(
-                                    color: Colors.yellow,
-                                    borderRadius: BorderRadius.circular(10)
-                                  ),
-                                  child: Center(child: Text(widget.items['maincateg'])),
-                                )
-                              ],
-                            ),
-                            Column( //both wrapped in column to keep them together,
-                              children: [
-                                const Text('sub category',style: TextStyle(color: Colors.red),),
-                                Container(
-                                  padding: const EdgeInsets.all(6),
-                                  margin: const EdgeInsets.all(6),
-                                  constraints: BoxConstraints(minWidth: size.width*0.3),
-                                  decoration: BoxDecoration(
-                                    color: Colors.yellow,
-                                    borderRadius: BorderRadius.circular(10)
-                                  ),
-                                  child: Center(child: Text(widget.items['subcateg'])),
-                                )
-                              ],
-                            )
-                          ],),
-                        )
-                        ],),
-
-                    const Padding(
-                          padding: EdgeInsets.all(8.0),
-                          child: SizedBox(
-                            height: 30,
-                            child: Divider(color: Colors.yellow,thickness: 1.5,)),
-                        ),
-                    Row(
-                      children: [
-                        Container(
-                          color: Colors.blueGrey.shade100,
-                          height: size.width*0.5,
-                          width: size.width*0.5,
-                          child:imagesFileList != null
-                            ?previewImages()
-                            :const Center(
-                            child: Text('you haven\'t picked \n \n any images yet!',
-                              style: TextStyle(fontSize: 16),
-                              textAlign: TextAlign.center,
+                      Row(
+                        children: [
+                          Container(
+                            color: Colors.blueGrey.shade100,
+                            height: size.width*0.5,
+                            width: size.width*0.5,
+                            child:previewCurrentImages()
+                              ),
+                          SizedBox(
+                            height: size.width*0.5,
+                            width: size.width*0.5,
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                Column( //both wrapped in column to keep them together,
+                                  children: [
+                                    const Text('main category',style: TextStyle(fontSize: 16,fontWeight: FontWeight.bold),),
+                                    // DropDownButton is one widget that contains several widgets, hence list
+                                    // these widget here, are the DropDownButtonMenuItem which contains: a 'child' & 'value' 
+                                    // clicking on a 'child' of DropDownButtonMenuItem uses the 'value'
+                                    Container(
+                                      padding: const EdgeInsets.all(6),
+                                      margin: const EdgeInsets.all(6),
+                                      constraints: BoxConstraints(minWidth: size.width*0.3),
+                                      decoration: BoxDecoration(
+                                        color: Colors.yellow,
+                                        borderRadius: BorderRadius.circular(10)
+                                      ),
+                                      child: Center(child: Text(widget.items['maincateg'])),
+                                    )
+                                  ],
                                 ),
-                              ),
-                            ),
-                        SizedBox(
-                          height: size.width*0.5,
-                          width: size.width*0.5,
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.spaceAround,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                              Column( //both wrapped in column to keep them together,
-                                children: [
-                                  const Text('*select main category',style: TextStyle(color: Colors.red),),
-                                  // DropDownButton is one widget that contains several widgets, hence list
-                                  // these widget here, are the DropDownButtonMenuItem which contains: a 'child' & 'value' 
-                                  // clicking on a 'child' of DropDownButtonMenuItem uses the 'value'
-                                  DropdownButton(
-                                    iconSize: 40,
-                                    iconEnabledColor: Colors.red,
-                                    dropdownColor: Colors.yellow.shade400,
-                                    value:mainCategdropDownVal, //! value here MUST exist in [DropdownMenuItem(value: )] /// aka: "DropdownButton(value) == DropdownMenuItem(value)"" /// the values within "DropdownMenuItem" MUST also be unique 
-                                    items: maincateg
-                                    .map<DropdownMenuItem<String>>((value){
-                                      return DropdownMenuItem(child: Text(value),value: value,);
-                                    }).toList(),
-                                    onChanged: (String? value){
-                                    print(value);
-                                    setState(() {
-                                      mainCategdropDownVal=value!;
-                                      subCategdropDownVal='subcategory';
-                                    });
-                                    selectedMainCateg(value);
-                                  }),
-                                ],
-                              ),
-                              Column( //both wrapped in column to keep them together,
-                                children: [
-                                  const Text('*select sub category',style: TextStyle(color: Colors.red),),
-                                  DropdownButton(
-                                    iconSize: 40,
-                                    iconEnabledColor: Colors.red,
-                                    iconDisabledColor: Colors.black,
-                                    dropdownColor: Colors.yellow.shade400,
-                                    menuMaxHeight: 500,
-                                    disabledHint: const Text('select category'),
-                                    value:subCategdropDownVal, 
-                                    items: subCategList
-                                    .map<DropdownMenuItem<String>>((value){
-                                      return DropdownMenuItem(child: Text(value),value: value,);
-                                    }).toList(),
-                                    onChanged: (String? value){
-                                    print(value);
-                                    setState(() {
-                                      subCategdropDownVal=value!;
-                                    });
-                                  }),
-                                ],
-                              )
+                                Column( //both wrapped in column to keep them together,
+                                  children: [
+                                    const Text('sub category',style: TextStyle(fontSize: 16,fontWeight: FontWeight.bold),),
+                                    Container(
+                                      padding: const EdgeInsets.all(6),
+                                      margin: const EdgeInsets.all(6),
+                                      constraints: BoxConstraints(minWidth: size.width*0.3),
+                                      decoration: BoxDecoration(
+                                        color: Colors.yellow,
+                                        borderRadius: BorderRadius.circular(10)
+                                      ),
+                                      child: Center(child: Text(widget.items['subcateg'])),
+                                    )
+                                  ],
+                                )
                             ],),
                           )
-                          ],),
+                      ],),
+
+                    const Padding(
+                            padding: EdgeInsets.all(8.0),
+                            child: SizedBox(
+                              height: 30,
+                              child: Divider(color: Colors.yellow,thickness: 1.5,)),
+                        ),
+                     ExpandablePanel(
+                        header: Padding(
+                          padding: const EdgeInsets.all(10.0),
+                          child: Container(
+                            decoration: BoxDecoration(color: Colors.black,borderRadius: BorderRadius.circular(10)),
+                            child: const Center(child: Text('Change Images & Categories',style: TextStyle(color: Colors.white,fontSize: 24,fontWeight: FontWeight.bold),))),
+                        ),
+                        collapsed: const SizedBox(), 
+                        expanded: changeImages(size))
+                    ],
+                  ),
                         const Padding(
                           padding: EdgeInsets.all(8.0),
                           child: SizedBox(
@@ -464,6 +405,105 @@ class _EditProductScreenState extends State<EditProduct> {
         ),
       ),
     );
+  }
+  Widget changeImages(Size size){
+            return Column(
+              children: [
+                        Row(
+                          children: [
+                            Container(
+                              color: Colors.blueGrey.shade100,
+                              height: size.width*0.5,
+                              width: size.width*0.5,
+                              child:imagesFileList != null
+                                ?previewImages()
+                                :const Center(
+                                child: Text('you haven\'t picked \n \n any images yet!',
+                                  style: TextStyle(fontSize: 16),
+                                  textAlign: TextAlign.center,
+                                    ),
+                                  ),
+                                ),
+                            SizedBox(
+                              height: size.width*0.5,
+                              width: size.width*0.5,
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                  Column( //both wrapped in column to keep them together,
+                                    children: [
+                                      const Text('*select main category',style: TextStyle(color: Colors.red),),
+                                      // DropDownButton is one widget that contains several widgets, hence list
+                                      // these widget here, are the DropDownButtonMenuItem which contains: a 'child' & 'value' 
+                                      // clicking on a 'child' of DropDownButtonMenuItem uses the 'value'
+                                      DropdownButton(
+                                        iconSize: 40,
+                                        iconEnabledColor: Colors.red,
+                                        dropdownColor: Colors.yellow.shade400,
+                                        value:mainCategdropDownVal, //! value here MUST exist in [DropdownMenuItem(value: )] /// aka: "DropdownButton(value) == DropdownMenuItem(value)"" /// the values within "DropdownMenuItem" MUST also be unique 
+                                        items: maincateg
+                                        .map<DropdownMenuItem<String>>((value){
+                                          return DropdownMenuItem(child: Text(value),value: value,);
+                                        }).toList(),
+                                        onChanged: (String? value){
+                                        print(value);
+                                        setState(() {
+                                          mainCategdropDownVal=value!;
+                                          subCategdropDownVal='subcategory';
+                                        });
+                                        selectedMainCateg(value);
+                                      }),
+                                    ],
+                                  ),
+                                  Column( //both wrapped in column to keep them together,
+                                    children: [
+                                      const Text('*select sub category',style: TextStyle(color: Colors.red),),
+                                      DropdownButton(
+                                        iconSize: 40,
+                                        iconEnabledColor: Colors.red,
+                                        iconDisabledColor: Colors.black,
+                                        dropdownColor: Colors.yellow.shade400,
+                                        menuMaxHeight: 500,
+                                        disabledHint: const Text('select category'),
+                                        value:subCategdropDownVal, 
+                                        items: subCategList
+                                        .map<DropdownMenuItem<String>>((value){
+                                          return DropdownMenuItem(child: Text(value),value: value,);
+                                        }).toList(),
+                                        onChanged: (String? value){
+                                        print(value);
+                                        setState(() {
+                                          subCategdropDownVal=value!;
+                                        });
+                                      }),
+                                    ],
+                                  )
+                                ],),
+                              )
+                              ],),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: imagesFileList!.isNotEmpty
+                      ? YellowButton(
+                          label: 'reset Images ?', 
+                          onPressed: (){
+                            setState(() {
+                              imagesFileList=[];
+                            });
+                          }, 
+                          width: 0.6
+                          )
+                      : YellowButton(
+                          label: 'change Images', 
+                          onPressed: (){
+                            _pickProductImages();
+                            }, 
+                          width: 0.6
+                          )
+                    )
+              ],
+            );
   }
 }
 
