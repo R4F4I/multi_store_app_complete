@@ -6,7 +6,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:expandable/expandable.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:multi_store_app/utilities/categ_list.dart';
 import 'package:multi_store_app/widgets/snackbar.dart';
@@ -273,6 +272,7 @@ class _EditProductScreenState extends State<EditProduct> {
                                 child: SizedBox(                                  
                                   width: MediaQuery.of(context).size.width*0.4,
                                   child: TextFormField(
+                                    initialValue: widget.items['price'].toStringAsFixed(2),
                                     validator: (value){
                                       if (value!.isEmpty){
                                         return 'please enter price';
@@ -298,6 +298,7 @@ class _EditProductScreenState extends State<EditProduct> {
                                 child: SizedBox(
                                   width: MediaQuery.of(context).size.width*0.4,
                                   child: TextFormField(
+                                    initialValue: widget.items['discount'].toString(),
                                     maxLength: 2,
                                     validator: (value){
                                       if (value!.isEmpty){
@@ -326,6 +327,7 @@ class _EditProductScreenState extends State<EditProduct> {
                             child: SizedBox(
                               width: MediaQuery.of(context).size.width*0.45,
                               child: TextFormField(
+                                initialValue: widget.items['instock'].toString(),
                                  validator: (value){
                                   if (value!.isEmpty){
                                     return 'please enter Quantity';
@@ -351,6 +353,7 @@ class _EditProductScreenState extends State<EditProduct> {
                             child: SizedBox(
                               width: MediaQuery.of(context).size.width,
                               child: TextFormField(
+                                initialValue: widget.items['proname'],
                                  validator: (value){
                                   if (value!.isEmpty){
                                     return 'please enter product Name';
@@ -374,6 +377,7 @@ class _EditProductScreenState extends State<EditProduct> {
                             child: SizedBox(
                               width: MediaQuery.of(context).size.width,
                               child: TextFormField(
+                                initialValue: widget.items['prodesc'],
                                  validator: (value){
                                   if (value!.isEmpty){
                                     return 'please enter product Description';

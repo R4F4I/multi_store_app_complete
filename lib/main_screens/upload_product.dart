@@ -289,6 +289,7 @@ class _UploadProductScreenState extends State<UploadProductScreen> {
                                 child: SizedBox(
                                   width: MediaQuery.of(context).size.width*0.4,
                                   child: TextFormField(
+                                    initialValue: discount.toString(),
                                     maxLength: 2,
                                     validator: (value){
                                       if (value!.isEmpty){
