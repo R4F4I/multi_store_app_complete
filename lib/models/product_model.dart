@@ -65,7 +65,8 @@ class _ProductModelState extends State<ProductModel> {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 onSale !=0
-                                ?  Row(
+                                ?  Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
                                         ('\$ ')+widget.products['price'].toStringAsFixed(2), //original price
@@ -76,7 +77,7 @@ class _ProductModelState extends State<ProductModel> {
                                           decoration: TextDecoration.lineThrough
                                         ),
                                       ),
-                                    const SizedBox(width: 6,),
+                                    //const SizedBox(width: 6,),
                                     Text(
                                         ('\$ ')+((1-(onSale/100))*widget.products['price']).toStringAsFixed(2)+(' !!!'), //discounted price
                                         style: const TextStyle(

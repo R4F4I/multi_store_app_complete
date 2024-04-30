@@ -105,13 +105,82 @@ class _EditProductScreenState extends State<EditProduct> {
     else if(value == 'kids'){subCategList = kids;}
     else if(value == 'bags'){subCategList = bags;}
   }
-  Future<void> uploadImages() async{
-    if (mainCategdropDownVal!='select category'&& subCategdropDownVal!='subcategory'){ // '&&' since both of them should be selected
-      if (_formKey.currentState!.validate()) {
+  // Future<void> uploadImages() async{
+  //   if (mainCategdropDownVal!='select category'&& subCategdropDownVal!='subcategory'){ // '&&' since both of them should be selected
+  //     if (_formKey.currentState!.validate()) {
+  //     _formKey.currentState!.save(); // since "onChanged" automatically saves while "onSaved" does not, we have to manually save
+  //     if(imagesFileList!.isNotEmpty){
+  //       // this for loop will upload each image inside the imagesFIleList to firebase,
+  //       // it references each image's name by placing it in products folder 
+  //       try {
+  //         setState(() {
+  //           processing=true; 
+  //         });
+  //         for (var image in imagesFileList!){
+  //         firebase_storage.Reference ref = firebase_storage.FirebaseStorage.instance.ref(
+  //           'products/${path.basename(image.path)}' // here each image is place in products folder, it name stays the same , basename place actual name inside path, hence input: 'path/in/my/local/space/image.png' output:'products/image.png'
+  //         );
+  //         await ref.putFile(File(image.path)).whenComplete(() async{
+  //           await ref.getDownloadURL().then((value) {
+  //             imagesUrlList.add(value); // when the image files are successfully uploaded to firebase, fetch their URLs and place them inside 'imagesUrlList' 
+  //           });
+  //         });
+  //       }
+  //      } catch(e){
+  //       print(e);
+  //      }
+  //     } else{
+  //       MyMessageHandler.showSnackBar(_scaffoldKey, 'Please pick an image');}
+  //   } else {
+  //     MyMessageHandler.showSnackBar(_scaffoldKey, 'Please fill all fields');
+  //   }
+  // } else { 
+  //   MyMessageHandler.showSnackBar(_scaffoldKey, 'Please select categories for product');
+  // }    
+  // }
+
+  // void uploadData() async{
+  //   if(imagesUrlList.isNotEmpty){
+  //     CollectionReference productRef = FirebaseFirestore.instance.collection('products');
+  //     proId = const Uuid().v4(); // used uuid to be able to refer to a prod id to edit in future, as the ones made by firebase cant be referenced
+  //             await productRef.doc(proId).set({
+  //               'proid':proId,
+  //               'maincateg': mainCategdropDownVal,
+  //               'subcateg': subCategdropDownVal,
+  //               'price': price,
+  //               'instock': quantity,
+  //               'proname': proName,
+  //               'prodesc': proDesc,
+  //               'sid': FirebaseAuth.instance.currentUser!.uid,
+  //               'proimages': imagesUrlList,
+  //               'discount': discount,
+  //                 }).whenComplete(() {
+  //               setState(() {
+  //                 processing=false; // when all is complete, processing is not happening
+  //                 imagesFileList=[];
+  //                 imagesUrlList=[];
+  //                 mainCategdropDownVal='select category';
+  //                 subCategList=[];
+  //                 });
+  //               _formKey.currentState!.reset();
+  //             });
+
+  //   } else {
+  //     print('no images');
+  //   }
+  // }
+  // void uploadProduct() async{
+  //   await uploadImages().whenComplete(() => uploadData()); // to avoid the 'incrementing' & the 'imagesUrlList not emptying' error, we split the two processes into two different functions
+  // }
+
+
+  Future uploadImages() async{
+    if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save(); // since "onChanged" automatically saves while "onSaved" does not, we have to manually save
-      if(imagesFileList!.isNotEmpty){
-        // this for loop will upload each image inside the imagesFIleList to firebase,
-        // it references each image's name by placing it in products folder 
+      if (imagesFileList!.isNotEmpty){
+
+      if (mainCategdropDownVal!='select category'&& subCategdropDownVal!='subcategory'){
+        
         try {
           setState(() {
             processing=true; 
@@ -128,49 +197,38 @@ class _EditProductScreenState extends State<EditProduct> {
         }
        } catch(e){
         print(e);
-       }
-      } else{
-        MyMessageHandler.showSnackBar(_scaffoldKey, 'Please pick an image');}
-    } else {
+        }
+      }else {
+          MyMessageHandler.showSnackBar(_scaffoldKey, 'Please select categories for product');
+        }
+    }else{
+        imagesUrlList = widget.items['proimages'] ;
+      }
+  }else{
       MyMessageHandler.showSnackBar(_scaffoldKey, 'Please fill all fields');
     }
-  } else { 
-    MyMessageHandler.showSnackBar(_scaffoldKey, 'Please select categories for product');
-  }    
   }
 
-  void uploadData() async{
-    if(imagesUrlList.isNotEmpty){
-      CollectionReference productRef = FirebaseFirestore.instance.collection('products');
-      proId = const Uuid().v4(); // used uuid to be able to refer to a prod id to edit in future, as the ones made by firebase cant be referenced
-              await productRef.doc(proId).set({
-                'proid':proId,
-                'maincateg': mainCategdropDownVal,
-                'subcateg': subCategdropDownVal,
+  editProductData() async{
+    FirebaseFirestore.instance.runTransaction((transaction) async{
+      DocumentReference documentReference = FirebaseFirestore.instance.collection('products').doc(widget.items['proid']);
+      transaction.update(documentReference, {
+                
+                // 'maincateg': mainCategdropDownVal,
+                // 'subcateg': subCategdropDownVal,
                 'price': price,
                 'instock': quantity,
                 'proname': proName,
                 'prodesc': proDesc,
-                'sid': FirebaseAuth.instance.currentUser!.uid,
+                
                 'proimages': imagesUrlList,
                 'discount': discount,
-                  }).whenComplete(() {
-                setState(() {
-                  processing=false; // when all is complete, processing is not happening
-                  imagesFileList=[];
-                  imagesUrlList=[];
-                  mainCategdropDownVal='select category';
-                  subCategList=[];
-                  });
-                _formKey.currentState!.reset();
-              });
-
-    } else {
-      print('no images');
-    }
+      });
+    }).whenComplete(()=> Navigator.pop(context));
   }
-  void uploadProduct() async{
-    await uploadImages().whenComplete(() => uploadData()); // to avoid the 'incrementing' & the 'imagesUrlList not emptying' error, we split the two processes into two different functions
+
+  void saveChanges() async{
+    await uploadImages().whenComplete(()=>editProductData());    
   }
 
   @override
@@ -400,7 +458,10 @@ class _EditProductScreenState extends State<EditProduct> {
                             mainAxisAlignment: MainAxisAlignment.spaceAround,
                             children: [
                             YellowButton(label: 'cancel', onPressed:(){Navigator.pop(context);}, width:0.25),
-                            YellowButton(label: 'Save', onPressed:(){Navigator.pop(context);}, width:0.25),
+                            YellowButton(
+                              label: 'Save', 
+                              onPressed:(){saveChanges();}, 
+                              width:0.25),
                           ],),
                           const SizedBox(height: 15,)
                       ],),

@@ -6,12 +6,12 @@ class MyMessageHandler{
     scaffoldKey.currentState!.hideCurrentSnackBar();
     scaffoldKey.currentState!.showSnackBar(
         SnackBar(
-            backgroundColor: Colors.yellow,
+            backgroundColor: Colors.grey.shade900,
             content: Text(message,
               textAlign: TextAlign.center,
               style: const TextStyle(
                 fontSize: 16,
-                color: Colors.black,
+                color: Colors.white,
               ),
             ),
             duration: const Duration(milliseconds: 1500),
