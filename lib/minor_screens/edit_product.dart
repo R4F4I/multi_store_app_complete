@@ -4,7 +4,6 @@ import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:expandable/expandable.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:multi_store_app/utilities/categ_list.dart';
@@ -13,7 +12,6 @@ import 'package:multi_store_app/widgets/snackbar.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:multi_store_app/widgets/yellow_button.dart';
 import 'package:path/path.dart' as path;
-import 'package:uuid/uuid.dart';
 
 
 
@@ -35,7 +33,7 @@ class _EditProductScreenState extends State<EditProduct> {
   late String proDesc;
   late String proId;
   int? discount = 0; //nullable
-  String mainCategdropDownVal='select category';
+  String mainCategdropDownVal='select maincateg';
   String subCategdropDownVal='subcategory';
   List<String> subCategList=[];
   bool processing = false;
@@ -106,7 +104,7 @@ class _EditProductScreenState extends State<EditProduct> {
     else if(value == 'bags'){subCategList = bags;}
   }
   // Future<void> uploadImages() async{
-  //   if (mainCategdropDownVal!='select category'&& subCategdropDownVal!='subcategory'){ // '&&' since both of them should be selected
+  //   if (mainCategdropDownVal!='select maincateg'&& subCategdropDownVal!='subcategory'){ // '&&' since both of them should be selected
   //     if (_formKey.currentState!.validate()) {
   //     _formKey.currentState!.save(); // since "onChanged" automatically saves while "onSaved" does not, we have to manually save
   //     if(imagesFileList!.isNotEmpty){
@@ -159,7 +157,7 @@ class _EditProductScreenState extends State<EditProduct> {
   //                 processing=false; // when all is complete, processing is not happening
   //                 imagesFileList=[];
   //                 imagesUrlList=[];
-  //                 mainCategdropDownVal='select category';
+  //                 mainCategdropDownVal='select maincateg';
   //                 subCategList=[];
   //                 });
   //               _formKey.currentState!.reset();
@@ -179,7 +177,7 @@ class _EditProductScreenState extends State<EditProduct> {
       _formKey.currentState!.save(); // since "onChanged" automatically saves while "onSaved" does not, we have to manually save
       if (imagesFileList!.isNotEmpty){
 
-      if (mainCategdropDownVal!='select category'&& subCategdropDownVal!='subcategory'){
+      if (mainCategdropDownVal!='select maincateg' && subCategdropDownVal !='subcategory'){
         
         try {
           setState(() {
@@ -214,8 +212,8 @@ class _EditProductScreenState extends State<EditProduct> {
       DocumentReference documentReference = FirebaseFirestore.instance.collection('products').doc(widget.items['proid']);
       transaction.update(documentReference, {
                 
-                // 'maincateg': mainCategdropDownVal,
-                // 'subcateg': subCategdropDownVal,
+                'maincateg': mainCategdropDownVal,
+                'subcateg': subCategdropDownVal,
                 'price': price,
                 'instock': quantity,
                 'proname': proName,
@@ -472,6 +470,8 @@ class _EditProductScreenState extends State<EditProduct> {
     );
   }
   Widget changeImages(Size size){
+    String mainCategdropDownVal=widget.items['maincateg'];
+    //String subCategdropDownVal=widget.items['subcateg'];
             return Column(
               children: [
                         Row(
@@ -515,7 +515,7 @@ class _EditProductScreenState extends State<EditProduct> {
                                         print(value);
                                         setState(() {
                                           mainCategdropDownVal=value!;
-                                          subCategdropDownVal='subcategory';
+                                          //subCategdropDownVal='subcategory';
                                         });
                                         selectedMainCateg(value);
                                       }),
@@ -530,7 +530,7 @@ class _EditProductScreenState extends State<EditProduct> {
                                         iconDisabledColor: Colors.black,
                                         dropdownColor: Colors.yellow.shade400,
                                         menuMaxHeight: 500,
-                                        disabledHint: const Text('select category'),
+                                        disabledHint: const Text('select subcateg'),
                                         value:subCategdropDownVal, 
                                         items: subCategList
                                         .map<DropdownMenuItem<String>>((value){

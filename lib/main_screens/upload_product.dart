@@ -19,10 +19,10 @@ class UploadProductScreen extends StatefulWidget {
   const UploadProductScreen({super.key});
 
   @override
-  State<UploadProductScreen> createState() => _UploadProductScreenState();
+  State<UploadProductScreen> createState() => Inside();
 }
 
-class _UploadProductScreenState extends State<UploadProductScreen> {
+class Inside extends State<UploadProductScreen> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final GlobalKey<ScaffoldMessengerState> _scaffoldKey = GlobalKey<ScaffoldMessengerState>();
 
@@ -32,15 +32,15 @@ class _UploadProductScreenState extends State<UploadProductScreen> {
   late String proDesc;
   late String proId;
   int? discount = 0; //nullable
-  String mainCategdropDownVal='select category';
+  String mainCategdropDownVal='select maincateg';
   String subCategdropDownVal='subcategory';
   List<String> subCategList=[];
   bool processing = false;
 
-// picks mulitple Images,
+// picks multiple Images,
 //imagesFIleList is a list of type XFile
 // the function '_pickProductImages()'  uses 'pickMultiImage()' to select multiple images
-// then places them inside 'pickedImages' (which places them insde the created imagesFileList)
+// then places them inside 'pickedImages' (which places them inside the created imagesFileList)
   final ImagePicker _picker = ImagePicker();
   List<XFile>? imagesFileList = [];
   List<String> imagesUrlList = [];
@@ -95,7 +95,7 @@ class _UploadProductScreenState extends State<UploadProductScreen> {
     else if(value == 'bags'){subCategList = bags;}
   }
   Future<void> uploadImages() async{
-    if (mainCategdropDownVal!='select category'&& subCategdropDownVal!='subcategory'){ // '&&' since both of them should be selected
+    if (mainCategdropDownVal!='select maincateg'&& subCategdropDownVal!='subcategory'){ // '&&' since both of them should be selected
       if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save(); // since "onChanged" automatically saves while "onSaved" does not, we have to manually save
       if(imagesFileList!.isNotEmpty){
@@ -115,7 +115,7 @@ class _UploadProductScreenState extends State<UploadProductScreen> {
             });
           });
         }
-       } catch(e){
+       } catch(e){ 
         print(e);
        }
       } else{
@@ -148,7 +148,7 @@ class _UploadProductScreenState extends State<UploadProductScreen> {
                   processing=false; // when all is complete, processing is not happening
                   imagesFileList=[];
                   imagesUrlList=[];
-                  mainCategdropDownVal='select category';
+                  mainCategdropDownVal='select maincateg';
                   subCategList=[];
                   });
                 _formKey.currentState!.reset();
@@ -234,7 +234,7 @@ class _UploadProductScreenState extends State<UploadProductScreen> {
                                   iconDisabledColor: Colors.black,
                                   dropdownColor: Colors.yellow.shade400,
                                   menuMaxHeight: 500,
-                                  disabledHint: const Text('select category'),
+                                  disabledHint: const Text('select subcateg'),
                                   value:subCategdropDownVal, 
                                   items: subCategList
                                   .map<DropdownMenuItem<String>>((value){
@@ -478,7 +478,7 @@ extension PriceValidator on String{
 above regex :
 > qualities of prev. +
 
-> allows decimals(optional) only upto 2 decmial place, 
+> allows decimals(optional) only upto 2 decimal place, 
 e.g: 12.3: 'yes',12.34: 'yes', 12.345: 'no',
 
 > or can start with 0 only once before decimal,
