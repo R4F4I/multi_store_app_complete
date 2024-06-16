@@ -54,3 +54,4 @@ lib/providers/stripe_id.dart
 # personal workspace
 .vscode/
 .markdownlint.json
+.idx
