@@ -14,6 +14,8 @@ import 'package:multi_store_app/widgets/yellow_button.dart';
 import 'package:multi_store_app/widgets/icon_button.dart';
 import 'package:path/path.dart' as path;
 
+import '../widgets/alert_dialog.dart';
+
 
 
 class EditProduct extends StatefulWidget {
@@ -398,14 +400,24 @@ class _EditProductScreenState extends State<EditProduct> {
                             label: 'Delete Item', 
                             icon: Icons.delete_forever_rounded, 
                             color: Colors.pink.shade500,
-                            onPressed: () async{
-                              await FirebaseFirestore.instance.runTransaction((transaction) async{
-                                DocumentReference documentReference = FirebaseFirestore.instance
-                                .collection('products')
-                                .doc(widget.items['proid']);
-                                
-                                transaction.delete(documentReference);
-                              }).whenComplete(()=>Navigator.pop(context));
+                            onPressed: () {
+                              MyAlertDialog.showMyDialog(
+                                context: context,
+                                title: 'Deleting Item',
+                                content: 'Are you sure you want to Delete this Item? (this action cannot be undone)',
+                                tapNo: () {
+                                  Navigator.pop(context);
+                                },
+                                tapYes: () async {
+                                  await FirebaseFirestore.instance.runTransaction((transaction) async{
+                                    DocumentReference documentReference = FirebaseFirestore.instance
+                                    .collection('products')
+                                    .doc(widget.items['proid']);
+                                    MyMessageHandler.showSnackBar(_scaffoldKey,'Item Deleted');
+                                    transaction.delete(documentReference);
+                                  }).whenComplete(()=>Navigator.pop(context));
+                                },
+                              );
                             }, 
                             width: 0.5),
                           const SizedBox(height: 15,)
