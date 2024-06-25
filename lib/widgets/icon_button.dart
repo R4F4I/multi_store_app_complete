@@ -4,11 +4,11 @@ class IconsButton extends StatelessWidget {
   final String label; 
   final Function() onPressed;
   final double width;
-  final IconData icon;
+  final IconData? icon;
   final Color color;
   
   const IconsButton({
-    super.key, required this.label,required this.icon,required this.color, required this.onPressed, required this.width
+    super.key, required this.label,this.icon,required this.color, required this.onPressed, required this.width
   });
 
   @override
