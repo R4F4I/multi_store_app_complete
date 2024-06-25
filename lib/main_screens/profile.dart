@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:multi_store_app/customer_screens/add_address.dart';
 import 'package:multi_store_app/customer_screens/customer_orders.dart';
 import 'package:multi_store_app/customer_screens/wishlist.dart';
 import 'package:multi_store_app/main_screens/cart.dart';
@@ -226,16 +227,19 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               icon: Icons.phone,),
                             
                             const YellowDivider(),
-                            RepeatedListTIle(title: 'Location',
-                              subtitle: data['address'] == ''
-                              ?'New Jersey - USA'
-                              :data['address'],
-                              icon: Icons.location_pin,),
+                            RepeatedListTIle(
+                              title: 'Location',
+                              subtitle: userAddress(data),
+                              icon: Icons.location_pin,
+                              onPressed: FirebaseAuth.instance.currentUser!.isAnonymous?null: () {
+                                Navigator.push(context, MaterialPageRoute(builder: (context)=>const AddAddress()));
+                              },
+                            ),
                           
-                          ]
-                          ),
-                          ),
+                        ]
+                      ),
                     ),
+                  ),
                     const ProfileHeaderLabel(headerLabel: ' Account Settings. ',),
                     Padding(
                       padding: const EdgeInsets.all(10.0),
@@ -288,6 +292,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
       },
     );
   }
+ String userAddress(dynamic data){
+  if(FirebaseAuth.instance.currentUser!.isAnonymous){
+    return 'example: New Jersey - USA';
+  } else if (FirebaseAuth.instance.currentUser!.isAnonymous == false && data['address']==''){
+    return 'set your Address';
+
+  }
+  return data['address'];
+
+ } 
 }
 
 
@@ -318,7 +332,7 @@ class RepeatedListTIle extends StatelessWidget {
   const RepeatedListTIle({
     super.key, 
     required this.icon,
-    /*required*/ this.onPressed, 
+    this.onPressed, 
     required this.title, 
     this.subtitle='',
   });
