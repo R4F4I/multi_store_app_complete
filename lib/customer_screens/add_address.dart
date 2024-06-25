@@ -1,9 +1,13 @@
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:multi_store_app/widgets/appbar_widgets.dart';
 import 'package:multi_store_app/widgets/snackbar.dart';
 import 'package:multi_store_app/widgets/yellow_button.dart';
 import 'package:country_state_city_picker/country_state_city_picker.dart';
+import 'package:uuid/uuid.dart';
 
 class AddAddress extends StatefulWidget {
   const AddAddress({super.key});
@@ -136,10 +140,27 @@ class _AddAddressState extends State<AddAddress> {
                      padding: const EdgeInsets.all(8.0),
                      child: YellowButton(
                       label: 'Add New Address',
-                      onPressed: () {
+                      onPressed: () async{
                         if (formKey.currentState!.validate()){
                           if (countryValue!='Choose Country' || stateValue!='Choose State' || cityValue!='Choose City') {
                             formKey.currentState!.save();
+                            CollectionReference addressRef =  FirebaseFirestore.instance
+                              .collection('customers')
+                              .doc(FirebaseAuth.instance.currentUser!.uid)
+                              .collection('address');
+
+                              var addressId = const Uuid().v4();
+                              await addressRef.doc(addressId).set({
+                                'addressid': addressId,
+                                'firstname': firstName,
+                                'lastname': lastName,
+                                'phone': phone,
+                                'country': countryValue,
+                                'state': stateValue,
+                                'city': cityValue,
+                              }).whenComplete(()=>Navigator.pop(context));
+
+
                           } else {MyMessageHandler.showSnackBar(scaffoldKey, 'Please set your Location');}
                         } else {
                           MyMessageHandler.showSnackBar(scaffoldKey, 'Please fill all Fields');
