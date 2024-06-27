@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:multi_store_app/customer_screens/add_address.dart';
+import 'package:multi_store_app/customer_screens/address_book.dart';
 import 'package:multi_store_app/customer_screens/customer_orders.dart';
 import 'package:multi_store_app/customer_screens/wishlist.dart';
 import 'package:multi_store_app/main_screens/cart.dart';
@@ -232,7 +232,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               subtitle: userAddress(data),
                               icon: Icons.location_pin,
                               onPressed: FirebaseAuth.instance.currentUser!.isAnonymous?null: () {
-                                Navigator.push(context, MaterialPageRoute(builder: (context)=>const AddAddress()));
+                                Navigator.push(context, MaterialPageRoute(builder: (context)=>const AddressBook()));
                               },
                             ),
                           

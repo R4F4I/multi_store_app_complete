@@ -1,7 +1,6 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:multi_store_app/widgets/appbar_widgets.dart';
 import 'package:multi_store_app/widgets/snackbar.dart';
@@ -139,7 +138,7 @@ class _AddAddressState extends State<AddAddress> {
                    child: Padding(
                      padding: const EdgeInsets.all(8.0),
                      child: YellowButton(
-                      label: 'Add New Address',
+                      label: 'Add this Address',
                       onPressed: () async{
                         if (formKey.currentState!.validate()){
                           if (countryValue!='Choose Country' || stateValue!='Choose State' || cityValue!='Choose City') {
