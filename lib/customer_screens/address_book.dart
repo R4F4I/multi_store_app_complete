@@ -53,45 +53,68 @@ class _AddressBookState extends State<AddressBook> {
                 itemCount: snapshot.data!.docs.length ,
                 itemBuilder: (context,index){
                   var customer = snapshot.data!.docs[index];
-                return Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Card(
-                    color: Colors.yellow.shade100,
-                    child: ListTile(
-                      title: SizedBox(
-                        height: 50,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                          Text('${customer['firstname']} - ${customer['lastname']}'),
-                          
-                          Text(customer['phone']),
-                        ],),
+                return GestureDetector(
+                  onTap: () async{
+                    // in a 'for loop', set all the 'default'  categories to false,
+                    for (var item in snapshot.data!.docs ){
+                      await FirebaseFirestore.instance.runTransaction((transaction) async{
+                        DocumentReference documentReference =
+                                FirebaseFirestore.instance
+                                    .collection('customers')
+                                    .doc(FirebaseAuth.instance.currentUser!.uid)
+                                    .collection('address')
+                                    .doc(item.id);
+                                    
+                                    // if the item.id matches the 'addressid' field in customer set 'default': true
+                                    item.id == customer['addressid']
+                                      ? transaction.update(documentReference, {'default': true})
+                                      : transaction.update(documentReference, {'default': false});
+                      });
+                    }
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Card(
+                      color: Colors.yellow.shade100,
+                      child: ListTile(
+                        trailing: customer['default'] == true 
+                          ? const Icon(Icons.home, color: Color.fromARGB(106, 0, 0, 0),)
+                          : const SizedBox(),
+                        title: SizedBox(
+                          height: 50,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                            Text('${customer['firstname']} - ${customer['lastname']}'),
+                            
+                            Text(customer['phone']),
+                          ],),
+                        ),
+                        subtitle: SizedBox(
+                          height: 50,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                            Text('city/state: ${customer['city']}, ${customer['state']}'),
+                            
+                            Text(customer['country']),
+                              ],),
+                            ),
+                          ),
+                        ),
                       ),
-                      subtitle: SizedBox(
-                        height: 50,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                          Text('city/state: ${customer['city']}, ${customer['state']}'),
-                          
-                          Text(customer['country']),
-                        ],),
-                      ),
-                    ),
-                  ),
                 );
-              });
-            },
+                  });
+                },
+              )
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: YellowButton(
+                label: 'Add New Address', 
+                onPressed: () {Navigator.push(context, MaterialPageRoute(builder: (context)=> const AddAddress()));}, 
+                width: 0.7),
           )
-        ),
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: YellowButton(
-            label: 'Add New Address', 
-            onPressed: () {Navigator.push(context, MaterialPageRoute(builder: (context)=> const AddAddress()));}, 
-            width: 0.7),
-        )
         ],
       )),
     );

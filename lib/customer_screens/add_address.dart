@@ -157,6 +157,7 @@ class _AddAddressState extends State<AddAddress> {
                                 'country': countryValue,
                                 'state': stateValue,
                                 'city': cityValue,
+                                'default': true,
                               }).whenComplete(()=>Navigator.pop(context));
 
 
