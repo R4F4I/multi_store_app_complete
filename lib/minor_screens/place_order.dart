@@ -16,27 +16,40 @@ class PlaceOrderScreen extends StatefulWidget {
 
 class _PlaceOrderScreenState extends State<PlaceOrderScreen> {
   CollectionReference customers = FirebaseFirestore.instance.collection('customers');
+  final Stream<QuerySnapshot> addressStream = FirebaseFirestore.instance
+      .collection('customers')
+      .doc(FirebaseAuth.instance.currentUser!.uid)
+      .collection('address')
+      .where('default', isEqualTo: true)
+      .limit(1)
+      .snapshots();
 
   @override
   Widget build(BuildContext context) {
-    return 
-    
-    FutureBuilder<DocumentSnapshot>(
-      future: customers.doc(FirebaseAuth.instance.currentUser!.uid).get(),
-      builder:
-          (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
-
-        if (snapshot.hasError) {return const Text("Something went wrong");}
-        if (snapshot.hasData && !snapshot.data!.exists) {return const Text("Document does not exist");}
-
-        if (snapshot.connectionState ==ConnectionState.waiting){
-          return const Material(child: Center(child: CircularProgressIndicator(),),);
+    return StreamBuilder<QuerySnapshot>(
+      stream: addressStream,
+      builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+        if (snapshot.hasError) {
+          return const Text('Something went wrong');
         }
 
-        if (snapshot.connectionState == ConnectionState.done) {
-          Map<String, dynamic> data = snapshot.data!.data() as Map<String, dynamic>;
-          return 
-            Material(
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Material(child: Center(child: CircularProgressIndicator()));
+        }
+        if (snapshot.data!.docs.isEmpty){ //when a section, filtered with '.where(,isEqualTo: )' returns an empty output
+          return const Center(child: Text(
+            'This category has \n \n no items yet!',
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              fontSize: 26,
+              fontWeight: FontWeight.bold,
+              fontFamily: 'Acme',
+              letterSpacing: 1.5,
+              color: Colors.blueGrey,
+            ),
+            ));
+        }
+          return Material(
               color: Colors.grey.shade200,
               child: SafeArea(
                 child: Scaffold(
@@ -54,23 +67,40 @@ class _PlaceOrderScreenState extends State<PlaceOrderScreen> {
                       child: Column(
                         children: [
                           Container(
-                            height: 90,
-                            width: double.infinity,
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(15)
+                            height: 120,
+                                width: double.infinity,
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(15)
+                                ),
+                            child: ListView.builder(
+                              itemCount: snapshot.data!.docs.length,
+                              itemBuilder: (context, index) {
+                                var customer = snapshot.data!.docs[index] ;
+                                return ListTile(
+                                    title: SizedBox(
+                                      height: 50,
+                                      child: Column(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+                                        Text('${customer['firstname']} - ${customer['lastname']}'),
+                                        
+                                        Text(customer['phone']),
+                                      ],),
+                                    ),
+                                    subtitle: SizedBox(
+                                      height: 50,
+                                      child: Column(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+                                        Text('city/state: ${customer['city']}, ${customer['state']}'),
+                                        
+                                        Text(customer['country']),
+                                          ],),
+                                        ),
+                                      );
+                              }
                             ),
-                              child: Padding(
-                                padding: const EdgeInsets.symmetric(vertical: 4,horizontal: 16),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                                  children: [
-                                    Text("Name: ${data['name']}"),
-                                    Text("Phone: ${data['phone']}"),
-                                    Text("Address: ${data['address']}"),
-                                ],),
-                            )
                           ),
                           const SizedBox(height: 20,),
                           Expanded(
@@ -158,17 +188,14 @@ class _PlaceOrderScreenState extends State<PlaceOrderScreen> {
                           onPressed: (){
                             Navigator.push(context, MaterialPageRoute(builder: (context) => const PaymentScreen()),);
                           },
-                        ),
-                      ),
                     ),
-                          ),
+                  ),
+                ),
               ),
-            );
-        } 
-      return const Center(
-          child: CircularProgressIndicator(),
-      );
-    });
+            ),
+          );
+        });
   }
 }
+
 

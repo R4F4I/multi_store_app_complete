@@ -65,10 +65,10 @@ class _AddressBookState extends State<AddressBook> {
                                     .collection('address')
                                     .doc(item.id);
                                     
-                                    // if the item.id matches the 'addressid' field in customer set 'default': true
-                                    item.id == customer['addressid']
-                                      ? transaction.update(documentReference, {'default': true})
-                                      : transaction.update(documentReference, {'default': false});
+                        // if the item.id matches the 'addressid' field in customer set 'default': true
+                        item.id == customer['addressid']
+                          ? transaction.update(documentReference, {'default': true})
+                          : transaction.update(documentReference, {'default': false});
                       });
                     }
                   },
