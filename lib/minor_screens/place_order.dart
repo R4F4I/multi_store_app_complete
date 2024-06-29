@@ -1,6 +1,8 @@
 import "package:cloud_firestore/cloud_firestore.dart";
 import "package:firebase_auth/firebase_auth.dart";
 import "package:flutter/material.dart";
+import "package:multi_store_app/customer_screens/add_address.dart";
+import "package:multi_store_app/customer_screens/address_book.dart";
 import "package:multi_store_app/minor_screens/payment_screen.dart";
 import "package:multi_store_app/providers/cart_provider.dart";
 import "package:multi_store_app/widgets/appbar_widgets.dart";
@@ -36,7 +38,7 @@ class _PlaceOrderScreenState extends State<PlaceOrderScreen> {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const Material(child: Center(child: CircularProgressIndicator()));
         }
-        if (snapshot.data!.docs.isEmpty){ //when a section, filtered with '.where(,isEqualTo: )' returns an empty output
+        /* if (snapshot.data!.docs.isEmpty){ //when a section, filtered with '.where(,isEqualTo: )' returns an empty output
           return const Center(child: Text(
             'This category has \n \n no items yet!',
             textAlign: TextAlign.center,
@@ -48,7 +50,7 @@ class _PlaceOrderScreenState extends State<PlaceOrderScreen> {
               color: Colors.blueGrey,
             ),
             ));
-        }
+        } */
           return Material(
               color: Colors.grey.shade200,
               child: SafeArea(
@@ -66,41 +68,71 @@ class _PlaceOrderScreenState extends State<PlaceOrderScreen> {
                       padding: const EdgeInsets.fromLTRB(16, 16, 16, 60),
                       child: Column(
                         children: [
-                          Container(
-                            height: 120,
-                                width: double.infinity,
-                                decoration: BoxDecoration(
-                                  color: Colors.white,
-                                  borderRadius: BorderRadius.circular(15)
-                                ),
-                            child: ListView.builder(
-                              itemCount: snapshot.data!.docs.length,
-                              itemBuilder: (context, index) {
-                                var customer = snapshot.data!.docs[index] ;
-                                return ListTile(
-                                    title: SizedBox(
-                                      height: 50,
-                                      child: Column(
-                                        crossAxisAlignment: CrossAxisAlignment.start,
-                                        children: [
-                                        Text('${customer['firstname']} - ${customer['lastname']}'),
-                                        
-                                        Text(customer['phone']),
-                                      ],),
+                          snapshot.data!.docs.isEmpty
+                          ? GestureDetector(
+                              onTap: (){
+                                Navigator.push(context, MaterialPageRoute(builder: (context)=>const AddAddress()));
+                              },
+                              child: Container(
+                                height: 120,
+                                    width: double.infinity,
+                                    decoration: BoxDecoration(
+                                      color: Colors.white,
+                                      borderRadius: BorderRadius.circular(15)
                                     ),
-                                    subtitle: SizedBox(
-                                      height: 50,
-                                      child: Column(
-                                        crossAxisAlignment: CrossAxisAlignment.start,
-                                        children: [
-                                        Text('city/state: ${customer['city']}, ${customer['state']}'),
-                                        
-                                        Text(customer['country']),
+                                child: const Center(
+                                  child: Text(
+                                    'Create New Address',
+                                    style: TextStyle(
+                                        fontSize: 24,
+                                        fontFamily: 'Acme',
+                                        fontWeight: FontWeight.bold,
+                                        letterSpacing: 1.5,
+                                        color: Colors.blueGrey),
+                                  ),
+                                ),
+                              ),
+                          )
+                          : GestureDetector(
+                              onTap: (){
+                                Navigator.push(context, MaterialPageRoute(builder: (context)=>const AddressBook()));
+                              },
+                              child: Container(
+                                height: 120,
+                                    width: double.infinity,
+                                    decoration: BoxDecoration(
+                                      color: Colors.white,
+                                      borderRadius: BorderRadius.circular(15)
+                                    ),
+                                child: ListView.builder(
+                                  itemCount: snapshot.data!.docs.length,
+                                  itemBuilder: (context, index) {
+                                    var customer = snapshot.data!.docs[index] ;
+                                    return ListTile(
+                                        title: SizedBox(
+                                          height: 50,
+                                          child: Column(
+                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            children: [
+                                            Text('${customer['firstname']} - ${customer['lastname']}'),
+                                            
+                                            Text(customer['phone']),
                                           ],),
                                         ),
-                                      );
-                              }
-                            ),
+                                        subtitle: SizedBox(
+                                          height: 50,
+                                          child: Column(
+                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            children: [
+                                            Text('city/state: ${customer['city']}, ${customer['state']}'),
+                                            
+                                            Text(customer['country']),
+                                              ],),
+                                            ),
+                                          );
+                                  }
+                                ),
+                              ),
                           ),
                           const SizedBox(height: 20,),
                           Expanded(
@@ -185,8 +217,10 @@ class _PlaceOrderScreenState extends State<PlaceOrderScreen> {
                         child: YellowButton(
                           label: 'Confirm ${context.watch<Cart>().totalPrice.toStringAsFixed(2)} USD',
                           width: 1,
-                          onPressed: (){
-                            Navigator.push(context, MaterialPageRoute(builder: (context) => const PaymentScreen()),);
+                          onPressed:  (){
+                             snapshot.data!.docs.isEmpty
+                              ? Navigator.push(context, MaterialPageRoute(builder: (context)=>const AddAddress()))
+                              : Navigator.push(context, MaterialPageRoute(builder: (context) => const PaymentScreen()),);
                           },
                     ),
                   ),
