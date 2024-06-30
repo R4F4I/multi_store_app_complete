@@ -19,6 +19,9 @@ class _AddressBookState extends State<AddressBook> {
       .doc(FirebaseAuth.instance.currentUser!.uid)
       .collection('address')
       .snapshots();
+
+      defAddressFalse(){}
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -71,6 +74,16 @@ class _AddressBookState extends State<AddressBook> {
                           : transaction.update(documentReference, {'default': false});
                       });
                     }
+                    await FirebaseFirestore.instance.runTransaction((transaction) async{
+                        DocumentReference documentReference =
+                                FirebaseFirestore.instance
+                                    .collection('customers')
+                                    .doc(FirebaseAuth.instance.currentUser!.uid);
+                         transaction.update(documentReference, {
+                            'address': '${customer['city']} - ${customer['state']} - ${customer['country']}',
+                            'phone': customer['phone'],
+                          });
+                      });
                   },
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),
