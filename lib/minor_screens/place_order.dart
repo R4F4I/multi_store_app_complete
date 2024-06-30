@@ -25,6 +25,9 @@ class _PlaceOrderScreenState extends State<PlaceOrderScreen> {
       .where('default', isEqualTo: true)
       .limit(1)
       .snapshots();
+      late String name;
+      late String phone;
+      late String address;
 
   @override
   Widget build(BuildContext context) {
@@ -108,6 +111,9 @@ class _PlaceOrderScreenState extends State<PlaceOrderScreen> {
                                   itemCount: snapshot.data!.docs.length,
                                   itemBuilder: (context, index) {
                                     var customer = snapshot.data!.docs[index] ;
+                                     address = customer['city']+', '+customer['state']+', '+customer['country'];
+                                     phone = customer['phone'];
+                                     name = customer['firstname']+' - '+customer['lastname'];
                                     return ListTile(
                                         title: SizedBox(
                                           height: 50,
@@ -220,7 +226,7 @@ class _PlaceOrderScreenState extends State<PlaceOrderScreen> {
                           onPressed:  (){
                              snapshot.data!.docs.isEmpty
                               ? Navigator.push(context, MaterialPageRoute(builder: (context)=>const AddAddress()))
-                              : Navigator.push(context, MaterialPageRoute(builder: (context) => const PaymentScreen()),);
+                              : Navigator.push(context, MaterialPageRoute(builder: (context) => PaymentScreen(name: name,phone: phone,address: address,)),);
                           },
                     ),
                   ),
