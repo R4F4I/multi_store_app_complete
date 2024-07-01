@@ -20,7 +20,37 @@ class _AddressBookState extends State<AddressBook> {
       .collection('address')
       .snapshots();
 
-      defAddressFalse(){}
+      Future defAddressSet(dynamic item, dynamic customer) async{
+        await FirebaseFirestore.instance.runTransaction((transaction) async{
+                        DocumentReference documentReference =
+                                FirebaseFirestore.instance
+                                    .collection('customers')
+                                    .doc(FirebaseAuth.instance.currentUser!.uid)
+                                    .collection('address')
+                                    .doc(item.id);
+                                    
+                        // if the item.id matches the 'addressid' field in customer set 'default': true
+                        item.id == customer['addressid']
+                          ? transaction.update(documentReference, {'default': true})
+                          : transaction.update(documentReference, {'default': false});
+                      });
+      }
+
+      Future updateProfile(dynamic customer) async{
+        await FirebaseFirestore.instance.runTransaction((transaction) async{
+                        DocumentReference documentReference =
+                                FirebaseFirestore.instance
+                                    .collection('customers')
+                                    .doc(FirebaseAuth.instance.currentUser!.uid);
+
+                        transaction.update(documentReference, {
+                            'address': '${customer['city']} - ${customer['state']} - ${customer['country']}',
+                            'phone': customer['phone'],
+                          });
+                      });
+        
+
+      }
 
   @override
   Widget build(BuildContext context) {
@@ -60,30 +90,9 @@ class _AddressBookState extends State<AddressBook> {
                   onTap: () async{
                     // in a 'for loop', set all the 'default'  categories to false,
                     for (var item in snapshot.data!.docs ){
-                      await FirebaseFirestore.instance.runTransaction((transaction) async{
-                        DocumentReference documentReference =
-                                FirebaseFirestore.instance
-                                    .collection('customers')
-                                    .doc(FirebaseAuth.instance.currentUser!.uid)
-                                    .collection('address')
-                                    .doc(item.id);
-                                    
-                        // if the item.id matches the 'addressid' field in customer set 'default': true
-                        item.id == customer['addressid']
-                          ? transaction.update(documentReference, {'default': true})
-                          : transaction.update(documentReference, {'default': false});
-                      });
+                      defAddressSet(item, customer);
                     }
-                    await FirebaseFirestore.instance.runTransaction((transaction) async{
-                        DocumentReference documentReference =
-                                FirebaseFirestore.instance
-                                    .collection('customers')
-                                    .doc(FirebaseAuth.instance.currentUser!.uid);
-                         transaction.update(documentReference, {
-                            'address': '${customer['city']} - ${customer['state']} - ${customer['country']}',
-                            'phone': customer['phone'],
-                          });
-                      });
+                    updateProfile(customer);
                   },
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),
