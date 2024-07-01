@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:multi_store_app/customer_screens/add_address.dart';
 import 'package:multi_store_app/widgets/appbar_widgets.dart';
 import 'package:multi_store_app/widgets/yellow_button.dart';
+import 'package:sn_progress_dialog/progress_dialog.dart';
 
 
 class AddressBook extends StatefulWidget {
@@ -52,6 +53,10 @@ class _AddressBookState extends State<AddressBook> {
 
       }
 
+      void showProgress(){
+          ProgressDialog progress = ProgressDialog(context: context);
+          progress.show(max: 100,msg:'Please Wait...',progressBgColor: Colors.red);
+      }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -86,45 +91,62 @@ class _AddressBookState extends State<AddressBook> {
                 itemCount: snapshot.data!.docs.length ,
                 itemBuilder: (context,index){
                   var customer = snapshot.data!.docs[index];
-                return GestureDetector(
-                  onTap: () async{
-                    // in a 'for loop', set all the 'default'  categories to false,
-                    for (var item in snapshot.data!.docs ){
-                      defAddressSet(item, customer);
-                    }
-                    updateProfile(customer);
-                  },
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Card(
-                      color: Colors.yellow.shade100,
-                      child: ListTile(
-                        trailing: customer['default'] == true 
-                          ? const Icon(Icons.home, color: Color.fromARGB(106, 0, 0, 0),)
-                          : const SizedBox(),
-                        title: SizedBox(
-                          height: 50,
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                            Text('${customer['firstname']} - ${customer['lastname']}'),
-                            
-                            Text(customer['phone']),
-                          ],),
-                        ),
-                        subtitle: SizedBox(
-                          height: 50,
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                            Text('city/state: ${customer['city']}, ${customer['state']}'),
-                            
-                            Text(customer['country']),
-                              ],),
+                return Dismissible(
+                  key: UniqueKey(),
+                  onDismissed: (direction)async => 
+                  await FirebaseFirestore.instance.runTransaction((transaction) async{
+                        DocumentReference docReference =
+                                FirebaseFirestore.instance
+                                    .collection('customers')
+                                    .doc(FirebaseAuth.instance.currentUser!.uid)
+                                    .collection('address')
+                                    .doc(customer['addressid']);
+                        transaction.delete(docReference);
+                  }),
+                  child: GestureDetector(
+                    onTap: () async{
+                      // in a 'for loop', set all the 'default'  categories to false,
+                      showProgress();
+                      for (var item in snapshot.data!.docs ){                      
+                        await defAddressSet(item, customer);
+                      }
+                      await updateProfile(customer);
+                      Future.delayed(const Duration(microseconds: 1000)).whenComplete(()=>Navigator.pop(context));
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Card(
+                        color: customer['default'] == true
+                                ? Colors.yellow.shade100
+                                : Colors.grey.shade500,
+                        child: ListTile(
+                          trailing: customer['default'] == true 
+                            ? const Icon(Icons.home, color: Color.fromARGB(131, 63, 30, 0),)
+                            : const SizedBox(),
+                          title: SizedBox(
+                            height: 50,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                              Text('${customer['firstname']} - ${customer['lastname']}'),
+                              
+                              Text(customer['phone']),
+                            ],),
+                          ),
+                          subtitle: SizedBox(
+                            height: 50,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                              Text('city/state: ${customer['city']}, ${customer['state']}'),
+                              
+                              Text(customer['country']),
+                                ],),
+                              ),
                             ),
                           ),
                         ),
-                      ),
+                  ),
                 );
                   });
                 },
