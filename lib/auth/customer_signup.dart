@@ -90,11 +90,9 @@ void signUp() async {
       if (_imageFile != null) {
         try{
           await FirebaseAuth.instance.createUserWithEmailAndPassword(email: email,password: password);
-        //print('image picked!');
-        //print("valid");
-        //print(name);
-        //print(email);
-        //print(password);
+          try{
+            await FirebaseAuth.instance.currentUser!.sendEmailVerification();
+          }catch(e){print(e);}
         
 
         firebase_storage.Reference ref = firebase_storage

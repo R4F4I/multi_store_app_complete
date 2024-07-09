@@ -24,35 +24,36 @@ class _CustomerLoginState extends State<CustomerLogin> {
 
 
 void logIn() async {
-  setState(() {
-    processing=true;
-  });
-    if (_formKey.currentState!.validate()) {
-      
-        try{
-          await FirebaseAuth.instance.signInWithEmailAndPassword(email: email,password: password);
-        _formKey.currentState!.reset();
-        await Future.delayed(const Duration(microseconds: 100)).whenComplete(()=>Navigator.pushReplacementNamed(context, '/customer_home'));
-
-        } on FirebaseAuthException 
-        catch(e){
-
-          if (e.code=='user-not-found'){
-            setState(() {processing=false;});
-            MyMessageHandler.showSnackBar(_scaffoldKey,'no user found for that email');
-          } 
-          else if (e.code=='wrong-password'){
-            setState(() {processing=false;});
-            MyMessageHandler.showSnackBar(_scaffoldKey,'the password for this account is incorrect');
-          }
-        }
+  if (FirebaseAuth.instance.currentUser!.emailVerified){
+    setState(() {
+      processing=true;
+    });
+      if (_formKey.currentState!.validate()) {
         
-       
-      
-    } 
-    else {
-      setState(() {processing=false;});
-      MyMessageHandler.showSnackBar(_scaffoldKey, 'Please fill all fields ');}
+          try{
+            await FirebaseAuth.instance.signInWithEmailAndPassword(email: email,password: password);
+          _formKey.currentState!.reset();
+          await Future.delayed(const Duration(microseconds: 100)).whenComplete(()=>Navigator.pushReplacementNamed(context, '/customer_home'));
+
+          } on FirebaseAuthException 
+          catch(e){
+
+            if (e.code=='user-not-found'){
+              setState(() {processing=false;});
+              MyMessageHandler.showSnackBar(_scaffoldKey,'no user found for that email');
+            } 
+            else if (e.code=='wrong-password'){
+              setState(() {processing=false;});
+              MyMessageHandler.showSnackBar(_scaffoldKey,'the password for this account is incorrect');
+            }
+          }
+
+      } 
+      else {
+        setState(() {processing=false;});
+        MyMessageHandler.showSnackBar(_scaffoldKey, 'Please fill all fields ');}
+    }
+    else{MyMessageHandler.showSnackBar(_scaffoldKey, 'Please check your inbox ');}
   }
 
 
