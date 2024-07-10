@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:multi_store_app/widgets/auth_widgets.dart';
 import 'package:multi_store_app/widgets/snackbar.dart';
+import 'package:multi_store_app/widgets/yellow_button.dart';
 
 
 class CustomerLogin extends StatefulWidget {
@@ -21,12 +22,14 @@ class _CustomerLoginState extends State<CustomerLogin> {
   final GlobalKey<ScaffoldMessengerState> _scaffoldKey = GlobalKey<ScaffoldMessengerState>();
   bool passwordVisible = false;
   bool processing = false;
+  bool sendEmailVerification = false;
 
 
 void logIn() async {
   
     setState(() {
       processing=true;
+      
     });
       if (_formKey.currentState!.validate()) {
         
@@ -38,22 +41,24 @@ void logIn() async {
               if (FirebaseAuth.instance.currentUser!.emailVerified){
                   _formKey.currentState!.reset();
                   await Future.delayed(const Duration(microseconds: 100)).whenComplete(()=>Navigator.pushReplacementNamed(context, '/customer_home')); 
+                  //sendEmailVerification = true;
               } 
               else {
-                setState(() {processing=false;});
+                setState(() {
+                  processing=false;
+                  sendEmailVerification = true;
+                });
                 MyMessageHandler.showSnackBar(_scaffoldKey, 'Please check your inbox ');
+                
               }
           } 
           on FirebaseAuthException catch(e){
 
-              if (e.code=='user-not-found'){
+              if (e.code=='invalid-credential'){
+                
                 setState(() {processing=false;});
-                MyMessageHandler.showSnackBar(_scaffoldKey,'no user found for that email');
+                MyMessageHandler.showSnackBar(_scaffoldKey,'your username or password is incorrect, Please Try Again');
               } 
-              else if (e.code=='wrong-password'){
-                setState(() {processing=false;});
-                MyMessageHandler.showSnackBar(_scaffoldKey,'the password for this account is incorrect');
-              }
           }
 
       } 
@@ -85,7 +90,28 @@ void logIn() async {
                     children: [
                     const AuthHeaderLabel(headerLabel: 'Log In',),
                     
-                    const SizedBox(height: 50,),
+                     SizedBox(
+                      height: 50,
+                      child: sendEmailVerification == true
+                        ? Center(
+                          child: YellowButton(
+                            label: 'resend Email Verification', 
+                            onPressed: () async{
+                              try {
+                                await FirebaseAuth.instance.currentUser!.sendEmailVerification();
+                              } catch (e) {
+                                MyMessageHandler.showSnackBar(_scaffoldKey,'Too many Requests! wait for a moment...');
+                              }
+                              Future.delayed(const Duration(seconds: 10)).whenComplete((){
+                                setState(() {
+                                sendEmailVerification = false;
+                              });
+                            });
+                          }, 
+                          width: 0.6),
+                        )
+                        : const SizedBox(),
+                      ),
                     Padding(
                       padding: const EdgeInsets.symmetric(vertical: 10),
                       child: TextFormField(
