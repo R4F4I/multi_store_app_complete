@@ -83,7 +83,7 @@ class _VisitStoreState extends State<VisitStore> {
                             Padding(
                               padding: const EdgeInsets.all(8.0),
                               child: Text(
-                                data['storename'].toUpperCase(),
+                                 data['storename'].toUpperCase(),
                                 style: const TextStyle(
                                   fontSize: 20,
                                   color: Colors.yellow,

@@ -8,6 +8,7 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:multi_store_app/providers/auth_repo.dart';
 import 'package:multi_store_app/widgets/auth_widgets.dart';
 import 'package:multi_store_app/widgets/snackbar.dart';
 
@@ -89,22 +90,20 @@ void signUp() async {
     if (_formKey.currentState!.validate()) {
       if (_imageFile != null) {
         try{
-          await FirebaseAuth.instance.createUserWithEmailAndPassword(email: email,password: password);
-          try{
-            await FirebaseAuth.instance.currentUser!.sendEmailVerification();
-          }catch(e){print(e);}
+          AuthRepo.signUpWithEmailAndPassword(email, password);
+          AuthRepo.sendEmailVerification();
         
-
         firebase_storage.Reference ref = firebase_storage
         .FirebaseStorage
         .instance.ref('cust-images/$email.jpg');
-        
+
         await ref.putFile(File(
           _imageFile!.path
           ));
         profileImage = await ref.getDownloadURL();
-        _uid=FirebaseAuth.instance.currentUser!.uid;
-        await customers.doc(_uid).set({
+
+
+        await customers.doc(AuthRepo.uid).set({
           'name':name,
           'email':email,
           'profileimage':profileImage,
@@ -120,17 +119,9 @@ void signUp() async {
 
         await Future.delayed(const Duration(microseconds: 100)).whenComplete(()=>Navigator.pushReplacementNamed(context, '/customer_login'));
 
-        } on FirebaseAuthException 
-        catch(e){
-
-          if (e.code=='weak-password'){
-            setState(() {processing=false;});
-            MyMessageHandler.showSnackBar(_scaffoldKey,'the password provided is weak');
-          } 
-          else if (e.code=='email-already-in-use'){
-            setState(() {processing=false;});
-            MyMessageHandler.showSnackBar(_scaffoldKey,'the account already exists for that email');
-          }
+        } on FirebaseAuthException catch(e){
+          setState(() {processing = false;});
+          MyMessageHandler.showSnackBar(_scaffoldKey,e.message.toString());
         }
         
       } 

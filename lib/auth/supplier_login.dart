@@ -2,6 +2,7 @@
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:multi_store_app/providers/auth_repo.dart';
 import 'package:multi_store_app/widgets/auth_widgets.dart';
 import 'package:multi_store_app/widgets/snackbar.dart';
 
@@ -30,22 +31,15 @@ void logIn() async {
     if (_formKey.currentState!.validate()) {
       
         try{
-          await FirebaseAuth.instance.signInWithEmailAndPassword(email: email,password: password);
+          AuthRepo.logInWithEmailAndPassword(email,password);
         _formKey.currentState!.reset();
         
         await Future.delayed(const Duration(microseconds: 100)).whenComplete(()=>Navigator.pushReplacementNamed(context, '/supplier_home'));
 
-        } on FirebaseAuthException 
-        catch(e){
+        } on FirebaseAuthException catch(e){
 
-          if (e.code=='user-not-found'){
-            setState(() {processing=false;});
-            MyMessageHandler.showSnackBar(_scaffoldKey,'no user found for that email');
-          } 
-          else if (e.code=='wrong-password'){
-            setState(() {processing=false;});
-            MyMessageHandler.showSnackBar(_scaffoldKey,'the password for this account is incorrect');
-          }
+          setState(() {processing = false;});
+          MyMessageHandler.showSnackBar(_scaffoldKey,e.message.toString());
         }
         
        

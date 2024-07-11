@@ -2,6 +2,7 @@
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:multi_store_app/providers/auth_repo.dart';
 import 'package:multi_store_app/widgets/auth_widgets.dart';
 import 'package:multi_store_app/widgets/snackbar.dart';
 import 'package:multi_store_app/widgets/yellow_button.dart';
@@ -34,11 +35,11 @@ void logIn() async {
       if (_formKey.currentState!.validate()) {
         
           try{
-              await FirebaseAuth.instance.signInWithEmailAndPassword(email: email,password: password);
+              AuthRepo.signUpWithEmailAndPassword(email, password);
 
 
-              await FirebaseAuth.instance.currentUser!.reload();
-              if (FirebaseAuth.instance.currentUser!.emailVerified){
+              AuthRepo.reloadUserData();
+              if (await AuthRepo.emailVerified()){
                   _formKey.currentState!.reset();
                   await Future.delayed(const Duration(microseconds: 100)).whenComplete(()=>Navigator.pushReplacementNamed(context, '/customer_home')); 
                   //sendEmailVerification = true;
@@ -53,12 +54,8 @@ void logIn() async {
               }
           } 
           on FirebaseAuthException catch(e){
-
-              if (e.code=='invalid-credential'){
-                
-                setState(() {processing=false;});
-                MyMessageHandler.showSnackBar(_scaffoldKey,'your username or password is incorrect, Please Try Again');
-              } 
+            setState(() {processing=false;});
+            MyMessageHandler.showSnackBar(_scaffoldKey,e.message.toString());
           }
 
       } 
@@ -97,11 +94,7 @@ void logIn() async {
                           child: YellowButton(
                             label: 'resend Email Verification', 
                             onPressed: () async{
-                              try {
-                                await FirebaseAuth.instance.currentUser!.sendEmailVerification();
-                              } catch (e) {
-                                MyMessageHandler.showSnackBar(_scaffoldKey,'Too many Requests! wait for a moment...');
-                              }
+                              AuthRepo.sendEmailVerification();
                               Future.delayed(const Duration(seconds: 10)).whenComplete((){
                                 setState(() {
                                 sendEmailVerification = false;
