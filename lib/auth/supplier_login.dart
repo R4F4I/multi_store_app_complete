@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:multi_store_app/providers/auth_repo.dart';
 import 'package:multi_store_app/widgets/auth_widgets.dart';
 import 'package:multi_store_app/widgets/snackbar.dart';
+import 'package:multi_store_app/widgets/yellow_button.dart';
 
 
 class SupplierLogin extends StatefulWidget {
@@ -22,6 +23,7 @@ class _SupplierLoginState extends State<SupplierLogin> {
   final GlobalKey<ScaffoldMessengerState> _scaffoldKey = GlobalKey<ScaffoldMessengerState>();
   bool passwordVisible = false;
   bool processing = false;
+  bool sendEmailVerification = false;
 
 
 void logIn() async {
@@ -34,16 +36,26 @@ void logIn() async {
           AuthRepo.logInWithEmailAndPassword(email,password);
         _formKey.currentState!.reset();
         
-        await Future.delayed(const Duration(microseconds: 100)).whenComplete(()=>Navigator.pushReplacementNamed(context, '/supplier_home'));
-
-        } on FirebaseAuthException catch(e){
+            if (await AuthRepo.emailVerified()){
+              _formKey.currentState!.reset();
+              await Future.delayed(const Duration(microseconds: 100)).whenComplete(()=>Navigator.pushReplacementNamed(context, '/supplier_home'));
+            }
+              
+            else {
+              setState(() {
+                processing=false;
+                sendEmailVerification = true;
+              });
+              MyMessageHandler.showSnackBar(_scaffoldKey, 'Please check your inbox ');
+                    
+            }
+        } 
+        on FirebaseAuthException catch(e){
 
           setState(() {processing = false;});
           MyMessageHandler.showSnackBar(_scaffoldKey,e.message.toString());
         }
-        
-       
-      
+
     } 
     else {
       setState(() {processing=false;});
@@ -72,7 +84,25 @@ void logIn() async {
                     children: [
                     const AuthHeaderLabel(headerLabel: 'Log In',),
                     
-                    const SizedBox(height: 50,),
+                     SizedBox(
+                      height: 50,
+                      child: sendEmailVerification == true
+                          ? Center(
+                            child: YellowButton(
+                              label: 'resend Email Verification', 
+                              onPressed: () async{
+                                AuthRepo.sendEmailVerification();
+                                Future.delayed(const Duration(seconds: 10)).whenComplete((){
+                                  setState(() {
+                                  sendEmailVerification = false;
+                                });
+                              });
+                            }, 
+                            width: 0.6),
+                          )
+                          : const SizedBox(),
+
+                    ),
                     Padding(
                       padding: const EdgeInsets.symmetric(vertical: 10),
                       child: TextFormField(

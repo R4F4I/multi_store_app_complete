@@ -35,14 +35,12 @@ void logIn() async {
       if (_formKey.currentState!.validate()) {
         
           try{
-              AuthRepo.signUpWithEmailAndPassword(email, password);
-
-
+              AuthRepo.logInWithEmailAndPassword(email, password);
               AuthRepo.reloadUserData();
+              
               if (await AuthRepo.emailVerified()){
                   _formKey.currentState!.reset();
                   await Future.delayed(const Duration(microseconds: 100)).whenComplete(()=>Navigator.pushReplacementNamed(context, '/customer_home')); 
-                  //sendEmailVerification = true;
               } 
               else {
                 setState(() {
