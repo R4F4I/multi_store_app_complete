@@ -2,6 +2,7 @@
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:multi_store_app/minor_screens/forgot_password.dart';
 import 'package:multi_store_app/providers/auth_repo.dart';
 import 'package:multi_store_app/widgets/auth_widgets.dart';
 import 'package:multi_store_app/widgets/snackbar.dart';
@@ -167,7 +168,7 @@ void logIn() async {
                           ),
                     ),
                     TextButton(
-                      onPressed: (){}, 
+                      onPressed: (){Navigator.push(context,MaterialPageRoute(builder: (context)=> const ForgotPassword()));}, 
                       child: const Text(
                         "Forgot Password? ",
                         style: TextStyle(

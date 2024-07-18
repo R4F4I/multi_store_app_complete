@@ -70,7 +70,7 @@ class AuthRepo{
   // uid getter
   static get uid{
     User user = FirebaseAuth.instance.currentUser!;
-    user.uid;
+    return user.uid;
   }
 
   //-------------------------------------------------------------------------------

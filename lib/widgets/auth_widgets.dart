@@ -84,18 +84,21 @@ class AuthHeaderLabel extends StatelessWidget {
 }
 
 
-var textFormDecoration  =  InputDecoration(
-                        labelText: 'Full Name',
-                        hintText: 'Enter your full Name please',
-                        border: 
-                          OutlineInputBorder(borderRadius: BorderRadius.circular(25)),
-                          enabledBorder: OutlineInputBorder(
-                            borderSide: const BorderSide(color: Colors.purple, width: 1),
-                            borderRadius: BorderRadius.circular(25)),
-                            focusedBorder: OutlineInputBorder(
-                              borderSide: const BorderSide(color: Colors.deepPurpleAccent, width: 2),
-                              borderRadius: BorderRadius.circular(25)),
-                        );
+var textFormDecoration  =  
+InputDecoration(
+    labelText: 'Full Name',
+    hintText: 'Enter your full Name please',
+    border: OutlineInputBorder(
+      borderRadius: BorderRadius.circular(25)),
+      enabledBorder: OutlineInputBorder(
+        borderSide: const BorderSide(color: Colors.purple, width: 1),
+        borderRadius: BorderRadius.circular(25)
+      ),
+      focusedBorder: OutlineInputBorder(
+        borderSide: const BorderSide(color: Colors.deepPurpleAccent, width: 2),
+        borderRadius: BorderRadius.circular(25)
+      ),
+    );
 
 
 extension EmailValidator on String{
