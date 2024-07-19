@@ -36,9 +36,14 @@ void logIn() async {
       if (_formKey.currentState!.validate()) {
         
           try{
-              AuthRepo.logInWithEmailAndPassword(email, password);
-              AuthRepo.reloadUserData();
+              try {
+                AuthRepo.logInWithEmailAndPassword(email, password);
+                AuthRepo.reloadUserData();
+              } catch (e) {
+                MyMessageHandler.showSnackBar(_scaffoldKey, e.toString());
+              }
               
+
               if (await AuthRepo.emailVerified()){
                   _formKey.currentState!.reset();
                   await Future.delayed(const Duration(microseconds: 100)).whenComplete(()=>Navigator.pushReplacementNamed(context, '/customer_home')); 

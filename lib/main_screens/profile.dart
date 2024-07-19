@@ -254,10 +254,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             RepeatedListTIle(
                                         title: 'Edit Profile',
                                         icon: Icons.edit,
-                                        onPressed: () {Navigator.push(context, MaterialPageRoute(builder: (context)=>const ChangePassword()));},
+                                        onPressed: () {},
                                       ),
                             const YellowDivider(),
-                            RepeatedListTIle(title: 'Change Password',icon: Icons.lock,onPressed:() {} ,),
+                            RepeatedListTIle(
+                                        title: 'Change Password',
+                                        icon: Icons.lock,
+                                        onPressed: () {Navigator.push(context, MaterialPageRoute(builder: (context)=>const ChangePassword()));},
+                                      ),
                             const YellowDivider(),
                             RepeatedListTIle(title: 'Log Out',icon: Icons.logout,
 
