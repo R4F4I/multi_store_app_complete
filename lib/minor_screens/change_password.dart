@@ -1,7 +1,9 @@
 
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:multi_store_app/customer_screens/add_address.dart';
+import 'package:multi_store_app/providers/auth_repo.dart';
 import 'package:multi_store_app/widgets/appbar_widgets.dart';
 import 'package:multi_store_app/widgets/yellow_button.dart';
 
@@ -15,10 +17,10 @@ class ChangePassword extends StatefulWidget {
 class _ChangePasswordState extends State<ChangePassword> {
 
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
-  final TextEditingController emailController = TextEditingController();
+  final TextEditingController oldPasswordController = TextEditingController();
   final GlobalKey<ScaffoldMessengerState> _scaffoldKey = GlobalKey<ScaffoldMessengerState>();
 
-
+  bool checkPassword = true;
 
 
 
@@ -54,9 +56,17 @@ class _ChangePasswordState extends State<ChangePassword> {
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: TextFormField(
+                    validator: (value) {
+                      if (value!.isEmpty){
+                        return 'enter your password';
+                      }
+                      return null;
+                    },
+                    controller: oldPasswordController,
                     decoration: textFormDecoration.copyWith(
                       labelText: 'Old Password',
                       hintText: 'Enter your current password',
+                      errorText: checkPassword!=true ? 'password not valid' : null
                     ),
                   ),
                 ),
@@ -79,7 +89,22 @@ class _ChangePasswordState extends State<ChangePassword> {
                   ),
                 ),
                 const Spacer(),
-                YellowButton(label: 'save changes', onPressed: () {}, width: 0.7),
+                YellowButton(
+                    label: 'save changes', 
+                    onPressed: () async{
+                      if (formKey.currentState!.validate()){
+                        checkPassword = await AuthRepo.checkOldPassword(FirebaseAuth.instance.currentUser!.email, oldPasswordController.text);
+                        setState(() {
+                          
+                        });
+                        checkPassword == true  ? print('old password is valid') : print('old password is invalid');
+                        print('form valid');
+                      } else {
+                        print('form not valid');
+                      }
+                    }, 
+                    width: 0.7,
+                  ),
               
               ],),
             ),
