@@ -5,6 +5,7 @@ import 'package:multi_store_app/customer_screens/address_book.dart';
 import 'package:multi_store_app/customer_screens/customer_orders.dart';
 import 'package:multi_store_app/customer_screens/wishlist.dart';
 import 'package:multi_store_app/main_screens/cart.dart';
+import 'package:multi_store_app/minor_screens/change_password.dart';
 import 'package:multi_store_app/providers/cart_provider.dart';
 import 'package:multi_store_app/providers/wish_provider.dart';
 import 'package:multi_store_app/widgets/alert_dialog.dart';
@@ -250,7 +251,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           borderRadius: BorderRadius.circular(16)),
                           child:  Column(children: [
                           
-                            RepeatedListTIle(title: 'Edit Profile',icon: Icons.edit,onPressed:() {} ,),
+                            RepeatedListTIle(
+                                        title: 'Edit Profile',
+                                        icon: Icons.edit,
+                                        onPressed: () {Navigator.push(context, MaterialPageRoute(builder: (context)=>const ChangePassword()));},
+                                      ),
                             const YellowDivider(),
                             RepeatedListTIle(title: 'Change Password',icon: Icons.lock,onPressed:() {} ,),
                             const YellowDivider(),
