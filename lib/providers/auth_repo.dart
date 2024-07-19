@@ -66,6 +66,18 @@ class AuthRepo{
   }
 
   //-------------------------------------------------------------------------------
+  // password reset via email 
+  static Future <void> sendPasswordResetEmail(email) async{
+      
+    try {
+        await FirebaseAuth.instance.sendPasswordResetEmail(email: email);
+    } catch (e) {
+        print(e);
+    }
+  }
+
+  //-------------------------------------------------------------------------------
+
 
   // uid getter
   static get uid{
