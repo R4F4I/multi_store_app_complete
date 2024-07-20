@@ -90,7 +90,7 @@ void signUp() async {
     if (_formKey.currentState!.validate()) {
       if (_imageFile != null) {
         try{
-          AuthRepo.signUpWithEmailAndPassword(email, password);
+          await FirebaseAuth.instance.createUserWithEmailAndPassword(email: email,password: password);
 
         
 
@@ -104,7 +104,7 @@ void signUp() async {
 
         storeLogo = await ref.getDownloadURL();
 
-        _uid = AuthRepo.uid;
+        _uid = FirebaseAuth.instance.currentUser!.uid;
 
          AuthRepo.updateSupplierName(storeName);
          AuthRepo.updateStoreLogo(storeLogo);

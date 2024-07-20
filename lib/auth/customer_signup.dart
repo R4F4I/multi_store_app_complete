@@ -8,7 +8,6 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:multi_store_app/providers/auth_repo.dart';
 import 'package:multi_store_app/widgets/auth_widgets.dart';
 import 'package:multi_store_app/widgets/snackbar.dart';
 
@@ -90,8 +89,8 @@ void signUp() async {
     if (_formKey.currentState!.validate()) {
       if (_imageFile != null) {
         try{
-          AuthRepo.signUpWithEmailAndPassword(email, password);
-          AuthRepo.sendEmailVerification();
+          await FirebaseAuth.instance.createUserWithEmailAndPassword(email: email,password: password);
+          await FirebaseAuth.instance.currentUser!.sendEmailVerification();
         
         firebase_storage.Reference ref = firebase_storage
         .FirebaseStorage
@@ -103,7 +102,7 @@ void signUp() async {
         profileImage = await ref.getDownloadURL();
 
 
-        await customers.doc(AuthRepo.uid).set({
+        await customers.doc(FirebaseAuth.instance.currentUser!.uid).set({
           'name':name,
           'email':email,
           'profileimage':profileImage,

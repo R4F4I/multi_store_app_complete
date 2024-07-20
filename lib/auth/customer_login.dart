@@ -3,7 +3,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:multi_store_app/minor_screens/forgot_password.dart';
-import 'package:multi_store_app/providers/auth_repo.dart';
 import 'package:multi_store_app/widgets/auth_widgets.dart';
 import 'package:multi_store_app/widgets/snackbar.dart';
 import 'package:multi_store_app/widgets/yellow_button.dart';
@@ -36,15 +35,10 @@ void logIn() async {
       if (_formKey.currentState!.validate()) {
         
           try{
-              try {
-                AuthRepo.logInWithEmailAndPassword(email, password);
-                AuthRepo.reloadUserData();
-              } catch (e) {
-                print('AuthRepo.logInWithEmailAndPassword exception caught');
-                MyMessageHandler.showSnackBar(_scaffoldKey, e.toString());
-              }
+              await FirebaseAuth.instance.signInWithEmailAndPassword(email: email,password: password);                
+              _formKey.currentState!.reset();
+              await FirebaseAuth.instance.currentUser!.reload();  
               
-
               if ( FirebaseAuth.instance.currentUser!.emailVerified){
                   _formKey.currentState!.reset();
                   await Future.delayed(const Duration(microseconds: 100)).whenComplete(()=>Navigator.pushReplacementNamed(context, '/customer_home')); 
@@ -100,7 +94,7 @@ void logIn() async {
                           child: YellowButton(
                             label: 'resend Email Verification', 
                             onPressed: () async{
-                              AuthRepo.sendEmailVerification();
+                              await FirebaseAuth.instance.currentUser!.sendEmailVerification();
                               Future.delayed(const Duration(seconds: 10)).whenComplete((){
                                 setState(() {
                                 sendEmailVerification = false;
