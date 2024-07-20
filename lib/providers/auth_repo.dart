@@ -22,10 +22,10 @@ class AuthRepo{
     final auth = FirebaseAuth.instance;
 
     try {
-     await auth.signInWithEmailAndPassword(email: email,password: password); 
+      await auth.signInWithEmailAndPassword(email: email,password: password);  
     } catch (e) {
       print(e);
-    }
+    } 
   }
 
   //-------------------------------------------------------------------------------
@@ -45,19 +45,22 @@ class AuthRepo{
   //  - we cannot remove async because `userIsVerified` is dependant on it
   static Future <bool> emailVerified() async{
 
-    final User user;
-
-      user  = FirebaseAuth.instance.currentUser!;
-
+    final User? user;
     try {
-      bool userIsVerified = user.emailVerified;
+      user  = FirebaseAuth.instance.currentUser!;
+        try {
+          bool userIsVerified = user.emailVerified;
 
-      return userIsVerified == true;
-    } catch (e) {
+          return userIsVerified == true;
+        } catch (e) {
+          print(e);
+
+          return false;
+        }
+     } catch (e) {
       print(e);
-
-      return false;
     }
+      return true;    
   }
 
   //-------------------------------------------------------------------------------

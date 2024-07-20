@@ -40,11 +40,12 @@ void logIn() async {
                 AuthRepo.logInWithEmailAndPassword(email, password);
                 AuthRepo.reloadUserData();
               } catch (e) {
+                print('AuthRepo.logInWithEmailAndPassword exception caught');
                 MyMessageHandler.showSnackBar(_scaffoldKey, e.toString());
               }
               
 
-              if (await AuthRepo.emailVerified()){
+              if ( FirebaseAuth.instance.currentUser!.emailVerified){
                   _formKey.currentState!.reset();
                   await Future.delayed(const Duration(microseconds: 100)).whenComplete(()=>Navigator.pushReplacementNamed(context, '/customer_home')); 
               } 
@@ -59,6 +60,7 @@ void logIn() async {
           } 
           on FirebaseAuthException catch(e){
             setState(() {processing=false;});
+            print('customer login exception caught');
             MyMessageHandler.showSnackBar(_scaffoldKey,e.message.toString());
           }
 
