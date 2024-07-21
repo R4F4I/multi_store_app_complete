@@ -112,7 +112,7 @@ class AuthRepo{
 
 
   // update supplier name
-  static Future <void> updateSupplierName(storeName) async{
+  static Future <void> updateDisplayName(storeName) async{
 
     User user = FirebaseAuth.instance.currentUser!;
     await user.updateDisplayName(storeName);
@@ -122,7 +122,7 @@ class AuthRepo{
 
 
   // update supplier logo
-  static Future <void> updateStoreLogo(storeLogo) async{
+  static Future <void> updateProfileImage(storeLogo) async{
 
     User user = FirebaseAuth.instance.currentUser!;
     await user.updatePhotoURL(storeLogo);

@@ -24,13 +24,13 @@ class _ChangePasswordState extends State<ChangePassword> {
 
   bool checkPassword = true;
 
-  //TODO: there is a problem in the overflow
 
   @override
   Widget build(BuildContext context) {
     return ScaffoldMessenger(
       key: _scaffoldKey,
       child: Scaffold(
+        resizeToAvoidBottomInset: false, // fixes overflow
         appBar: AppBar(
           elevation: 0,
           backgroundColor: Colors.white,

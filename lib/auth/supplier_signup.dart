@@ -106,8 +106,8 @@ void signUp() async {
 
         _uid = FirebaseAuth.instance.currentUser!.uid;
 
-         AuthRepo.updateSupplierName(storeName);
-         AuthRepo.updateStoreLogo(storeLogo);
+         AuthRepo.updateDisplayName(storeName);
+         AuthRepo.updateProfileImage(storeLogo);
         
         await suppliers.doc(_uid).set({
           'storename':storeName,
