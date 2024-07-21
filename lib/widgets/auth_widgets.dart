@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class AuthMainButton extends StatelessWidget {
   final String mainButtonLabel;
@@ -106,5 +107,72 @@ extension EmailValidator on String{
     return RegExp(
       r'^[a-zA-Z0-9]+[\-\_\.]*[a-zA-Z0-9]*[@][a-zA-Z0-9]{2,}[\.][a-zA-Z]{2,3}$'
       ).hasMatch(this);
+  }
+}
+
+class LoginDivider extends StatelessWidget {
+  const LoginDivider({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return const Padding(
+      padding: EdgeInsets.all(8.0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+        SizedBox(
+          width: 80,
+          child: Divider(
+            color: Colors.grey,
+            thickness: 1,
+          ),
+        ),
+        Text(
+          '  Or  ',
+          style: TextStyle(color: Colors.grey),
+        ),
+        SizedBox(
+          width: 80,
+          child: Divider(
+            color: Colors.grey,
+            thickness: 1,
+          ),
+        ),
+
+      ],),
+    );
+  }
+}
+
+
+class GoogleSignInButton extends StatelessWidget {
+  const GoogleSignInButton({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(50, 50, 50, 20),
+      child: Material(
+        elevation: 3,
+        color: Colors.grey.shade300,
+        borderRadius: BorderRadius.circular(6),
+        child: MaterialButton(
+          onPressed: (){},
+          child: const Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              Icon(
+                FontAwesomeIcons.google,
+                color: Colors.red,
+              ),
+              Text(
+                'Sign In with Google',
+                style: TextStyle(color: Colors.red,fontSize: 16),
+              )
+            ],
+          ),
+        ),
+      ),
+    );
   }
 }
