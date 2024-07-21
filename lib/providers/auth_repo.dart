@@ -127,6 +127,22 @@ class AuthRepo{
     User user = FirebaseAuth.instance.currentUser!;
     await user.updatePhotoURL(storeLogo);
   }
+  
+  //-------------------------------------------------------------------------------
+
+
+  // update supplier logo
+  static Future <void> updateUserPassword(password) async{
+
+    User user = FirebaseAuth.instance.currentUser!;
+    try {
+      await user.updatePassword(password);
+    } catch (e) {
+      print(e);
+    }
+    
+    
+  }
 
   
   

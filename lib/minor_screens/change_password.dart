@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:multi_store_app/customer_screens/add_address.dart';
 import 'package:multi_store_app/providers/auth_repo.dart';
 import 'package:multi_store_app/widgets/appbar_widgets.dart';
+import 'package:multi_store_app/widgets/snackbar.dart';
 import 'package:multi_store_app/widgets/yellow_button.dart';
 import 'package:flutter_pw_validator/flutter_pw_validator.dart';
 
@@ -22,7 +23,7 @@ class _ChangePasswordState extends State<ChangePassword> {
   final TextEditingController newPasswordController = TextEditingController();
   final GlobalKey<ScaffoldMessengerState> _scaffoldKey = GlobalKey<ScaffoldMessengerState>();
 
-  bool checkPassword = true;
+  bool checkOldPasswordValidation = true;
 
 
   @override
@@ -68,13 +69,18 @@ class _ChangePasswordState extends State<ChangePassword> {
                     decoration: textFormDecoration.copyWith(
                       labelText: 'Old Password',
                       hintText: 'Enter your current password',
-                      errorText: checkPassword!=true ? 'password not valid' : null
+                      errorText: checkOldPasswordValidation!=true ? 'password not valid' : null
                     ),
                   ),
                 ),
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: TextFormField(
+                    validator: (value){
+                      if (value!.isEmpty) {
+                        return 'enter your new password';
+                      } return null;
+                    },
                     controller: newPasswordController,
                     decoration: textFormDecoration.copyWith(
                       labelText: 'New Password',
@@ -88,6 +94,8 @@ class _ChangePasswordState extends State<ChangePassword> {
                     validator: (value){
                       if(value != newPasswordController.text){
                         return 'password not matching';
+                      } else if (value!.isEmpty) {
+                        return 're-enter your new password';
                       } else {
                          return null;
                       }
@@ -118,11 +126,20 @@ class _ChangePasswordState extends State<ChangePassword> {
                     label: 'save changes', 
                     onPressed: () async{
                       if (formKey.currentState!.validate()){
-                        checkPassword = await AuthRepo.checkOldPassword(FirebaseAuth.instance.currentUser!.email, oldPasswordController.text);
+                        checkOldPasswordValidation = await AuthRepo.checkOldPassword(FirebaseAuth.instance.currentUser!.email, oldPasswordController.text);
                         setState(() {
                           
                         });
-                        checkPassword == true  ? print('old password is valid') : print('old password is invalid');
+                        checkOldPasswordValidation == true
+                        ? await AuthRepo.updateUserPassword(newPasswordController.text.trim()).whenComplete((){
+                            formKey.currentState!.reset();
+                            newPasswordController.clear();
+                            oldPasswordController.clear();
+
+                            MyMessageHandler.showSnackBar(_scaffoldKey, 'Your password has been successfully updated!');
+                            Future.delayed(const Duration(seconds: 3)).whenComplete(()=>Navigator.pop(context));
+                        })
+                        : print('old password is invalid');
                         print('form valid');
                       } else {
                         print('form not valid');
