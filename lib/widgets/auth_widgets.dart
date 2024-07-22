@@ -146,7 +146,8 @@ class LoginDivider extends StatelessWidget {
 
 
 class GoogleSignInButton extends StatelessWidget {
-  const GoogleSignInButton({super.key});
+  final Function()? onPressed;
+  const GoogleSignInButton({super.key, required this.onPressed});
 
   @override
   Widget build(BuildContext context) {
@@ -157,7 +158,7 @@ class GoogleSignInButton extends StatelessWidget {
         color: Colors.grey.shade300,
         borderRadius: BorderRadius.circular(6),
         child: MaterialButton(
-          onPressed: (){},
+          onPressed: onPressed,
           child: const Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [

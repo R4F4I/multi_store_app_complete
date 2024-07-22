@@ -6,7 +6,7 @@ import 'package:multi_store_app/minor_screens/forgot_password.dart';
 import 'package:multi_store_app/widgets/auth_widgets.dart';
 import 'package:multi_store_app/widgets/snackbar.dart';
 import 'package:multi_store_app/widgets/yellow_button.dart';
-
+import 'package:google_sign_in/google_sign_in.dart';
 
 class CustomerLogin extends StatefulWidget {
   const CustomerLogin({super.key});
@@ -16,6 +16,23 @@ class CustomerLogin extends StatefulWidget {
 }
 
 class _CustomerLoginState extends State<CustomerLogin> {
+
+  Future<UserCredential> signInWithGoogle() async {
+    // Trigger the authentication flow
+    final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+
+    // Obtain the auth details from the request
+    final GoogleSignInAuthentication? googleAuth = await googleUser?.authentication;
+
+    // Create a new credential
+    final credential = GoogleAuthProvider.credential(
+      accessToken: googleAuth?.accessToken,
+      idToken: googleAuth?.idToken,
+    );
+
+    // Once signed in, return the UserCredential
+    return await FirebaseAuth.instance.signInWithCredential(credential);
+  }
   
   late String email;
   late String password;
@@ -188,9 +205,17 @@ void logIn() async {
                      : AuthMainButton(
                        mainButtonLabel: 'Log In',
                         onPressed: (){logIn();},
-                    ),
+                     ),
                      const LoginDivider(),
-                     const GoogleSignInButton()
+                     GoogleSignInButton(
+                        onPressed: () async{
+                          try {
+                            await signInWithGoogle();
+                          } catch (e) {
+                            print(e);
+                          }                          
+                        },
+                      )
                   ]),
                 ),
               ),

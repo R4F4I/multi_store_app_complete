@@ -188,7 +188,7 @@ void logIn() async {
                         onPressed: (){logIn();},
                     ),
                     const LoginDivider(),
-                    const GoogleSignInButton()
+                    //const GoogleSignInButton()
                   ]),
                 ),
               ),
