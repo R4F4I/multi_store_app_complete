@@ -1,5 +1,7 @@
 // ignore_for_file: avoid_print,
 
+import 'dart:async';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -19,7 +21,19 @@ class CustomerLogin extends StatefulWidget {
 class _CustomerLoginState extends State<CustomerLogin> {
 
   CollectionReference customers = FirebaseFirestore.instance.collection('customers');
-  late String _uid;
+
+  Future <bool> checkIfDocExists(String docId) async{
+    try {
+      var doc = await customers.doc(docId).get();
+      return doc.exists;
+
+    } catch (e) {
+      return false;
+    }
+  }
+
+  bool docExists = false;
+
 
   Future<UserCredential> signInWithGoogle() async {
     // Trigger the authentication flow
@@ -38,23 +52,25 @@ class _CustomerLoginState extends State<CustomerLogin> {
     print(credential);
     return await FirebaseAuth.instance.signInWithCredential(credential)
       .whenComplete(() async{
-        
+        User user =  FirebaseAuth.instance.currentUser!;
 
-        _uid = FirebaseAuth.instance.currentUser!.uid;
 
         print(googleUser!.id);
-        print(_uid);
         print(googleUser);
+        print(user);
         
+        docExists = await checkIfDocExists(user.uid);
 
-        await customers.doc(_uid).set({
-          'name':googleUser.displayName,
-          'email':googleUser.email,
-          'profileimage':googleUser.photoUrl,
-          'phone':'',
-          'address':'',
-          'cid':_uid, // customer_i.d
-        }).then((value)=>Navigator.pushReplacementNamed(context,'/customer_home'));
+        docExists ==false
+        ?  await customers.doc(user.uid).set({
+            'name':user.displayName,
+            'email':user.email,
+            'profileimage':user.photoURL,
+            'phone':'',
+            'address':'',
+            'cid':user.uid, // customer_i.d
+          }).then((value)=>navigate())
+        : navigate();
       });
   }
   
@@ -66,8 +82,11 @@ class _CustomerLoginState extends State<CustomerLogin> {
   bool processing = false;
   bool sendEmailVerification = false;
 
+  void navigate(){
+    Navigator.pushReplacementNamed(context,'/customer_home');
+  }
 
-void logIn() async {
+  void logIn() async {
   
     setState(() {
       processing=true;
