@@ -1,5 +1,6 @@
 // ignore_for_file: avoid_print,
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:multi_store_app/minor_screens/forgot_password.dart';
@@ -17,6 +18,9 @@ class CustomerLogin extends StatefulWidget {
 
 class _CustomerLoginState extends State<CustomerLogin> {
 
+  CollectionReference customers = FirebaseFirestore.instance.collection('customers');
+  late String _uid;
+
   Future<UserCredential> signInWithGoogle() async {
     // Trigger the authentication flow
     final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
@@ -31,7 +35,27 @@ class _CustomerLoginState extends State<CustomerLogin> {
     );
 
     // Once signed in, return the UserCredential
-    return await FirebaseAuth.instance.signInWithCredential(credential);
+    print(credential);
+    return await FirebaseAuth.instance.signInWithCredential(credential)
+      .whenComplete(() async{
+        
+
+        _uid = FirebaseAuth.instance.currentUser!.uid;
+
+        print(googleUser!.id);
+        print(_uid);
+        print(googleUser);
+        
+
+        await customers.doc(_uid).set({
+          'name':googleUser.displayName,
+          'email':googleUser.email,
+          'profileimage':googleUser.photoUrl,
+          'phone':'',
+          'address':'',
+          'cid':_uid, // customer_i.d
+        }).then((value)=>Navigator.pushReplacementNamed(context,'/customer_home'));
+      });
   }
   
   late String email;
@@ -212,8 +236,9 @@ void logIn() async {
                           try {
                             await signInWithGoogle();
                           } catch (e) {
+                            MyMessageHandler.showSnackBar(_scaffoldKey, e.toString());
                             print(e);
-                          }                          
+                          }
                         },
                       )
                   ]),

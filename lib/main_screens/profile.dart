@@ -82,7 +82,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     child: Padding(
                       padding: const EdgeInsets.only(top:25 ,left: 30),
                       child: Row(children: [
-                        data['profileimage'] == ''
+                        data['profileimage'] == '' || data['profileimage'] == null
                         ? const CircleAvatar(
                           radius: 50,
                           backgroundImage: AssetImage('images/inapp/guest.jpg'),
