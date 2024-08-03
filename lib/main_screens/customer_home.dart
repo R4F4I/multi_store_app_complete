@@ -1,5 +1,4 @@
 
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:multi_store_app/main_screens/cart.dart';
 import 'package:multi_store_app/main_screens/home.dart';
@@ -25,7 +24,7 @@ class _CustomerHomeScreenState extends State<CustomerHomeScreen> {
     const CategoryScreen(),
     const StoresScreen(),
     const CartScreen(),
-    ProfileScreen(documentId: FirebaseAuth.instance.currentUser!.uid,)
+    const ProfileScreen()
 
   ];
   /*in the widget '_tabs' all values are stored in indexed form hence

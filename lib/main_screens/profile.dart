@@ -15,17 +15,29 @@ import 'package:provider/provider.dart';
 
 
 class ProfileScreen extends StatefulWidget {
-  final String documentId;
-  const ProfileScreen({super.key, required this.documentId});
+  const ProfileScreen({super.key});
 
   @override
   State<ProfileScreen> createState() => _ProfileScreenState();
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
+  late String documentId;
   CollectionReference customers = FirebaseFirestore.instance.collection('customers');
   CollectionReference anonymous = FirebaseFirestore.instance.collection('anonymous');
   
+  @override
+  void initState() {
+    FirebaseAuth.instance.authStateChanges().listen((User? user){
+      if (user != null){
+        print(user.uid);
+        setState(() {
+          documentId=user.uid;
+        });
+      }
+    });
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -33,8 +45,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
     
     FutureBuilder<DocumentSnapshot>(
       future: FirebaseAuth.instance.currentUser!.isAnonymous
-        ? anonymous.doc(widget.documentId).get()
-        : customers.doc(widget.documentId).get(),
+        ? anonymous.doc(documentId).get()
+        : customers.doc(documentId).get(),
       builder:
           (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
 
