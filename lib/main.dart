@@ -5,6 +5,7 @@ import 'package:multi_store_app/auth/customer_signup.dart';
 import 'package:multi_store_app/auth/supplier_login.dart';
 import 'package:multi_store_app/auth/supplier_signup.dart';
 import 'package:multi_store_app/main_screens/customer_home.dart';
+import 'package:multi_store_app/main_screens/onboarding_screen.dart';
 import 'package:multi_store_app/main_screens/supplier_home.dart';
 
 import 'package:multi_store_app/main_screens/welcome_screen.dart';                    /*CustomerHomeScreen() is called by being imported*/
@@ -49,9 +50,10 @@ class MyApp extends StatelessWidget {
     return  MaterialApp(
       debugShowCheckedModeBanner: false,
       // home: const WelcomeScreen(),
-      initialRoute: '/welcome_screen',
+      initialRoute: '/onboarding_screen',
       routes: {
         '/welcome_screen' :(context) =>const WelcomeScreen(),
+        '/onboarding_screen' :(context) =>const OnboardingScreen(),
         '/customer_home'  :(context) =>const CustomerHomeScreen(),
         '/supplier_home'  :(context) =>const SupplierHomeScreen(),
         '/customer_signup':(context) =>const CustomerRegister(),

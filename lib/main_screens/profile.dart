@@ -34,7 +34,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         setState(() {
           documentId=user.uid;
         });
-      }
+      } //TODO: Work on the user == null case
     });
     super.initState();
   }
