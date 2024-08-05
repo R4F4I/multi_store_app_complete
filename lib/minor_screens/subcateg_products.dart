@@ -8,7 +8,9 @@ import 'package:staggered_grid_view_flutter/widgets/staggered_tile.dart';
 class SubCategProducts extends StatefulWidget {
   final String subcategName;
   final String maincategName;
-  const SubCategProducts({super.key, required this.subcategName, required this.maincategName});
+  final bool fromOnBoarding;
+
+  const SubCategProducts({super.key, required this.subcategName, required this.maincategName, this.fromOnBoarding = false});
 
   @override
   State<SubCategProducts> createState() => _SubCategProductsState();
@@ -26,7 +28,17 @@ class _SubCategProductsState extends State<SubCategProducts> {
       appBar: AppBar(
         elevation: 0,
         backgroundColor: Colors.white,
-        leading: const AppBarBackButton(),
+        leading: widget.fromOnBoarding == true 
+        ?IconButton(
+          onPressed: (){
+            Navigator.pushReplacementNamed(context, '/customer_home');
+          },
+          icon: const Icon(
+            Icons.arrow_back_ios_new, 
+            color: Colors.black
+            )
+          )
+        : const AppBarBackButton(),
           
 
         title: AppBarTitle(title: widget.subcategName)

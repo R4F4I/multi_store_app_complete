@@ -3,6 +3,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:multi_store_app/minor_screens/subcateg_products.dart';
 
 class OnboardingScreen extends StatefulWidget {
   const OnboardingScreen({super.key});
@@ -56,7 +57,22 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     return Scaffold(
       body: Stack(
         children: [
-          Image.asset('images/onboard/watches.JPEG'),
+          GestureDetector(
+            onTap: () {
+              stopTimer();
+              Navigator.of(context).pushAndRemoveUntil(
+                MaterialPageRoute(
+                  builder: (context) => const SubCategProducts(
+                      fromOnBoarding: true,
+                      subcategName: 'smart watch',
+                      maincategName: 'electronics'
+                    )
+                  ),
+                 (Route route)=> false
+                );
+            },
+            child: Image.asset('images/onboard/watches.JPEG'),
+          ),
           Positioned(
             top: 60,
             right: 30,
