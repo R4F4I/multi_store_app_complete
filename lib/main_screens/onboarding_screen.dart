@@ -3,6 +3,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:multi_store_app/galleries/shoes_gallery.dart';
 import 'package:multi_store_app/minor_screens/subcateg_products.dart';
 
 class OnboardingScreen extends StatefulWidget {
@@ -62,16 +63,22 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
               stopTimer();
               Navigator.of(context).pushAndRemoveUntil(
                 MaterialPageRoute(
+                  builder: (context) => const ShoesGalleryScreen(
+                    fromOnBoarding: true,
+                  )
+                  ),
+
+                /* MaterialPageRoute(
                   builder: (context) => const SubCategProducts(
                       fromOnBoarding: true,
                       subcategName: 'smart watch',
                       maincategName: 'electronics'
                     )
-                  ),
+                  ) */
                  (Route route)=> false
                 );
             },
-            child: Image.asset('images/onboard/watches.JPEG'),
+            child: Image.asset('images/onboard/shoes.JPEG'),
           ),
           Positioned(
             top: 60,
