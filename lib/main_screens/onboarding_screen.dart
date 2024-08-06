@@ -1,6 +1,7 @@
 // ignore_for_file: avoid_print
 
 import 'dart:async';
+import 'dart:ffi';
 import 'dart:math';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -8,6 +9,13 @@ import 'package:flutter/material.dart';
 import 'package:multi_store_app/galleries/shoes_gallery.dart';
 import 'package:multi_store_app/minor_screens/hot_deals.dart';
 import 'package:multi_store_app/minor_screens/subcateg_products.dart';
+
+
+enum Offers {
+  watches,
+  shoes,
+  sale,
+}
 
 class OnboardingScreen extends StatefulWidget {
   const OnboardingScreen({super.key});
@@ -21,12 +29,16 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   Timer? countDownTimer;
   int seconds = 3;
   int? maxDiscount;
+  late int selectedIndex;
+  late String offerName;
+  late String assetName;
   List<int> discounts=[];
 
   @override
   void initState() {
+    selectRandomOffer();
     startTimer();
-    getMaxDiscount();
+    getMaxDiscount();    
     super.initState();
   }
 
@@ -34,6 +46,22 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   void dispose() {
     super.dispose();
   }
+
+  void selectRandomOffer(){
+
+    for (var i = 0; i < Offers.values.length; i++) {
+      var random = Random();
+      setState(() {
+        selectedIndex = random.nextInt(3);
+        offerName = Offers.values[selectedIndex].toString();
+        assetName = offerName.replaceAll("Offers.", "");
+      });
+    }
+    print(selectedIndex);
+    print(offerName);
+    print(assetName);
+  }
+
 
   void startTimer(){
     countDownTimer = Timer.periodic(const Duration(seconds: 1), (timer){
@@ -45,9 +73,9 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
         stopTimer();
         Navigator.pushReplacementNamed(context,'/customer_home');
       }
-      print('timer.tick: $timer.tick');
-      print(timer.tick);
-      print('seconds: $seconds');
+      //print('timer.tick: $timer.tick');
+      //print(timer.tick);
+      //print('seconds: $seconds');
       
     });
   }
@@ -86,7 +114,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                   builder: (context) => HotDealsScreen(
                     fromOnBoarding: true,
                     maxDiscount: maxDiscount!.toString(),
-                  )
+                    )
                   ),
 
                 /* MaterialPageRoute(
@@ -99,7 +127,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                  (Route route)=> false
                 );
             },
-            child: Image.asset('images/onboard/sale.JPEG'),
+            child: Image.asset('images/onboard/$assetName.JPEG'),
           ),
           Positioned(
             top: 60,
