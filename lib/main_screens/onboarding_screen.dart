@@ -32,6 +32,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   late int selectedIndex;
   late String offerName;
   late String assetName;
+  late Offers offer;
   List<int> discounts=[];
 
   @override
@@ -55,6 +56,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
         selectedIndex = random.nextInt(3);
         offerName = Offers.values[selectedIndex].toString();
         assetName = offerName.replaceAll("Offers.", "");
+        offer = Offers.values[selectedIndex];
       });
     }
     print(selectedIndex);
@@ -84,6 +86,51 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     countDownTimer!.cancel();
   }
 
+  Widget buildAsset (){
+    return Image.asset('images/onboard/$assetName.JPEG');
+  }
+
+  void navigateToOffer(){
+    switch (offer) {      
+      case Offers.watches:
+        
+        Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(
+            builder: (context) => const SubCategProducts(
+                fromOnBoarding: true,
+                subcategName: 'smart watch',
+                maincategName: 'electronics'
+              )
+            ),
+          (Route route)=> false
+        );
+        break;
+
+      case Offers.shoes:
+        
+        Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(
+            builder: (context) => const ShoesGalleryScreen(fromOnBoarding: true,)
+            ),
+          (Route route)=> false
+        );
+        break;
+
+      case Offers.sale:
+        
+        Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(
+            builder: (context) => HotDealsScreen(
+              fromOnBoarding: true,
+              maxDiscount: maxDiscount!.toString(),
+              )
+            ),
+            (Route route)=> false
+        );
+        break;
+    }
+  }
+
   void getMaxDiscount(){
     FirebaseFirestore.instance
     .collection('products')
@@ -109,25 +156,9 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
           GestureDetector(
             onTap: () {
               stopTimer();
-              Navigator.of(context).pushAndRemoveUntil(
-                MaterialPageRoute(
-                  builder: (context) => HotDealsScreen(
-                    fromOnBoarding: true,
-                    maxDiscount: maxDiscount!.toString(),
-                    )
-                  ),
-
-                /* MaterialPageRoute(
-                  builder: (context) => const SubCategProducts(
-                      fromOnBoarding: true,
-                      subcategName: 'smart watch',
-                      maincategName: 'electronics'
-                    )
-                  ) */
-                 (Route route)=> false
-                );
+              navigateToOffer();
             },
-            child: Image.asset('images/onboard/$assetName.JPEG'),
+            child: buildAsset(),
           ),
           Positioned(
             top: 60,
