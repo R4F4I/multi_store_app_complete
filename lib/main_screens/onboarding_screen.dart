@@ -1,9 +1,12 @@
 // ignore_for_file: avoid_print
 
 import 'dart:async';
+import 'dart:math';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:multi_store_app/galleries/shoes_gallery.dart';
+import 'package:multi_store_app/minor_screens/hot_deals.dart';
 import 'package:multi_store_app/minor_screens/subcateg_products.dart';
 
 class OnboardingScreen extends StatefulWidget {
@@ -17,10 +20,13 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 
   Timer? countDownTimer;
   int seconds = 3;
+  int? maxDiscount;
+  List<int> discounts=[];
 
   @override
   void initState() {
     startTimer();
+    getMaxDiscount();
     super.initState();
   }
 
@@ -50,6 +56,20 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     countDownTimer!.cancel();
   }
 
+  void getMaxDiscount(){
+    FirebaseFirestore.instance
+    .collection('products')
+    .get()
+    .then((QuerySnapshot querySnapshot){
+      for (var doc in querySnapshot.docs){
+        discounts.add(doc['discount']);
+      }
+    })
+    .whenComplete(()=>setState(() {
+      maxDiscount = discounts.reduce(max);
+    }));
+  }
+
    
 
 
@@ -63,8 +83,9 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
               stopTimer();
               Navigator.of(context).pushAndRemoveUntil(
                 MaterialPageRoute(
-                  builder: (context) => const ShoesGalleryScreen(
+                  builder: (context) => HotDealsScreen(
                     fromOnBoarding: true,
+                    maxDiscount: maxDiscount!.toString(),
                   )
                   ),
 
@@ -78,7 +99,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                  (Route route)=> false
                 );
             },
-            child: Image.asset('images/onboard/shoes.JPEG'),
+            child: Image.asset('images/onboard/sale.JPEG'),
           ),
           Positioned(
             top: 60,

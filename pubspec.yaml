@@ -139,3 +139,6 @@ flutter:
     - family: AkayaTelivigala
       fonts:
         - asset: fonts/AkayaTelivigala-Regular.ttf
+    - family: PressStart2P
+      fonts:
+        - asset: fonts/PressStart2P-Regular.ttf
