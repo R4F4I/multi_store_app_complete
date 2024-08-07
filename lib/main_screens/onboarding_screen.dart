@@ -42,7 +42,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> with SingleTickerPr
   @override
   void initState() {
     selectRandomOffer();
-    //startTimer();
+    startTimer();
     getMaxDiscount();    
     _animationController = AnimationController(
       vsync: this, 
@@ -202,12 +202,16 @@ class _OnboardingScreenState extends State<OnboardingScreen> with SingleTickerPr
           ? Positioned(
               top: 180,
               right: 68,
-              child: Text(
-                '${maxDiscount.toString()}%',
-                style: const TextStyle(
-                  fontSize: 100,
-                  color: Colors.cyan,
-                  fontFamily: 'AkayaTelivigala'
+              child: AnimatedOpacity(
+                duration: const Duration(microseconds: 600),
+                opacity: _animationController.value,
+                child: Text(
+                  '${maxDiscount.toString()}%',
+                  style: const TextStyle(
+                    fontSize: 100,
+                    color: Colors.cyan,
+                    fontFamily: 'AkayaTelivigala'
+                  ),
                 ),
               ),
             )
