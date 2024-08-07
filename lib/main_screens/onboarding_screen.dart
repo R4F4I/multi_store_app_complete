@@ -24,7 +24,7 @@ class OnboardingScreen extends StatefulWidget {
   State<OnboardingScreen> createState() => _OnboardingScreenState();
 }
 
-class _OnboardingScreenState extends State<OnboardingScreen> {
+class _OnboardingScreenState extends State<OnboardingScreen> with SingleTickerProviderStateMixin {
 
   Timer? countDownTimer;
   int seconds = 5;
@@ -35,16 +35,34 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   late Offers offer;
   List<int> discounts=[];
 
+  late AnimationController _animationController;
+  late Animation<Color?> _colorTweenAnimation;
+
+
   @override
   void initState() {
     selectRandomOffer();
     //startTimer();
     getMaxDiscount();    
+    _animationController = AnimationController(
+      vsync: this, 
+      duration: const Duration(milliseconds: 600),
+    );
+
+    _colorTweenAnimation = ColorTween(begin: Colors.black, end: Colors.red)
+      .animate(_animationController)
+        ..addListener((){
+            setState(() { });
+        });
+    _animationController.repeat();
+
+
     super.initState();
   }
 
  @override
   void dispose() {
+    _animationController.dispose();
     super.dispose();
   }
 
@@ -196,19 +214,25 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
           : const SizedBox(),
           Positioned(
             bottom: 70,
-            child: Container(
-              height: 70,
-              width: MediaQuery.of(context).size.width,
-              color: Colors.black,
+            child: AnimatedBuilder(
+              animation: _animationController.view,
+              builder: (context, child) {
+                return Container(
+                  height: 70,
+                  width: MediaQuery.of(context).size.width,
+                  color: _colorTweenAnimation.value,
+                  child: child,
+                );
+              },
               child: const Center(
-                child: Text(
-                  'SHOP NOW',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 24
-                  ),
-                ),
-              ),
+                    child: Text(
+                      'SHOP NOW',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 24
+                      ),
+                    ),
+                  )
             )
           ),
         ],
