@@ -27,7 +27,7 @@ class OnboardingScreen extends StatefulWidget {
 class _OnboardingScreenState extends State<OnboardingScreen> {
 
   Timer? countDownTimer;
-  int seconds = 3;
+  int seconds = 5;
   int? maxDiscount;
   late int selectedIndex;
   late String offerName;
@@ -38,7 +38,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   @override
   void initState() {
     selectRandomOffer();
-    startTimer();
+    //startTimer();
     getMaxDiscount();    
     super.initState();
   }
@@ -179,6 +179,37 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                 :  Text('skip | $seconds'),
               )
               ),
+          ),
+          offer == Offers.sale
+          ? Positioned(
+              top: 180,
+              right: 68,
+              child: Text(
+                '${maxDiscount.toString()}%',
+                style: const TextStyle(
+                  fontSize: 100,
+                  color: Colors.cyan,
+                  fontFamily: 'AkayaTelivigala'
+                ),
+              ),
+            )
+          : const SizedBox(),
+          Positioned(
+            bottom: 70,
+            child: Container(
+              height: 70,
+              width: MediaQuery.of(context).size.width,
+              color: Colors.black,
+              child: const Center(
+                child: Text(
+                  'SHOP NOW',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 24
+                  ),
+                ),
+              ),
+            )
           ),
         ],
       ),
