@@ -51,6 +51,9 @@ windows/flutter/*
 # Stripe ignore
 lib/providers/stripe_id.dart
 
+# secret ignore
+sk_*
+
 # personal workspace
 .vscode/
 .dependencygraph/

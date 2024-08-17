@@ -91,6 +91,7 @@ void signUp() async {
       if (_imageFile != null) {
         try{
           await FirebaseAuth.instance.createUserWithEmailAndPassword(email: email,password: password);
+          await FirebaseAuth.instance.currentUser!.sendEmailVerification();
 
         
 

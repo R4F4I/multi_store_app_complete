@@ -1,10 +1,7 @@
-import 'package:collection/collection.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:ms_supplier_app/minor_screens/edit_product.dart';
 import 'package:ms_supplier_app/minor_screens/product_details.dart';
-import 'package:ms_supplier_app/providers/wish_provider.dart';
-import 'package:provider/provider.dart';
 
 class ProductModel extends StatefulWidget {
   final dynamic products;
@@ -16,8 +13,7 @@ class ProductModel extends StatefulWidget {
   State<ProductModel> createState() => _ProductModelState();
 }
 
-class _ProductModelState extends State<ProductModel> {
-  late var existingItemWishlist = context.read<Wish>().getWishItems.firstWhereOrNull((product) => product.documentId==widget.products['proid']);
+class _ProductModelState extends State<ProductModel> {  
   @override
   Widget build(BuildContext context) {
     var onSale = widget.products['discount'];
@@ -102,34 +98,7 @@ class _ProductModelState extends State<ProductModel> {
                                         Navigator.push(context, MaterialPageRoute(builder: (context)=> EditProduct(items: widget.products)));
                                       },
                                       icon: const Icon(Icons.edit,color: Colors.black,))
-                                    : IconButton(
-                                      onPressed: (){
-                                        existingItemWishlist !=null
-                                        ? context.read<Wish>().removeThis(widget.products['proid']) //now reclicking the heart icon removes the product from wishlist
-                                        : context.read<Wish>().addWishItem(          
-                                            widget.products['proname'],
-                                            onSale!=0
-                                              ? (1-(onSale/100))*widget.products['price']
-                                              : widget.products['price'],
-                                            1,
-                                            widget.products['instock'],
-                                            widget.products['proimages'],
-                                            widget.products['proid'],
-                                          widget.products['sid'],
-                                        );
-                                      },
-                                      icon: context.watch<Wish>().getWishItems.firstWhereOrNull((product) => product.documentId==widget.products['proid']) !=null
-                                        ? const Icon(
-                                        Icons.favorite,
-                                        color: Colors.red,
-                                        size: 30,
-                                        )
-                                        : const Icon(
-                                        Icons.favorite_border_outlined,
-                                        color: Colors.red,
-                                        size: 30,
-                                        )
-                                      ),
+                                    : const SizedBox(),
                           ],)]
                       ),
                     ),

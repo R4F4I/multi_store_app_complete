@@ -4,11 +4,9 @@ import 'package:ms_supplier_app/auth/customer_login.dart';
 import 'package:ms_supplier_app/auth/customer_signup.dart';
 import 'package:ms_supplier_app/auth/supplier_login.dart';
 import 'package:ms_supplier_app/auth/supplier_signup.dart';
-import 'package:ms_supplier_app/main_screens/customer_home.dart';
 import 'package:ms_supplier_app/main_screens/onboarding_screen.dart';
 import 'package:ms_supplier_app/main_screens/supplier_home.dart';
 
-import 'package:ms_supplier_app/main_screens/welcome_screen.dart';                    /*CustomerHomeScreen() is called by being imported*/
 
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
@@ -34,11 +32,9 @@ class MyApp extends StatelessWidget {
     return  MaterialApp(
       debugShowCheckedModeBanner: false,
       // home: const WelcomeScreen(),
-      initialRoute: '/welcome_screen',
+      initialRoute: '/onboarding_screen',
       routes: {
-        '/welcome_screen' :(context) =>const WelcomeScreen(),
         '/onboarding_screen' :(context) =>const OnboardingScreen(),
-        '/customer_home'  :(context) =>const CustomerHomeScreen(),
         '/supplier_home'  :(context) =>const SupplierHomeScreen(),
         '/customer_signup':(context) =>const CustomerRegister(),
         '/customer_login':(context) =>const CustomerLogin(),

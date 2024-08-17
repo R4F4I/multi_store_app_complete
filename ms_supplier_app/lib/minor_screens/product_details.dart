@@ -1,22 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-//import 'package:flutter_swiper_null_safety/flutter_swiper_null_safety.dart';
 import 'package:card_swiper/card_swiper.dart';
-import 'package:ms_supplier_app/main_screens/cart.dart';
-import 'package:ms_supplier_app/main_screens/visit_store.dart';
 import 'package:ms_supplier_app/minor_screens/full_screen_view.dart';
 import 'package:ms_supplier_app/models/product_model.dart';
-import 'package:ms_supplier_app/providers/cart_provider.dart';
-import 'package:ms_supplier_app/providers/wish_provider.dart';
-import 'package:ms_supplier_app/widgets/appbar_widgets.dart';
-import 'package:ms_supplier_app/widgets/snackbar.dart';
-import 'package:ms_supplier_app/widgets/yellow_button.dart';
-import 'package:provider/provider.dart';
 import 'package:staggered_grid_view_flutter/widgets/staggered_grid_view.dart';
 import 'package:staggered_grid_view_flutter/widgets/staggered_tile.dart';
-import 'package:collection/collection.dart';
 import 'package:expandable/expandable.dart';
-import 'package:badges/badges.dart' as badges;
 
 
 class ProductDetailsScreen extends StatefulWidget {
@@ -40,8 +29,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
   late List<dynamic> imagesList = widget.proList['proimages'];
   @override
   Widget build(BuildContext context) {
-    var onSale = widget.proList['discount'];
-    var existingItemCart = context.read<Cart>().getItems.firstWhereOrNull((product) => product.documentId==widget.proList['proid']);
+    var onSale = widget.proList['discount'];    
     return Material(
       child: SafeArea(
         child: ScaffoldMessenger(
@@ -141,35 +129,6 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                                     fontWeight: FontWeight.w600
                                   ),
                                 ),
-                          IconButton(
-                            onPressed: (){
-                              var existingItemWishlist = context.read<Wish>().getWishItems.firstWhereOrNull((product) => product.documentId==widget.proList['proid']);
-                              existingItemWishlist !=null
-                              ? context.read<Wish>().removeThis(widget.proList['proid']) //now reclicking the heart icon removes the product from wishlist
-                              : context.read<Wish>().addWishItem(          
-                                  widget.proList['proname'],
-                                  onSale!=0
-                                    ? (1-(onSale/100))*widget.proList['price']
-                                    : widget.proList['price'],
-                                  1,
-                                  widget.proList['instock'],
-                                  widget.proList['proimages'],
-                                  widget.proList['proid'],
-                                widget.proList['sid'],
-                              );
-                            },
-                            icon: context.watch<Wish>().getWishItems.firstWhereOrNull((product) => product.documentId==widget.proList['proid']) !=null
-                              ? const Icon(
-                              Icons.favorite,
-                              color: Colors.red,
-                              size: 30,
-                              )
-                              : const Icon(
-                              Icons.favorite_border_outlined,
-                              color: Colors.red,
-                              size: 30,
-                              )
-                            ),
                           
                         ],),
                         widget.proList['instock']==0
@@ -237,64 +196,6 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                     ),
                   )
                 ],),
-            ),
-            bottomSheet: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 15),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                Row(
-                  children: [
-                    IconButton(
-                        onPressed: (){
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context)=>VisitStore(
-                                  suppID: widget.proList['sid']
-                              )
-                          ));
-                      },
-                        icon: const Icon(Icons.store)
-                    ),
-                    const SizedBox(width: 20,),
-                    IconButton(onPressed: (){
-                      Navigator.push(context, MaterialPageRoute(builder: (context)=> const CartScreen(back: AppBarBackButton(),)));
-                    }, icon: badges.Badge(
-                      showBadge: context.read<Cart>().getItems.isEmpty
-                        ? false
-                        : true,
-                      badgeStyle: const badges.BadgeStyle(
-                        badgeColor: Colors.yellow ,
-                      ),
-                      badgeContent: Text(context.watch<Cart>().getItems.length.toString()),
-                      child: const Icon(Icons.shopping_cart_sharp))),
-                  ],
-                ),
-                YellowButton(
-                    label: existingItemCart!=null ?'Added to Cart'.toUpperCase():'Add to Cart'.toUpperCase(),
-                    onPressed: (){
-                      if (widget.proList['instock']==0){MyMessageHandler.showSnackBar(_scaffoldKey,'this item is out of stock');}
-                      else if (existingItemCart !=null){MyMessageHandler.showSnackBar(_scaffoldKey,'this item is already in your cart');}
-                      // above line checks documentId of each prod. obj. in cart list, and 
-                      // compares it with documentId of the current Item pressed on, 
-                      //if they are same, the snackbar pops, else addItem
-                      else {
-                        context.read<Cart>().addItem(          
-                          widget.proList['proname'],
-                          onSale!=0
-                            ? (1-(onSale/100))*widget.proList['price']
-                            : widget.proList['price'],
-                          1,
-                          widget.proList['instock'],
-                          widget.proList['proimages'],
-                          widget.proList['proid'],
-                        widget.proList['sid'],
-                      );
-                      }
-                    },
-                    width: 0.5),
-              ],),
             ),
             ),
         ),
