@@ -1,5 +1,6 @@
-package com.example.ms_customer_app
+package com.flutter.ms_customer_app
 
-import io.flutter.embedding.android.FlutterActivity
+import io.flutter.embedding.android.FlutterFragmentActivity
 
-class MainActivity: FlutterActivity()
+class MainActivity: FlutterFragmentActivity() {
+}
