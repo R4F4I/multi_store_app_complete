@@ -62,3 +62,5 @@ lib/providers/stripe_id.dart
 
 # secret ignore
 sk_*
+.*/
+.
