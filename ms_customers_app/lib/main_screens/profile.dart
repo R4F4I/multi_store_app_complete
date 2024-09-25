@@ -22,7 +22,7 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
-  late String documentId;
+  String? documentId;
   CollectionReference customers = FirebaseFirestore.instance.collection('customers');
   CollectionReference anonymous = FirebaseFirestore.instance.collection('anonymous');
   
@@ -34,14 +34,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
         setState(() {
           documentId=user.uid;
         });
-      } //TODO: Work on the user == null case
+      } else{
+        documentId = null;
+      }
     });
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    return 
+    return documentId != null ?
     
     FutureBuilder<DocumentSnapshot>(
       future: FirebaseAuth.instance.currentUser!.isAnonymous
@@ -249,10 +251,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               },
                             ),
                           
-                        ]
+                          ]
+                        ),
                       ),
                     ),
-                  ),
                     const ProfileHeaderLabel(headerLabel: ' Account Settings. ',),
                     Padding(
                       padding: const EdgeInsets.all(10.0),
@@ -289,30 +291,30 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                           if (!context.mounted) return;
                                           Navigator.pop(context);
                                           Navigator.pushReplacementNamed(context, '/welcome_screen');
-                                              },); 
-                                },
+                                              },
+                                                );
+                                              },
+                                            ),
+                                          ]),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
                             ),
-                          ]
-                        ),
+                          )
+                        ],
                       ),
-                     ),        
                     ],
                   ),
-                ),
-              ],
-            ),
-          )
-        ],
-       ),
-      ],
-    ),
-  );
-}
+                );
+              }
 
-  return const Center(child: CircularProgressIndicator());
-      },
-    );
-  }
+        return const Center(child: CircularProgressIndicator());
+            },
+          ): const Scaffold(body: Center(child: Text("No user"),),);
+    }
  String userAddress(dynamic data){
   if(FirebaseAuth.instance.currentUser!.isAnonymous){
     return 'example: New Jersey - USA';

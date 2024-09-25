@@ -96,13 +96,7 @@ class _ProductModelState extends State<ProductModel> {
                                       fontWeight: FontWeight.w600
                                     ),
                                   ),
-                                widget.products['sid'] == FirebaseAuth.instance.currentUser!.uid
-                                    ? IconButton(
-                                      onPressed: (){
-                                        Navigator.push(context, MaterialPageRoute(builder: (context)=> EditProduct(items: widget.products)));
-                                      },
-                                      icon: const Icon(Icons.edit,color: Colors.black,))
-                                    : IconButton(
+                                 IconButton(
                                       onPressed: (){
                                         existingItemWishlist !=null
                                         ? context.read<Wish>().removeThis(widget.products['proid']) //now reclicking the heart icon removes the product from wishlist
@@ -115,7 +109,7 @@ class _ProductModelState extends State<ProductModel> {
                                             widget.products['instock'],
                                             widget.products['proimages'],
                                             widget.products['proid'],
-                                          widget.products['sid'],
+                                             widget.products['sid'],
                                         );
                                       },
                                       icon: context.watch<Wish>().getWishItems.firstWhereOrNull((product) => product.documentId==widget.products['proid']) !=null
